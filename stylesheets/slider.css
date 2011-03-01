@@ -44,8 +44,9 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 
 html { text-align: center; -moz-background-size: 80px 80px; -webkit-background-size: 80px 80px; -o-background-size: 80px 80px; background-size: 80px 80px; background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(25%, rgba(0, 0, 0, 0.1)), color-stop(25%, rgba(0, 0, 0, 0)), color-stop(50%, rgba(0, 0, 0, 0)), color-stop(50%, rgba(0, 0, 0, 0.1)), color-stop(75%, rgba(0, 0, 0, 0.1)), color-stop(75%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0))); background-image: -moz-linear-gradient(left top, rgba(0, 0, 0, 0.1) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0)); background-image: linear-gradient(left top, rgba(0, 0, 0, 0.1) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0)); background-color: #555; }
 
-body { background: none; -moz-border-radius: 25px; -webkit-border-radius: 25px; -o-border-radius: 25px; -ms-border-radius: 25px; -khtml-border-radius: 25px; border-radius: 25px; padding: 0px 0px 40px; margin: 0 auto; width: 640px; display: inline-block; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+body { background: none; padding: 0px 0px 40px; display: inline-block; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 body:after { content: " "; position: absolute; top: 0; bottom: 0; left: 0; right: 0; position: fixed; background: rgba(0, 0, 0, 0.5); z-index: -1; }
+body > div, body > section, body > heading { width: 640px; margin: 0 auto; }
 
 .heading-font, h1, h2, h3 { font-family: 'AdelleBasic', sans; font-weight: normal; }
 
@@ -67,14 +68,12 @@ pre code { background: none; }
 
 .x-thumb, #hsl_picker .slider > div .thumb { position: relative; z-index: 2; top: -3px; content: " "; width: 21px; height: 21px; z-index: 1; background-color: #cccccc; -moz-transition-property: background; -webkit-transition-property: background; -o-transition-property: background; transition-property: background; -moz-transition-duration: 0.4s; -webkit-transition-duration: 0.4s; -o-transition-duration: 0.4s; transition-duration: 0.4s; background-image: -webkit-gradient(radial, 50% 0%, 0, 50% 0%, 15, color-stop(0%, rgba(255, 255, 255, 0.8)), color-stop(100%, rgba(255, 255, 255, 0.2))); background-image: -moz-radial-gradient(top center, circle, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2) 15px); background-image: radial-gradient(top center, circle, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2) 15px); -moz-border-radius: 11px; -webkit-border-radius: 11px; -o-border-radius: 11px; -ms-border-radius: 11px; -khtml-border-radius: 11px; border-radius: 11px; -moz-box-shadow: white 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px -1px 1px inset, rgba(0, 0, 0, 0.4) 0px 1px 4px 0px, rgba(0, 0, 0, 0.6) 0 0 2px; -webkit-box-shadow: white 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px -1px 1px inset, rgba(0, 0, 0, 0.4) 0px 1px 4px 0px, rgba(0, 0, 0, 0.6) 0 0 2px; -o-box-shadow: white 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px -1px 1px inset, rgba(0, 0, 0, 0.4) 0px 1px 4px 0px, rgba(0, 0, 0, 0.6) 0 0 2px; box-shadow: white 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px -1px 1px inset, rgba(0, 0, 0, 0.4) 0px 1px 4px 0px, rgba(0, 0, 0, 0.6) 0 0 2px; }
 
-.lined-heading, h1 span { font-style: normal; text-transform: uppercase; font-family: "CaviarDreams", sans; }
-.lined-heading:before, h1 span:before, .lined-heading:after, h1 span:after { content: ' '; width: 4.5em; height: 1px; display: inline-block; border-bottom: 1px solid #888; position: relative; top: -0.35em; margin: 0 .5em; }
-
-h1 { text-align: center; font-size: 3.5em; margin: .3em 0 .1em; line-height: 1em; text-transform: uppercase; word-spacing: .05em; font-weight: bold; }
+h1 { text-align: center; font-size: 3.5em; margin: 0em 0 .1em; line-height: 1em; text-transform: uppercase; word-spacing: .05em; font-weight: bold; }
 h1:focus { outline: 0; }
-h1 span { display: block; text-shadow: #000 1px 1px 0px; color: #eee; letter-spacing: .1em; margin: 0 0 -0.3em; font-size: .30em; }
 
-h1 + p { font-size: .7em; text-shadow: #000 0 1px; font-family: "Caviar Dreams", sans; font-style: normal; display: block; margin: 0em 0 1.5em; color: #aaa; text-transform: uppercase; font-weight: normal; letter-spacing: .5em; }
+heading p:first-child { font-style: normal; text-transform: uppercase; font-family: "CaviarDreams", sans; display: block; text-shadow: #000 1px 1px 0px; color: #eee; letter-spacing: .1em; margin: .8em 0 .3em; padding: 0; font-size: 1.30em; }
+heading p:first-child:before, heading p:first-child:after { content: ' '; width: 4.5em; height: 1px; display: inline-block; border-bottom: 1px solid #888; position: relative; top: -0.35em; margin: 0 .5em; }
+heading p { font-size: .7em; text-shadow: #000 0 1px; font-family: "Caviar Dreams", sans; font-style: normal; display: block; margin: 0em 0 1.5em; color: #aaa; text-transform: uppercase; font-weight: normal; letter-spacing: .5em; }
 
 #frame { margin: 0 auto; padding: 21px 20px; position: relative; z-index: 2; -webkit-perspective: 500; perspective: 500; -moz-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -webkit-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -o-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -moz-border-radius: 10px; -webkit-border-radius: 10px; -o-border-radius: 10px; -ms-border-radius: 10px; -khtml-border-radius: 10px; border-radius: 10px; }
 

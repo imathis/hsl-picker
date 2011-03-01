@@ -45,10 +45,7 @@ html {
 
 body {
   background: none;
-  @include border-radius(25px);
   padding: 0px 0px 40px;
-  margin: 0 auto;
-  width: 640px;
   display: inline-block;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   &:after {
@@ -57,6 +54,10 @@ body {
     position: fixed;
     background: rgba(#000, .5);
     z-index: -1;
+  }
+  & > div, & > section, & > heading {
+    width: 640px;
+    margin: 0 auto;
   }
 }
 .heading-font {
@@ -130,55 +131,53 @@ pre {
   @include box-shadow(rgba(#fff, 1) 0px 1px 1px inset, rgba(#000, 0.4) 0px -1px 1px inset, rgba(#000, 0.4) 0px 1px 4px 0px, rgba(#000, .6) 0 0 2px);
 }
 
-.lined-heading {
-  font-style: normal;
-  text-transform: uppercase;
-  font-family: "CaviarDreams", sans;
-  &:before, &:after {
-    content: ' ';
-    width: 4.5em;
-    height: 1px;
-    display: inline-block;
-    border-bottom: 1px solid #888;
-    position: relative;
-    top: -.35em;
-    margin: 0 .5em;
-  }
-}
-
 h1 {
   text-align: center;
   font-size: 3.5em;
-  margin: .3em 0 .1em;
+  margin: 0em 0 .1em;
   line-height: 1em;
   @extend .heading-font;
   text-transform: uppercase;
   word-spacing: .05em;
   font-weight: bold;
   &:focus { outline: 0; }
-  span {
-    @extend .lined-heading;
+}
+heading {
+  p:first-child {
+    font-style: normal;
+    text-transform: uppercase;
+    font-family: "CaviarDreams", sans;
     display: block;
     text-shadow: #000 1px 1px 0px;
     color: #eee;
     letter-spacing: .1em;
-    margin: 0 0 -.3em;
-    font-size: .30em;
+    margin: .8em 0 .3em;
+    padding: 0;
+    font-size: 1.30em;
+    &:before, &:after {
+      content: ' ';
+      width: 4.5em;
+      height: 1px;
+      display: inline-block;
+      border-bottom: 1px solid #888;
+      position: relative;
+      top: -.35em;
+      margin: 0 .5em;
+    }
+  }
+  p {
+    font-size: .7em;
+    text-shadow: #000 0 1px;
+    font-family: "Caviar Dreams", sans;
+    font-style: normal;
+    display: block;
+    margin: 0em 0 1.5em;
+    color: #aaa;
+    text-transform: uppercase;
+    font-weight: normal;
+    letter-spacing: .5em;
   }
 }
-h1 + p {
-  font-size: .7em;
-  text-shadow: #000 0 1px;
-  font-family: "Caviar Dreams", sans;
-  font-style: normal;
-  display: block;
-  margin: 0em 0 1.5em;
-  color: #aaa;
-  text-transform: uppercase;
-  font-weight: normal;
-  letter-spacing: .5em;
-}
-
 
 #frame {
   margin: 0 auto;

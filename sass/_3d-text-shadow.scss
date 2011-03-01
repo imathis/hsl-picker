@@ -1,0 +1,34 @@
+@function shadow-3d($thickness-shadow-color, $splash-shadow-color, $thickness, $angle: 0) {
+  //Create empty list (Compass only) for text-shadow values
+  $shadows: compact();
+
+  //Only allow pixel units
+  @if unit($thickness) != px { @warn "$thickness must be passed as a pixel value, eg: 5px." };
+
+  // Add values to the list for the thickness of the text shadow
+  @for $i from 1px through $thickness {
+    $shadows: append($shadows, 0 $i 0 adjust-color($thickness-shadow-color, $lightness: -3.3% * ($i/1px - 1)));
+  }
+
+  // Add values to the list for the splash shadow
+  @each $values in (
+    0 $thickness + 1px 1px 0.1,
+    0 0 $thickness + 5px 0.3,
+    0 abs($thickness - 2px) 5px 0.2,
+    round($angle/2) abs($thickness * 1.3) 5px 0.25,
+    $angle round($thickness * 2) 10px 0.25) {
+
+    // Add values to list
+    $shadows: append($shadows, nth($values, 1) nth($values, 2) nth($values, 3) rgba($splash-shadow-color, nth($values, 4)));
+  }
+
+  @return $shadows;
+}
+@mixin text-shadow-3d($text-color: #fff, $background-color: false, $thickness: 5px, $angle: 0, $thickness-shadow-color: scale-color($text-color, $lightness: -30%), $splash-shadow-color: #000){
+  color: $text-color;
+  @if $background-color and hue($text-color) == 0 {
+    $thickness-shadow-color: change-color($text-color, $hue: hue($background-color), $lightness: lightness($background-color) + 25, $saturation: saturation($background-color)/2);
+  }
+  text-shadow: shadow-3d($thickness-shadow-color, $splash-shadow-color, $thickness, $angle);
+}
+

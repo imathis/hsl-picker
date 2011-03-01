@@ -21,16 +21,33 @@
   99% { opacity: 0; }
   100% { opacity: 1; } }
 
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; }
+
+body { line-height: 1; color: black; background: white; }
+
+ol, ul { list-style: none; }
+
+table { border-collapse: separate; border-spacing: 0; vertical-align: middle; }
+
+caption, th, td { text-align: left; font-weight: normal; vertical-align: middle; }
+
+q, blockquote { quotes: "" ""; }
+q:before, q:after, blockquote:before, blockquote:after { content: ""; }
+
+a img { border: none; }
+
+article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary { margin: 0; padding: 0; border: 0; outline: 0; display: block; }
+
 @font-face { font-family: 'AdelleBasic'; src: url("/fonts/adellebasic_bold-webfont.eot"); src: url("/fonts/adellebasic_bold-webfont.eot?iefix") format("eot"), url("/fonts/adellebasic_bold-webfont.woff") format("woff"), url("/fonts/adellebasic_bold-webfont.ttf") format("truetype"), url("/fonts/adellebasic_bold-webfont.svg#webfontJFDq7ODC") format("svg"); font-weight: normal; font-style: normal; }
 
 @font-face { font-family: 'CaviarDreams'; src: url("/fonts/caviardreams-webfont.eot"); src: url("/fonts/caviardreams-webfont.eot?iefix") format("eot"), url("/fonts/caviardreams-webfont.woff") format("woff"), url("/fonts/caviardreams-webfont.ttf") format("truetype"), url("/fonts/caviardreams-webfont.svg#webfont0Js5eVZ5") format("svg"); font-weight: normal; font-style: normal; }
 
 html { text-align: center; -moz-background-size: 80px 80px; -webkit-background-size: 80px 80px; -o-background-size: 80px 80px; background-size: 80px 80px; background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(25%, rgba(0, 0, 0, 0.1)), color-stop(25%, rgba(0, 0, 0, 0)), color-stop(50%, rgba(0, 0, 0, 0)), color-stop(50%, rgba(0, 0, 0, 0.1)), color-stop(75%, rgba(0, 0, 0, 0.1)), color-stop(75%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0))); background-image: -moz-linear-gradient(left top, rgba(0, 0, 0, 0.1) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0)); background-image: linear-gradient(left top, rgba(0, 0, 0, 0.1) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0)); background-color: #555; }
 
-body { -moz-border-radius: 25px; -webkit-border-radius: 25px; -o-border-radius: 25px; -ms-border-radius: 25px; -khtml-border-radius: 25px; border-radius: 25px; padding: 0px 0px 40px; margin: 0 auto; width: 640px; display: inline-block; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+body { background: none; -moz-border-radius: 25px; -webkit-border-radius: 25px; -o-border-radius: 25px; -ms-border-radius: 25px; -khtml-border-radius: 25px; border-radius: 25px; padding: 0px 0px 40px; margin: 0 auto; width: 640px; display: inline-block; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 body:after { content: " "; position: absolute; top: 0; bottom: 0; left: 0; right: 0; position: fixed; background: rgba(0, 0, 0, 0.5); z-index: -1; }
 
-.heading-font, h1, h2, h3 { font-family: 'AdelleBasic', 'sans'; }
+.heading-font, h1, h2, h3 { font-family: 'AdelleBasic', sans; font-weight: normal; }
 
 h1, h2, h3 { color: #eee; font-weight: normal; }
 
@@ -50,14 +67,14 @@ pre code { background: none; }
 
 .x-thumb, #hsl_picker .slider > div .thumb { position: relative; z-index: 2; top: -3px; content: " "; width: 21px; height: 21px; z-index: 1; background-color: #cccccc; -moz-transition-property: background; -webkit-transition-property: background; -o-transition-property: background; transition-property: background; -moz-transition-duration: 0.4s; -webkit-transition-duration: 0.4s; -o-transition-duration: 0.4s; transition-duration: 0.4s; background-image: -webkit-gradient(radial, 50% 0%, 0, 50% 0%, 15, color-stop(0%, rgba(255, 255, 255, 0.8)), color-stop(100%, rgba(255, 255, 255, 0.2))); background-image: -moz-radial-gradient(top center, circle, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2) 15px); background-image: radial-gradient(top center, circle, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2) 15px); -moz-border-radius: 11px; -webkit-border-radius: 11px; -o-border-radius: 11px; -ms-border-radius: 11px; -khtml-border-radius: 11px; border-radius: 11px; -moz-box-shadow: white 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px -1px 1px inset, rgba(0, 0, 0, 0.4) 0px 1px 4px 0px, rgba(0, 0, 0, 0.6) 0 0 2px; -webkit-box-shadow: white 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px -1px 1px inset, rgba(0, 0, 0, 0.4) 0px 1px 4px 0px, rgba(0, 0, 0, 0.6) 0 0 2px; -o-box-shadow: white 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px -1px 1px inset, rgba(0, 0, 0, 0.4) 0px 1px 4px 0px, rgba(0, 0, 0, 0.6) 0 0 2px; box-shadow: white 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px -1px 1px inset, rgba(0, 0, 0, 0.4) 0px 1px 4px 0px, rgba(0, 0, 0, 0.6) 0 0 2px; }
 
-.lined-heading, h1 span { font-style: normal; text-transform: uppercase; font-family: "CaviarDreams"; }
+.lined-heading, h1 span { font-style: normal; text-transform: uppercase; font-family: "CaviarDreams", sans; }
 .lined-heading:before, h1 span:before, .lined-heading:after, h1 span:after { content: ' '; width: 4.5em; height: 1px; display: inline-block; border-bottom: 1px solid #888; position: relative; top: -0.35em; margin: 0 .5em; }
 
-h1 { text-align: center; font-size: 3.5em; margin: .4em 0 0em; text-transform: uppercase; word-spacing: .05em; font-weight: bold; }
+h1 { text-align: center; font-size: 3.5em; margin: .3em 0 .1em; line-height: 1em; text-transform: uppercase; word-spacing: .05em; font-weight: bold; }
 h1:focus { outline: 0; }
-h1 span { display: block; text-shadow: #000 1px 1px 0px; color: #eee; letter-spacing: .1em; margin: 0 0 .2em; font-size: .30em; }
+h1 span { display: block; text-shadow: #000 1px 1px 0px; color: #eee; letter-spacing: .1em; margin: 0 0 -0.3em; font-size: .30em; }
 
-h1 + p { font-size: .7em; text-shadow: #000 0 1px; font-family: "Caviar Dreams"; font-style: normal; display: block; margin: -0.3em 0 1.5em; color: #aaa; text-transform: uppercase; font-weight: normal; letter-spacing: .5em; }
+h1 + p { font-size: .7em; text-shadow: #000 0 1px; font-family: "Caviar Dreams", sans; font-style: normal; display: block; margin: 0em 0 1.5em; color: #aaa; text-transform: uppercase; font-weight: normal; letter-spacing: .5em; }
 
 #frame { margin: 0 auto; padding: 21px 20px; position: relative; z-index: 2; -webkit-perspective: 500; perspective: 500; -moz-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -webkit-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -o-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -moz-border-radius: 10px; -webkit-border-radius: 10px; -o-border-radius: 10px; -ms-border-radius: 10px; -khtml-border-radius: 10px; border-radius: 10px; }
 
@@ -96,11 +113,13 @@ h2 { text-align: center; font-size: 2em; margin: .2em 0 0; border-bottom: 1px so
 h2 + p { border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 1.2em; }
 
 #why { color: #c6c6c6; font-size: .9em; line-height: 1.45em; margin-top: 1em; padding-top: 1em; text-align: left; overflow: hidden; }
-#why h2, #why h3, #why p { display: none; }
-#why p { font-family: "Lucida sans"; }
+#why pre, #why h2, #why h3, #why p { display: none; }
+#why p { font-family: "Lucida sans", Helvetica, Arial, sans; }
 #why strong { color: #ccc; }
-#why a.why { color: #444; text-shadow: #000 0 0 2px; text-transform: lowercase; display: block; width: 3.5em; margin: 0 auto; text-align: center; }
+#why a.why { color: #444; text-shadow: #000 0 0 2px; text-transform: lowercase; display: block; width: 3.5em; margin: 0 auto; text-align: center; display: none; }
 #why:target { margin-top: 2em; -moz-border-radius: 4px; -webkit-border-radius: 4px; -o-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; padding: 2em 2.5em .5em; background: rgba(0, 0, 0, 0.2); }
 #why:target h2, #why:target h3 { text-shadow: rgba(0, 0, 0, 0.7) 0 2px 2px; }
-#why:target h2, #why:target h3, #why:target p { display: block; }
+#why:target pre, #why:target h2, #why:target h3, #why:target p { display: block; }
 #why:target a.why { display: none; }
+
+#footer { color: #444; text-shadow: rgba(0, 0, 0, 0.5) 0 1px 1px; margin-top: 1.3em; }

@@ -1,5 +1,5 @@
 guard 'shell' do
-  watch(/^sass\/(.*)\.s[a,c]ss/){|m| `compass compile` }
+  watch(/^sass\/(.*)\.scss/){|m| `compass compile` }
 end
 
 guard 'livereload', :api_version => '1.5' do

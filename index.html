@@ -29,7 +29,7 @@
       <input id="hsl" spellcheck="false" type="text"/>
     </div>
     <section id="footer">
-      HSL Color Picker likes cutting-edge browsers.
+      <p>HSL Color Picker likes cutting-edge browsers. <a href="#why">Hello?</a></p>
     </section>
     <section id="why">
       <h2>What's so great about HSL</h2>
@@ -37,7 +37,7 @@
       Look at that in hex, <code>#2C1D07</code> to <code>#DDCFBB</code>, or in rgb, <code>rgb(44, 29, 7)</code> to <code>rgb(221, 207, 187)</code>, and the relationship between colors isn't evident in any meaningful way.
       </p>
       <p>I use <a href="http://beta.compass-style.org/">Compass</a> and <a href="http://sass-lang.com">Sass</a> for all of my web design work and there are great color functions that allow me to
-      manipulate colors using these relationships. I can use Sass's <code>scale-color</code> to convert brown to cream like in the example above.</p>
+      manipulate colors using these relationships. I can use Sass's <code>adjust-color</code> to convert brown to cream like in the example above.</p>
 <pre><code>adjust-color(#2C1D07, $saturation: -40%, $lightness: 70%)
 //returns #DDCFBB</code></pre>
       <p>Sass converts easily between rgb, hsl, and hex so I can have convenience of HSL color relationships but the browser compatibility of hex color notation.
@@ -48,8 +48,19 @@
       <h3>How to think in HSL</h3>
       <p>Pick a Hue from 0 to 360 and with saturation at 100 and lightness at 50 and you'll have the purest form of that color. Reduce the saturation and you move towards gray.
       Increasing the brightness moves you towards white, decreasing it moves you towards black.</p>
-
-      <a class="why" href="#why">Why?</a>
       </section>
   </body>
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10876422-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
 </html>

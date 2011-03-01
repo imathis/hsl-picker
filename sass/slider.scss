@@ -335,8 +335,11 @@ h2 {
 }
 
 #footer {
-  color: #444;
+  color: #555;
   text-shadow: rgba(#000, .5) 0 1px 1px;
   margin-top: 1.3em;
+  a {
+    color: #777;
+  }
 }
 

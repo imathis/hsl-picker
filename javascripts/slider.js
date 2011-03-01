@@ -31,14 +31,6 @@ FS.HSLSlider = new Class({
   createSlider: function(el, start, type){
     var range = el.get('max') ? [0, el.get('max')] : this.options.range;
     var thumb = el.getFirst('div.thumb');
-    //if (this.options.snap){
-      //var barWidth = el.getStyle('width').toInt();
-      //var knobWidth = 20;//thumb.getStyle('width').toInt();
-      //var numSteps = range[1].toInt();
-      //var idealWidth = (Math.ceil(barWidth/numSteps - knobWidth/numSteps) * numSteps) + knobWidth;
-      //console.log(idealWidth);
-      //if (barWidth != idealWidth){ el.setStyle('width', idealWidth); }
-    //}
     var slider = new SliderEx(el, thumb, {
       range: range,
       steps: range[1],
@@ -90,7 +82,7 @@ FS.HSLSlider = new Class({
     sliderStyles = '#hsl_picker #hue { background-image: ' + this.sliderBg('hue', 'webkit') + '; background-image: ' + this.sliderBg('hue', 'moz') + '; background-image: ' + this.sliderBg('hue') + '; } ' +
       '#hsl_picker #saturation { background-image: ' + this.sliderBg('saturation', 'webkit') + ';  background-image: ' + this.sliderBg('saturation', 'moz') + '; background-image: ' + this.sliderBg('saturation') + '; } ' +
       '#hsl_picker #lightness { background-image: ' + this.sliderBg('lightness', 'webkit') + ';  background-image: ' + this.sliderBg('lightness', 'moz') + '; background-image: ' + this.sliderBg('lightness') + '; } ' +
-      'body a:hover { color: '+ this.color.getHsl([this.color.h(), 100, 70]) +'; } '+
+      'body a:hover { color: '+ this.color.getHsl([this.color.h(), 100, 70]) +' !important; } '+
       'h1 + p { color: '+ this.color.getHsl([this.color.h(), 40, 70]) +'; } '+
       'body h2, body h3, code { color:'+ this.color.getHsl([this.color.h(), 20, 70]) +'; }';
 

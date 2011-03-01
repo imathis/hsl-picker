@@ -9,7 +9,7 @@ I use [Compass](http://beta.compass-style.org/) and [Sass](http://sass-lang.com/
 
 Sass converts easily between rgb, hsl, and hex so I can have convenience of HSL color relationships but the browser compatibility of hex color notation. There are other color functions like change-color which lets you set the properties of a color, and scale-color which applies color transformations on a relative scale. These are great, but because they work like HSL, you have to understand how HSL works.
 
-## HSB &neq; HSL
+## HSB != HSL
 
 In graphics software I pick colors in HSB (Hue, Saturation, Brightness) because it feels more natural to work with than RGB or CMYK. Now, with CSS3 we can use HSL which is actually quite different than HSB. Without a decent HSL color picker, it's difficult to understand.
 

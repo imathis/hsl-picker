@@ -76,6 +76,7 @@ a {
   @include transition(color, .5s);
   color: #eee;
   text-decoration: none;
+  border-bottom: 1px dotted;
 }
 p {
   margin: 0;
@@ -177,6 +178,9 @@ heading {
     text-transform: uppercase;
     font-weight: normal;
     letter-spacing: .5em;
+  }
+  a {
+    border-bottom: 0;
   }
 }
 
@@ -339,14 +343,24 @@ h2 {
   color: #555;
   text-shadow: rgba(#000, .5) 0 1px 1px;
   margin-top: 1.3em;
+  font-size: .85em;
   a {
     display: inline-block;
-    color: #777;
-    border-left: 1px solid rgba(#000, .4);
-    @include box-shadow(rgba(#fff, .04) 1px 0 inset);
-    margin-left: .35em;
-    padding-left: .5em;
+    color: #666;
     line-height: 1.1em;
+    border-color: #555;
+    & + a {
+      margin-left: 1em;
+      position: relative;
+      &:before {
+        content: " ";
+        display: block;
+        position: absolute; left: -.7em; top: 0;
+        border-left: 1px solid rgba(#000, .4);
+        @include box-shadow(rgba(#fff, .04) 1px 0 inset);
+        width: 1px; height: 1.3em;
+      }
+    }
   }
 }
 

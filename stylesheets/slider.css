@@ -52,7 +52,7 @@ body > div, body > section, body > heading { width: 640px; margin: 0 auto; -moz-
 
 h1, h2, h3 { color: #eee; font-weight: normal; }
 
-a { -moz-transition-property: color; -webkit-transition-property: color; -o-transition-property: color; transition-property: color; -moz-transition-duration: 0.5s; -webkit-transition-duration: 0.5s; -o-transition-duration: 0.5s; transition-duration: 0.5s; color: #eee; text-decoration: none; }
+a { -moz-transition-property: color; -webkit-transition-property: color; -o-transition-property: color; transition-property: color; -moz-transition-duration: 0.5s; -webkit-transition-duration: 0.5s; -o-transition-duration: 0.5s; transition-duration: 0.5s; color: #eee; text-decoration: none; border-bottom: 1px dotted; }
 
 p { margin: 0; padding: 0 0 1.5em; line-height: 1.5em; }
 
@@ -74,6 +74,7 @@ h1:focus { outline: 0; }
 heading p:first-child { font-style: normal; text-transform: uppercase; font-family: "CaviarDreams", sans; display: block; text-shadow: #000 1px 1px 0px; color: #eee; letter-spacing: .1em; margin: 1em 0 .3em; padding: 0; font-size: 1.25em; }
 heading p:first-child:before, heading p:first-child:after { content: ' '; width: 4.5em; height: 1px; display: inline-block; border-bottom: 1px solid #888; position: relative; top: -0.35em; margin: 0 .5em; }
 heading p { font-size: .7em; text-shadow: #000 0 1px; font-family: "Caviar Dreams", sans; font-style: normal; display: block; margin: 0em 0 1.2em; color: #aaa; text-transform: uppercase; font-weight: normal; letter-spacing: .5em; }
+heading a { border-bottom: 0; }
 
 #frame { margin: 0 auto; padding: 21px 20px; position: relative; z-index: 2; -webkit-perspective: 500; perspective: 500; -moz-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -webkit-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -o-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -moz-border-radius: 10px; -webkit-border-radius: 10px; -o-border-radius: 10px; -ms-border-radius: 10px; -khtml-border-radius: 10px; border-radius: 10px; }
 
@@ -120,5 +121,7 @@ h2 + p { border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 1.2em; }
 #why.hello h2, #why.hello h3 { text-shadow: rgba(0, 0, 0, 0.7) 0 2px 2px; }
 #why.hello pre, #why.hello h2, #why.hello h3, #why.hello p { display: block; }
 
-#footer { color: #555; text-shadow: rgba(0, 0, 0, 0.5) 0 1px 1px; margin-top: 1.3em; }
-#footer a { display: inline-block; color: #777; border-left: 1px solid rgba(0, 0, 0, 0.4); -moz-box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; -webkit-box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; -o-box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; margin-left: .35em; padding-left: .5em; line-height: 1.1em; }
+#footer { color: #555; text-shadow: rgba(0, 0, 0, 0.5) 0 1px 1px; margin-top: 1.3em; font-size: .85em; }
+#footer a { display: inline-block; color: #666; line-height: 1.1em; border-color: #555; }
+#footer a + a { margin-left: 1em; position: relative; }
+#footer a + a:before { content: " "; display: block; position: absolute; left: -0.7em; top: 0; border-left: 1px solid rgba(0, 0, 0, 0.4); -moz-box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; -webkit-box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; -o-box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; width: 1px; height: 1.3em; }

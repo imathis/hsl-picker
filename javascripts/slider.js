@@ -549,9 +549,9 @@ FS.Color = new Class({
     else if (l <= 0.5) var s = diff / add;
     else var s = diff / (2 - add);
 
-    h = h.round(3);
-    s = (s*100).round(3);
-    l = (l*100).round(3);
+    h = h.round();
+    s = (s*100).round();
+    l = (l*100).round();
 
     return [h, s, l];
   }

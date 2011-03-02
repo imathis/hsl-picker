@@ -204,7 +204,7 @@ heading {
 
 #color {
   float: left;
-  width: 70px;
+  width: 100px;
   height: 100px;
   margin: 1px 18px 1px 20px;
   @include border-radius(6px);
@@ -232,7 +232,7 @@ heading {
     padding: 10px 20px 10px 0;
     float: left;
     z-index: 1;
-    width: 450px;
+    width: 420px;
     & > div {
       @extend .x-input-slider;
       .thumb { @extend .x-thumb; }
@@ -240,7 +240,7 @@ heading {
         background-color: rgba(#fff, .1);
       }
       & + input {
-        position: absolute; right: 0px; width: 60px; top: 4px;
+        position: absolute; right: 0px; width: 30px; top: 4px;
         font-size: .9em;
         padding: 3px 6px;
       }
@@ -255,14 +255,14 @@ heading {
   position: relative;
   z-index: 0;
   input {
-    //width: 32.2%;
+    width: 32.2%;
     display: inline-block;
     text-align: center;
     & + input { margin-left: 5px; }
   }
-  #hex { width: 8em; }
-  #rgb { width: 13em; }
-  #hsl { width: 17em; }
+  //#hex { width: 8em; }
+  //#rgb { width: 13em; }
+  //#hsl { width: 17em; }
 
 }
 

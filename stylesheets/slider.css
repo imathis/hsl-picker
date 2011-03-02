@@ -46,7 +46,7 @@ html { text-align: center; -moz-background-size: 80px 80px; -webkit-background-s
 
 body { background: none; padding: 0px 0px 40px; display: inline-block; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 body:after { content: " "; position: absolute; top: 0; bottom: 0; left: 0; right: 0; position: fixed; background: rgba(0, 0, 0, 0.5); z-index: -1; }
-body > div, body > section, body > heading { width: 640px; margin: 0 auto; }
+body > div, body > section, body > heading { width: 640px; margin: 0 auto; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; }
 
 .heading-font, h1, h2, h3 { font-family: 'AdelleBasic', sans; font-weight: normal; }
 
@@ -61,7 +61,7 @@ code { font-size: 0.95em; font-family: menlo, monaco, 'andale mono', 'courier ne
 pre { background: rgba(0, 0, 0, 0.3); padding: 1em; margin: 0 0 1.8em; width: auto; -moz-border-radius: 4px; -webkit-border-radius: 4px; -o-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; }
 pre code { background: none; }
 
-.inset-box-shadow, pre, #why:target { -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset; -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset; -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset; box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset; }
+.inset-box-shadow, pre, #why.hello { -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset; -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset; -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset; box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset; }
 
 .x-input-slider, #hsl_picker .slider > div { -moz-border-radius: 10px; -webkit-border-radius: 10px; -o-border-radius: 10px; -ms-border-radius: 10px; -khtml-border-radius: 10px; border-radius: 10px; -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 2px 1px inset, rgba(255, 255, 255, 0.2) 0 1px inset, rgba(0, 0, 0, 0.4) 0 -1px 1px inset, rgba(0, 0, 0, 0.4) 0 1px 1px; -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 2px 1px inset, rgba(255, 255, 255, 0.2) 0 1px inset, rgba(0, 0, 0, 0.4) 0 -1px 1px inset, rgba(0, 0, 0, 0.4) 0 1px 1px; -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 2px 1px inset, rgba(255, 255, 255, 0.2) 0 1px inset, rgba(0, 0, 0, 0.4) 0 -1px 1px inset, rgba(0, 0, 0, 0.4) 0 1px 1px; box-shadow: rgba(255, 255, 255, 0.1) 0 1px 2px 1px inset, rgba(255, 255, 255, 0.2) 0 1px inset, rgba(0, 0, 0, 0.4) 0 -1px 1px inset, rgba(0, 0, 0, 0.4) 0 1px 1px; position: relative; height: 15px; width: 381px; }
 .x-input-slider:after, #hsl_picker .slider > div:after { content: " "; position: absolute; top: -3px; bottom: -3px; left: -4px; right: -4px; background: rgba(0, 0, 0, 0.3); -moz-border-radius: 15px; -webkit-border-radius: 15px; -o-border-radius: 15px; -ms-border-radius: 15px; -khtml-border-radius: 15px; border-radius: 15px; -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px inset, rgba(255, 255, 255, 0.1) 0 1px; -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px inset, rgba(255, 255, 255, 0.1) 0 1px; -o-box-shadow: rgba(0, 0, 0, 0.3) 0 1px inset, rgba(255, 255, 255, 0.1) 0 1px; box-shadow: rgba(0, 0, 0, 0.3) 0 1px inset, rgba(255, 255, 255, 0.1) 0 1px; z-index: -1; }
@@ -71,9 +71,9 @@ pre code { background: none; }
 h1 { text-align: center; font-size: 3.5em; margin: 0em 0 .1em; line-height: 1em; text-transform: uppercase; word-spacing: .05em; font-weight: bold; }
 h1:focus { outline: 0; }
 
-heading p:first-child { font-style: normal; text-transform: uppercase; font-family: "CaviarDreams", sans; display: block; text-shadow: #000 1px 1px 0px; color: #eee; letter-spacing: .1em; margin: .8em 0 .3em; padding: 0; font-size: 1.30em; }
+heading p:first-child { font-style: normal; text-transform: uppercase; font-family: "CaviarDreams", sans; display: block; text-shadow: #000 1px 1px 0px; color: #eee; letter-spacing: .1em; margin: 1em 0 .3em; padding: 0; font-size: 1.25em; }
 heading p:first-child:before, heading p:first-child:after { content: ' '; width: 4.5em; height: 1px; display: inline-block; border-bottom: 1px solid #888; position: relative; top: -0.35em; margin: 0 .5em; }
-heading p { font-size: .7em; text-shadow: #000 0 1px; font-family: "Caviar Dreams", sans; font-style: normal; display: block; margin: 0em 0 1.5em; color: #aaa; text-transform: uppercase; font-weight: normal; letter-spacing: .5em; }
+heading p { font-size: .7em; text-shadow: #000 0 1px; font-family: "Caviar Dreams", sans; font-style: normal; display: block; margin: 0em 0 1.2em; color: #aaa; text-transform: uppercase; font-weight: normal; letter-spacing: .5em; }
 
 #frame { margin: 0 auto; padding: 21px 20px; position: relative; z-index: 2; -webkit-perspective: 500; perspective: 500; -moz-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -webkit-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -o-box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; box-shadow: rgba(255, 255, 255, 0.4) 0 1px inset, rgba(0, 0, 0, 0.1) 0 -1px 1px inset, rgba(0, 0, 0, 0.8) 0 5px 30px; -moz-border-radius: 10px; -webkit-border-radius: 10px; -o-border-radius: 10px; -ms-border-radius: 10px; -khtml-border-radius: 10px; border-radius: 10px; }
 
@@ -81,7 +81,7 @@ heading p { font-size: .7em; text-shadow: #000 0 1px; font-family: "Caviar Dream
 
 .no-csstransforms3d #shadow { display: none; }
 
-#color { float: left; width: 100px; height: 100px; margin: 1px 18px 1px 20px; -moz-border-radius: 6px; -webkit-border-radius: 6px; -o-border-radius: 6px; -ms-border-radius: 6px; -khtml-border-radius: 6px; border-radius: 6px; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 5px, rgba(255, 255, 255, 0.4) 0 1px 1px inset, rgba(0, 0, 0, 0.3) 0 -1px 1px inset; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 5px, rgba(255, 255, 255, 0.4) 0 1px 1px inset, rgba(0, 0, 0, 0.3) 0 -1px 1px inset; -o-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 5px, rgba(255, 255, 255, 0.4) 0 1px 1px inset, rgba(0, 0, 0, 0.3) 0 -1px 1px inset; box-shadow: rgba(0, 0, 0, 0.5) 0 1px 5px, rgba(255, 255, 255, 0.4) 0 1px 1px inset, rgba(0, 0, 0, 0.3) 0 -1px 1px inset; }
+#color { float: left; width: 70px; height: 100px; margin: 1px 18px 1px 20px; -moz-border-radius: 6px; -webkit-border-radius: 6px; -o-border-radius: 6px; -ms-border-radius: 6px; -khtml-border-radius: 6px; border-radius: 6px; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 5px, rgba(255, 255, 255, 0.4) 0 1px 1px inset, rgba(0, 0, 0, 0.3) 0 -1px 1px inset; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 5px, rgba(255, 255, 255, 0.4) 0 1px 1px inset, rgba(0, 0, 0, 0.3) 0 -1px 1px inset; -o-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 5px, rgba(255, 255, 255, 0.4) 0 1px 1px inset, rgba(0, 0, 0, 0.3) 0 -1px 1px inset; box-shadow: rgba(0, 0, 0, 0.5) 0 1px 5px, rgba(255, 255, 255, 0.4) 0 1px 1px inset, rgba(0, 0, 0, 0.3) 0 -1px 1px inset; }
 
 #hue { background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #ff0000), color-stop(2.778%, #ff2b00), color-stop(5.556%, #ff5500), color-stop(8.333%, #ff8000), color-stop(11.111%, #ffaa00), color-stop(13.889%, #ffd500), color-stop(16.667%, #ffff00), color-stop(19.444%, #d4ff00), color-stop(22.222%, #aaff00), color-stop(25.0%, #80ff00), color-stop(27.778%, #55ff00), color-stop(30.556%, #2bff00), color-stop(33.333%, #00ff00), color-stop(36.111%, #00ff2b), color-stop(38.889%, #00ff55), color-stop(41.667%, #00ff80), color-stop(44.444%, #00ffaa), color-stop(47.222%, #00ffd5), color-stop(50.0%, #00ffff), color-stop(52.778%, #00d4ff), color-stop(55.556%, #00aaff), color-stop(58.333%, #007fff), color-stop(61.111%, #0055ff), color-stop(63.889%, #002bff), color-stop(66.667%, #0000ff), color-stop(69.444%, #2a00ff), color-stop(72.222%, #5500ff), color-stop(75%, #7f00ff), color-stop(77.778%, #aa00ff), color-stop(80.556%, #d400ff), color-stop(83.333%, #ff00ff), color-stop(86.111%, #ff00d4), color-stop(88.889%, #ff00aa), color-stop(91.667%, #ff0080), color-stop(94.444%, #ff0055), color-stop(97.222%, #ff002b), color-stop(100%, #ff0000)); background-image: -moz-linear-gradient(left, #ff0000, #ff2b00, #ff5500, #ff8000, #ffaa00, #ffd500, #ffff00, #d4ff00, #aaff00, #80ff00, #55ff00, #2bff00, #00ff00, #00ff2b, #00ff55, #00ff80, #00ffaa, #00ffd5, #00ffff, #00d4ff, #00aaff, #007fff, #0055ff, #002bff, #0000ff, #2a00ff, #5500ff, #7f00ff, #aa00ff, #d400ff, #ff00ff, #ff00d4, #ff00aa, #ff0080, #ff0055, #ff002b, #ff0000); background-image: linear-gradient(left, #ff0000, #ff2b00, #ff5500, #ff8000, #ffaa00, #ffd500, #ffff00, #d4ff00, #aaff00, #80ff00, #55ff00, #2bff00, #00ff00, #00ff2b, #00ff55, #00ff80, #00ffaa, #00ffd5, #00ffff, #00d4ff, #00aaff, #007fff, #0055ff, #002bff, #0000ff, #2a00ff, #5500ff, #7f00ff, #aa00ff, #d400ff, #ff00ff, #ff00d4, #ff00aa, #ff0080, #ff0055, #ff002b, #ff0000); }
 
@@ -91,13 +91,16 @@ heading p { font-size: .7em; text-shadow: #000 0 1px; font-family: "Caviar Dream
 
 #hsl_picker { *zoom: 1; margin: 0; z-index: 100; list-style: none; background: rgba(0, 0, 0, 0.6); padding: 1.2em 0; -moz-box-shadow: rgba(0, 0, 0, 0.4) 0 0 1em 0.3em inset, rgba(255, 255, 255, 0.3) 0 1px, rgba(0, 0, 0, 0.3) 0 -1px; -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 0 1em 0.3em inset, rgba(255, 255, 255, 0.3) 0 1px, rgba(0, 0, 0, 0.3) 0 -1px; -o-box-shadow: rgba(0, 0, 0, 0.4) 0 0 1em 0.3em inset, rgba(255, 255, 255, 0.3) 0 1px, rgba(0, 0, 0, 0.3) 0 -1px; box-shadow: rgba(0, 0, 0, 0.4) 0 0 1em 0.3em inset, rgba(255, 255, 255, 0.3) 0 1px, rgba(0, 0, 0, 0.3) 0 -1px; -moz-background-size: 25px 25px; -webkit-background-size: 25px 25px; -o-background-size: 25px 25px; background-size: 25px 25px; background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(25%, rgba(0, 0, 0, 0.1)), color-stop(25%, rgba(0, 0, 0, 0)), color-stop(50%, rgba(0, 0, 0, 0)), color-stop(50%, rgba(0, 0, 0, 0.1)), color-stop(75%, rgba(0, 0, 0, 0.1)), color-stop(75%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0))); background-image: -moz-linear-gradient(left top, rgba(0, 0, 0, 0.1) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0)); background-image: linear-gradient(left top, rgba(0, 0, 0, 0.1) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0)); border: 1px solid rgba(0, 0, 0, 0.3); -moz-border-radius: 5px; -webkit-border-radius: 5px; -o-border-radius: 5px; -ms-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
 #hsl_picker:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
-#hsl_picker .slider { position: relative; padding: 10px 20px 10px 0; float: left; z-index: 1; width: 420px; }
+#hsl_picker .slider { position: relative; padding: 10px 20px 10px 0; float: left; z-index: 1; width: 450px; }
 #hsl_picker .slider > div:hover .thumb { background-color: rgba(255, 255, 255, 0.1); }
-#hsl_picker .slider > div + input { position: absolute; right: 0px; width: 30px; top: 4px; font-size: .9em; padding: 3px 6px; }
+#hsl_picker .slider > div + input { position: absolute; right: 0px; width: 60px; top: 4px; font-size: .9em; padding: 3px 6px; }
 
 #colors { padding: 42px 0px 10px; clear: both; position: relative; z-index: 0; }
-#colors input { width: 32.2%; display: inline-block; text-align: center; }
+#colors input { display: inline-block; text-align: center; }
 #colors input + input { margin-left: 5px; }
+#colors #hex { width: 8em; }
+#colors #rgb { width: 13em; }
+#colors #hsl { width: 17em; }
 
 .csstransforms3d #colors { -webkit-animation: slide-in .8s ease-out; }
 
@@ -116,10 +119,9 @@ h2 + p { border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 1.2em; }
 #why p { font-family: "Lucida sans", Helvetica, Arial, sans; }
 #why strong { color: #ccc; }
 #why a.why { color: #444; text-shadow: #000 0 0 2px; text-transform: lowercase; display: block; width: 3.5em; margin: 0 auto; text-align: center; display: none; }
-#why:target { margin-top: 2em; -moz-border-radius: 4px; -webkit-border-radius: 4px; -o-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; padding: 2em 2.5em .5em; background: rgba(0, 0, 0, 0.2); }
-#why:target h2, #why:target h3 { text-shadow: rgba(0, 0, 0, 0.7) 0 2px 2px; }
-#why:target pre, #why:target h2, #why:target h3, #why:target p { display: block; }
-#why:target a.why { display: none; }
+#why.hello { margin-top: 2em; -moz-border-radius: 4px; -webkit-border-radius: 4px; -o-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; padding: 2em 2.5em .5em; background: rgba(0, 0, 0, 0.2); }
+#why.hello h2, #why.hello h3 { text-shadow: rgba(0, 0, 0, 0.7) 0 2px 2px; }
+#why.hello pre, #why.hello h2, #why.hello h3, #why.hello p { display: block; }
 
 #footer { color: #555; text-shadow: rgba(0, 0, 0, 0.5) 0 1px 1px; margin-top: 1.3em; }
 #footer a { display: inline-block; color: #777; border-left: 1px solid rgba(0, 0, 0, 0.4); -moz-box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; -webkit-box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; -o-box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; box-shadow: rgba(255, 255, 255, 0.04) 1px 0 inset; margin-left: .35em; padding-left: .5em; line-height: 1.1em; }

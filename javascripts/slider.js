@@ -9,17 +9,20 @@ FS.HSLSlider = new Class({
     start: 0,
     steps: 100,
     range: [0, 100],
-    snap: true
+    snap: true,
+    color: false
   },
 
   initialize: function(options){
     this.setOptions(options);
     this.styles = new Element('style');
     document.head.grab(this.styles);
-    this.color = new FS.Color([Number.random(0, 360), 100, 50], {'type':'hsl'});;
-    this.hue = this.createSlider($('hue'), this.color.h(), 'hue');
-    this.saturation = this.createSlider($('saturation'), this.color.s(), 'sat');
-    this.lightness = this.createSlider($('lightness'), this.color.l(), 'light');
+    if(!this.getColorUrl()) {
+      this.color = new FS.Color([Number.random(0, 360), 100, 50], 'hsl');;
+    }
+    this.hue = this.createSlider($('hue'), this.color.hue());
+    this.saturation = this.createSlider($('saturation'), this.color.sat());
+    this.luminosity = this.createSlider($('luminosity'), this.color.lum());
     this.updateStyles();
     this.hexInput = $('hex').addEvent('keyup', this.changeHex.bind(this));
     this.rgbInput = $('rgb').addEvent('keyup', this.changeRgb.bind(this));
@@ -28,7 +31,7 @@ FS.HSLSlider = new Class({
     this.setColorValues();
   },
 
-  createSlider: function(el, start, type){
+  createSlider: function(el, start){
     var range = el.get('max') ? [0, el.get('max')] : this.options.range;
     var thumb = el.getFirst('div.thumb');
     var slider = new SliderEx(el, thumb, {
@@ -38,42 +41,54 @@ FS.HSLSlider = new Class({
       snap: this.options.snap,
       onChange: this.changeSlider.bind(this)
     });
-    slider.type = type;
     return slider;
   },
 
+  getColorUrl: function(){
+    var url = window.location.hash;
+    if(url.test(/^(#)([0-9a-fA-F]{3})([0-9a-fA-F]{3})?$/)){
+      this.color = new FS.Color(url, 'hex');
+      return true;
+    } else {
+      return false;
+    }
+  },
+
   setHsl: function(hsl){
-    this.color.set(hsl, 'hsl');
+    this.color = new FS.Color(hsl, 'hsl');
     this.setColorValues();
   },
 
   setRgb: function(rgb){
-    this.color.set(rgb, 'rgb');
+    this.color = new FS.Color(rgb, 'rgb');
     this.setColorValues();
   },
 
   setHex: function(hex){
-    this.color.set(hex, 'hex');
+    this.color = new FS.Color(hex, 'hex');
     this.setColorValues();
   },
 
   setColorValues: function(){
-    //set bottom row values
 
-    if (this.rgbInput.value != this.color.getRgb()) this.rgbInput.set('value', this.color.getRgb()).removeClass('error');
-    if (this.hslInput.value != this.color.getHsl()) this.hslInput.set('value', this.color.getHsl()).removeClass('error');
-    if (this.hexInput.value != this.color.getHex()) this.hexInput.set('value', this.color.getHex()).removeClass('error');
+    //set bottom row values
+    if (this.rgbInput.value != this.color.rgb()) this.rgbInput.set('value', this.color.rgb()).removeClass('error');
+    if (this.hslInput.value != this.color.hsl()) this.hslInput.set('value', this.color.hsl()).removeClass('error');
+    if (this.hexInput.value != this.color.hex()) this.hexInput.set('value', this.color.hex()).removeClass('error');
 
     //Set slider values
     var h = $('h'); var s = $('s'); var l = $('l');
-    if(h.value != this.color.h()) h.set('value', this.color.h()).removeClass('error');
-    if(s.value != this.color.s()) s.set('value', this.color.s()).removeClass('error');
-    if(l.value != this.color.l()) l.set('value', this.color.l()).removeClass('error');
+    if(h.value != this.color.hue()) h.set('value', this.color.hue()).removeClass('error');
+    if(s.value != this.color.sat()) s.set('value', this.color.sat()).removeClass('error');
+    if(l.value != this.color.lum()) l.set('value', this.color.lum()).removeClass('error');
 
     //set sliders
-    this.hue.set(this.color.h().round());
-    this.saturation.set(this.color.s().round());
-    this.lightness.set(this.color.l().round());
+    this.hue.set(this.color.hue().round());
+    this.saturation.set(this.color.sat().round());
+    this.luminosity.set(this.color.lum().round());
+
+    //update url
+    window.location.hash = this.color.hex();
 
     this.updateStyles();
   },
@@ -81,27 +96,27 @@ FS.HSLSlider = new Class({
   updateStyles: function(){
     sliderStyles = '#hsl_picker #hue { background-image: ' + this.sliderBg('hue', 'webkit') + '; background-image: ' + this.sliderBg('hue', 'moz') + '; background-image: ' + this.sliderBg('hue') + '; } ' +
       '#hsl_picker #saturation { background-image: ' + this.sliderBg('saturation', 'webkit') + ';  background-image: ' + this.sliderBg('saturation', 'moz') + '; background-image: ' + this.sliderBg('saturation') + '; } ' +
-      '#hsl_picker #lightness { background-image: ' + this.sliderBg('lightness', 'webkit') + ';  background-image: ' + this.sliderBg('lightness', 'moz') + '; background-image: ' + this.sliderBg('lightness') + '; } ' +
-      'body a:hover { color: '+ this.color.getHsl([this.color.h(), 100, 70]) +' !important; } '+
-      'h1 + p { color: '+ this.color.getHsl([this.color.h(), 40, 70]) +'; } '+
-      'body h2, body h3, code { color:'+ this.color.getHsl([this.color.h(), 20, 70]) +'; }';
+      '#hsl_picker #luminosity { background-image: ' + this.sliderBg('luminosity', 'webkit') + ';  background-image: ' + this.sliderBg('luminosity', 'moz') + '; background-image: ' + this.sliderBg('luminosity') + '; } ' +
+      'body a:hover { color: '+ this.color.hslStr([this.color.hue(), 100, 70]) +' !important; } '+
+      'h1 + p { color: '+ this.color.hslStr([this.color.hue(), 40, 70]) +'; } '+
+      'body h2, body h3, code { color:'+ this.color.hslStr([this.color.hue(), 20, 70]) +'; }';
 
     this.styles.set('text', sliderStyles);
 
     $$('h1')[0].setStyle('text-shadow', this.getTextShadow());
-    $('frame').setStyle('background-color', this.color.getHex());
-    $('color').setStyle('background', this.color.getHex());
+    $('frame').setStyle('background-color', this.color.hex());
+    $('color').setStyle('background', this.color.hex());
     $('shadow').setStyle('background', this.getShadow());
   },
 
   sliderBg: function(type, browser){
-    var H = this.color.h();
-    var S = this.color.s();
-    var L = this.color.l();
+    var H = this.color.hue();
+    var S = this.color.sat();
+    var L = this.color.lum();
     var colors = []
-    if (type == 'hue') for(i=0;i<36;i++){ colors.push('#'+this.color.hslToHex([i*10, S, L], 1)); }
-    else if(type == 'saturation') for(i=0;i<3;i++){ colors.push('#'+this.color.hslToHex([H, i*50, L], 1)); }
-    else if(type == 'lightness') for(i=0;i<3;i++){ colors.push('#'+this.color.hslToHex([H, S, i*50], 1)); }
+    if (type == 'hue') for(i=0;i<36;i++){ colors.push(this.color.hslStr([i*10, S, L], 1)); }
+    else if(type == 'saturation') for(i=0;i<3;i++){ colors.push(this.color.hslStr([H, i*50, L], 1)); }
+    else if(type == 'luminosity') for(i=0;i<3;i++){ colors.push(this.color.hslStr([H, S, i*50], 1)); }
 
     return this.gradientBG(colors, browser);
   },
@@ -124,22 +139,22 @@ FS.HSLSlider = new Class({
   },
 
   getShadow: function(){
-    var sat = this.color.s();
-    var lit = this.color.l();
+    var sat = this.color.sat();
+    var lum = this.color.lum();
     var s = sat;
-    var l = lit - lit * .35;
-    s = sat*(100 - lit)/100;
-    var color = [this.color.h(), s, l];
-    return this.color.getHsl(color);
+    var l = lum - lum * .35;
+    s = sat*(100 - lum)/100;
+    var color = [this.color.hue(), s, l];
+    return this.color.hslStr(color);
   },
 
   getTextShadow: function(){
-    s = (this.color.l() < 35) ? 30 : ((this.color.l() > 80) ? 30 : this.color.s());
-    l = (this.color.l() < 35) ? 35 : ((this.color.l() > 80) ? 80 : this.color.l());
-    var color = [this.color.h(), s/2.7, l];
+    s = (this.color.lum() < 35) ? 30 : ((this.color.lum() > 80) ? 30 : this.color.sat());
+    l = (this.color.lum() < 35) ? 35 : ((this.color.lum() > 80) ? 80 : this.color.lum());
+    var color = [this.color.hue(), (s/2.7).round(), l];
     var colors = [];
     for(i=1; i<=5; i++){
-      colors.push(this.color.getHsl(this.color.change(0, 0, (-5.5 * (i-1)).round(), color)));
+      colors.push(this.color.adjustLum((-5.5 * (i-1)).round(), color));
     }
     return colors[0]+' 0px 1px 0px, '+
     colors[1]+' 0px 2px 0px, '+
@@ -154,8 +169,10 @@ FS.HSLSlider = new Class({
   },
 
   changeSlider: function(val, slider){
-    if (typeof(slider.type) != 'undefined' && this.color.get(slider.type).round() != val){
-      this.setHsl([this.hue.step, this.saturation.step, this.lightness.step], 'hsl');
+    if ((slider == this.hue && this.color.hue().round() != val) ||
+      (slider == this.saturation && this.color.sat().round() != val) ||
+      (slider == this.luminosity && this.color.lum().round() != val)) {
+      this.setHsl([this.hue.step, this.saturation.step, this.luminosity.step]);
     }
   },
 
@@ -172,8 +189,8 @@ FS.HSLSlider = new Class({
       var inputs = this.hslPicker.getElements('input');
       var hsl = inputs.map(function(item, index){ return parseInt(item.value) });
 
-      if(this.validHsl(hsl)){
-        if(!hsl.equalTo(this.hsl)) this.setHsl(hsl);
+      if(this.color.validHsl(hsl)){
+        if(!hsl.equalTo(this.color.hsl(true))) this.setHsl(hsl);
       }else{
         event.target.addClass('error');
       }
@@ -185,9 +202,9 @@ FS.HSLSlider = new Class({
   changeHex: function(event){
     hex = this.hexInput.value;
     this.hexInput.removeClass('error');
-    if(this.color.valid(hex, 'hex') && hex != this.color.getHex()){
+    if(this.color.validHex(hex) && hex != this.color.hex()){
       this.setHex(hex);
-    }else if(!this.color.valid(hex, 'hex')) {
+    }else if(!this.color.validHex(hex)) {
       this.hexInput.addClass('error');
     }
   },
@@ -195,9 +212,9 @@ FS.HSLSlider = new Class({
   changeRgb: function(event){
     rgb = this.rgbInput.value
     this.rgbInput.removeClass('error');
-    if(this.color.valid(rgb, 'rgb') && rgb != this.color.getRgb()){
+    if(this.color.validRgb(rgb) && rgb != this.color.rgb()){
       this.setRgb(rgb);
-    }else if(!this.color.valid(rgb, 'rgb')) {
+    }else if(!this.color.validRgb(rgb)) {
       this.rgbInput.addClass('error');
     }
   },
@@ -205,12 +222,26 @@ FS.HSLSlider = new Class({
   changeHsl: function(event){
     hsl = this.hslInput.value
     this.hslInput.removeClass('error');
-    if(this.color.valid(hsl, 'hsl') && hsl != this.color.getHsl()){
+    if(this.color.validHsl(hsl) && hsl != this.color.hsl()){
       this.setHsl(hsl);
-    }else if(!this.color.valid(hsl, 'hsl')) {
+    }else if(!this.color.validHsl(hsl)) {
       this.hslInput.addClass('error');
     }
+  },
+
+  compare: function(color1, color2){
+    c1 = new FS.Color(color1).hsl(true);//this.hexToHsl(this.valid(color2, 'hex'));
+    c2 = new FS.Color(color2).hsl(true);
+    //c2 = this.hexToHsl(this.valid(color1, 'hex'));
+    var h = (c1[0] - c2[0]);
+    var s = (c1[1] - c2[1]);
+    var l = (c1[2] - c2[2]);
+    var msg = '#'+color2+" is "+Math.abs(h.round(3))+((h > 0) ? ' degrees higher' : ' degrees lower')+', '+
+    Math.abs(s)+'%'+((s > 0) ? ' less saturated' : ' more saturated') + ', and ' +
+    Math.abs(l) + '%'+((l > 0) ? ' darker' : ' lighter') + ' than #' + color1 + '.';
+    return msg;
   }
+
 });
 
 var SliderEx = new Class({
@@ -258,132 +289,178 @@ var SliderEx = new Class({
       return this;
 	}
 });
-FS.Color = new Class({
-  Implements: Options,
 
-  options: {
-    type: 'hex'
-  },
+window.addEvent('domready', function(){
+  new FS.HSLSlider();
+});
 
-  initialize: function(color, options){
-    this.setOptions(options);
-    this.set(color, this.options.type);
-  },
 
-  valid: function(color, type){
-    if(type == "hex"){
-      if(color.test(/^(#)?([0-9a-fA-F]{3})([0-9a-fA-F]{3})?$/)) color = this.strToHex(color);
-      else color = false;
-    } else if (type == "rgb") {
-      if(typeof(color) == "string"){ color = this.strToRgb(color); }
-      if(!color.every(function(item, index){ return (item >= 0) && (item <= 255) })){
-        color = false;
-      }
-    } else if (type == "hsl") {
-      if(typeof(color) == "string"){ color = this.strToHsl(color); }
-      if(!color.every(function(item, index){ return (index == 0 && item >= 0 && item <= 360) || (index > 0 && item >= 0 && item <= 100) })){
-        color = false;
-      }
-    } else {
-      color = false;
+// Map mouse events to touch events
+
+(function() {
+  try {
+    document.createEvent("TouchEvent");
+  } catch(e) {
+    return;
+  }
+
+  ['touchstart', 'touchmove', 'touchend'].each(function(type){
+      Element.NativeEvents[type] = 2;
+  });
+
+  var mapping = {
+    'mousedown': 'touchstart',
+    'mousemove': 'touchmove',
+    'mouseup': 'touchend'
+  };
+
+  var condition = function(event) {
+    var touch = event.event.changedTouches[0];
+    event.page = {
+      x: touch.pageX,
+      y: touch.pageY
+    };
+    return true;
+  };
+
+  for (var e in mapping) {
+    Element.Events[e] = {
+      base: mapping[e],
+      condition: condition
+    };
+  }
+})();
+
+Array.implement({
+  equalTo: function(arr){
+    if(this.length !== arr.length){
+      return false;
     }
-    return color;
+    for(var i = this.length - 1; i >= 0; i--){
+      if(this[i] !== arr[i]){
+        return false;
+      }
+    }
+    return true;
+  }
+});
+
+FS.Color = new Class({
+
+  initialize: function(color, type){
+    if (type == 'hex' && this.validHex(color)) {
+      this.setHex(color);
+    } else if (type == 'hsl' && this.validHsl(color)) {
+      this.setHsl(color);
+    } else if (type == 'rgb' && this.validRgb(color)) {
+      this.setRgb(color);
+    } else if (typeof(color) == 'string') {
+      if (this.validHex(color)) {
+        this.setHex(color);
+      } else if (this.validRgb(color)) {
+        this.setRgb(color);
+      } else if (this.validHsl(color)) {
+        this.setHsl(color);
+      }
+    }
   },
 
-  getHex: function(string) {
-    return '#'+this.hex;
+  setHsl: function(color) {
+    this._hsl = this.toHsl(color);
+    this._rgb = this.hslToRgb(this._hsl);
+    this._hex = this.rgbToHex(this._rgb);
   },
 
-  getRgb: function(rgb) {
-    var rgb = (typeof(rgb) == 'undefined') ? this.rgb : this.valid(rgb, 'rgb');
+  setRgb: function(color) {
+    this._rgb = this.toRgb(color);
+    this._hsl = this.rgbToHsl(this._rgb);
+    this._hex = this.rgbToHex(this._rgb);
+  },
+
+  setHex: function(color) {
+    this._hex = this.toHex(color);
+    this._rgb = this.hexToRgb(this._hex);
+    this._hsl = this.rgbToHsl(this._rgb);
+  },
+
+  adjustLum: function(l, color){
+    color = (typeof(color) == 'undefined') ? this._hsl : color;
+    return this.hslStr([color[0], color[1], color[2] + l]);
+  },
+
+  hex: function(notStr) {
+    return (notStr) ? this._hex : '#'+this._hex;
+  },
+
+  rgb: function(notStr) {
+    return (notStr) ? this._rgb : this.rgbStr(this._rgb);
+  },
+
+  hsl: function(notStr) {
+    return (notStr) ? this._hsl : this.hslStr(this._hsl);
+  },
+
+  rgbStr: function(rgb) {
     return "rgb(" + rgb.join(", ") + ")";
   },
 
-  getHsl: function(hsl){
-    var hsl = (typeof(hsl) == 'undefined') ? this.hsl : this.valid(hsl, 'hsl');
+  hslStr: function(hsl) {
     return "hsl("+ hsl[0] +", "+ hsl[1] +"%, "+ hsl[2] +"%)";
   },
 
-  h: function(){
-    return this.hsl[0];
+  hue: function(){
+    return this.hsl(true)[0];
   },
 
-  s: function(){
-    return this.hsl[1];
+  sat: function(){
+    return this.hsl(true)[1];
   },
 
-  l: function() {
-    return this.hsl[2];
+  lum: function() {
+    return this.hsl(true)[2];
   },
 
-  r: function() {
-    return this.rgb[0];
+  red: function() {
+    return this.rgb(true)[0];
   },
 
-  g: function() {
-    return this.rgb[1];
+  green: function() {
+    return this.rgb(true)[1];
   },
 
-  b: function() {
-    return this.rgb[2];
+  blue: function() {
+    return this.rgb(true)[2];
   },
 
-  get: function(string){
-    if(string == 'hue') return this.h();
-    if(string == 'sat') return this.s();
-    if(string == 'light') return this.l();
+  validHex: function(color){
+    return color.test(/^(#)?([0-9a-fA-F]{3})([0-9a-fA-F]{3})?$/);
   },
 
-  set: function(color, type){
-    color = this.valid(color, type);
-    if(color){
-      if(type == 'hex'){
-        this.hex = color;
-        this.rgb = this.hexToRgb(color);
-        this.hsl = this.hexToHsl(color);
-      } else if (type == 'rgb') {
-        this.hex = this.rgbToHex(color);
-        this.rgb = color;
-        this.hsl = this.rgbToHsl(color);
-      } else if (type == 'hsl') {
-        this.hex = this.hslToHex(color);
-        this.rgb = this.hslToRgb(color);
-        this.hsl = color;
-      }
-    }
-    return color;
+  validRgb: function (color) {
+    color = (typeof(color) == 'array') ? color : this.toRgb(color);
+    return color.every(function(item, index){ return (item >= 0) && (item <= 255) })
   },
 
-  change: function(h,s,l, color){
-    h = (typeof(h) == 'undefined') ? 0 : h;
-    s = (typeof(s) == 'undefined') ? 0 : s;
-    l = (typeof(l) == 'undefined') ? 0 : l;
-    color = (typeof(color) == 'undefined') ? this.hsl : color;
-    return [color[0] + h, color[1] + s, color[2] + l];
+  validHsl: function(color) {
+    color = (typeof(color) == 'array') ? color : this.toHsl(color);
+    return color.every(function(item, index){ return (index == 0 && item >= 0 && item <= 360) || (index > 0 && item >= 0 && item <= 100) });
   },
 
-  compareHex: function(color1, color2){
-    color2 = (typeof(color2) == 'undefined') ? this.hex : color2;
-    c2 = this.hexToHsl(this.valid(color2, 'hex'));
-    c1 = this.hexToHsl(this.valid(color1, 'hex'));
-    var h = (c1[0] - c2[0]);
-    var s = (c1[1] - c2[1]);
-    var l = (c1[2] - c2[2]);
-    var msg = '#'+color2+" is "+Math.abs(h.round(3))+((h > 0) ? ' degrees higher' : ' degrees lower')+', '+
-    Math.abs(s)+'%'+((s > 0) ? ' less saturated' : ' more saturated') + ', and ' +
-    Math.abs(l) + '%'+((l > 0) ? ' darker' : ' lighter') + ' than #' + color1 + '.';
-    return msg;
+  toRgb: function(rgb){
+    if (typeof(rgb) == 'string')
+      return rgb.replace(/rgb\(/, '').replace(/\)/, '').replace(/;/, '').clean().split(',').map(function(item, index) { return parseFloat(item); });
+    else
+      return rgb;
   },
 
-  strToRgb: function(rgb){
-    return rgb.replace(/rgb\(/, '').replace(/\)/, '').replace(/;/, '').clean().split(',').map(function(item, index) { return parseFloat(item); });
+  toHsl: function (hsl){
+    if (typeof(hsl) == 'string')
+      return hsl.replace(/hsl\(/, '').replace(/\)/, '').replace(/;/, '').replace(/\%/, '').clean().split(',').map(function(item, index) { return parseFloat(item); });
+    else
+      return hsl;
   },
 
-  strToHsl: function (hsl){
-    return hsl.replace(/hsl\(/, '').replace(/\)/, '').replace(/;/, '').replace(/\%/, '').clean().split(',').map(function(item, index) { return parseFloat(item); });
-  },
-
-  strToHex: function(hex){
+  toHex: function(hex){
     return hex.replace(/\#/, '').clean();
   },
 
@@ -477,60 +554,5 @@ FS.Color = new Class({
     l = (l*100).round(3);
 
     return [h, s, l];
-  }
-})
-
-window.addEvent('domready', function(){
-  new FS.HSLSlider();
-});
-
-
-// Map mouse events to touch events
-
-(function() {
-  try {
-    document.createEvent("TouchEvent");
-  } catch(e) {
-    return;
-  }
-
-  ['touchstart', 'touchmove', 'touchend'].each(function(type){
-      Element.NativeEvents[type] = 2;
-  });
-
-  var mapping = {
-    'mousedown': 'touchstart',
-    'mousemove': 'touchmove',
-    'mouseup': 'touchend'
-  };
-
-  var condition = function(event) {
-    var touch = event.event.changedTouches[0];
-    event.page = {
-      x: touch.pageX,
-      y: touch.pageY
-    };
-    return true;
-  };
-
-  for (var e in mapping) {
-    Element.Events[e] = {
-      base: mapping[e],
-      condition: condition
-    };
-  }
-})();
-
-Array.implement({
-  equalTo: function(arr){
-    if(this.length !== arr.length){
-      return false;
-    }
-    for(var i = this.length - 1; i >= 0; i--){
-      if(this[i] !== arr[i]){
-        return false;
-      }
-    }
-    return true;
   }
 });

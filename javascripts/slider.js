@@ -92,12 +92,12 @@ FS.HSLSlider = new Class({
 
     this.updateStyles();
   },
-  
+
   updateLocation:function(color){
     clearTimeout(this._locationHashTimer);
     this._locationHashTimer = setTimeout(function(){
       window.location.hash = color.hex();
-    }, 1000);
+    }, 300);
   },
 
   updateStyles: function(){

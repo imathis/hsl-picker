@@ -88,9 +88,16 @@ FS.HSLSlider = new Class({
     this.luminosity.set(this.color.lum().round());
 
     //update url
-    window.location.hash = this.color.hex();
+    this.updateLocation(this.color);
 
     this.updateStyles();
+  },
+  
+  updateLocation:function(color){
+    clearTimeout(this._locationHashTimer);
+    this._locationHashTimer = setTimeout(function(){
+      window.location.hash = color.hex();
+    }, 1000);
   },
 
   updateStyles: function(){

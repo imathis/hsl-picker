@@ -1,1 +1,2 @@
-vendor/ruby
+.DS_Store
+.sass-cache

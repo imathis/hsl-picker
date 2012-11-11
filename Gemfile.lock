@@ -1,41 +1,65 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
-    addressable (2.2.4)
-    chunky_png (0.12.0)
-    compass (0.11.beta.2)
-      chunky_png (~> 0.12.0)
-      sass (>= 3.1.0.alpha.218)
-    configuration (1.2.0)
-    em-websocket (0.2.0)
-      addressable (>= 2.1.1)
-      eventmachine (>= 0.12.9)
-    eventmachine (0.12.10)
-    guard (0.3.0)
-      open_gem (~> 1.4.2)
-      thor (~> 0.14.6)
-    guard-livereload (0.1.7)
-      em-websocket (~> 0.2.0)
-      guard (>= 0.2.2)
-      json (~> 1.4.6)
-    guard-shell (0.1.1)
-      guard (>= 0.2.0)
-    json (1.4.6)
-    launchy (0.3.7)
-      configuration (>= 0.0.5)
-      rake (>= 0.8.1)
-    open_gem (1.4.2)
-      launchy (~> 0.3.5)
-    rake (0.8.7)
-    rb-fsevent (0.3.10)
-    sass (3.1.0.alpha.221)
-    thor (0.14.6)
+    chunky_png (1.2.6)
+    coderay (1.0.8)
+    coffee-script (2.2.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.4.0)
+    compass (0.12.2)
+      chunky_png (~> 1.2)
+      fssm (>= 0.2.7)
+      sass (~> 3.1)
+    execjs (1.4.0)
+      multi_json (~> 1.0)
+    ffi (1.1.5)
+    fssm (0.2.9)
+    guard (1.5.3)
+      listen (>= 0.4.2)
+      lumberjack (>= 1.0.2)
+      pry (>= 0.9.10)
+      thor (>= 0.14.6)
+    guard-coffeescript (1.2.1)
+      coffee-script (>= 2.2.0)
+      guard (>= 1.1.0)
+    guard-compass (0.0.6)
+      compass (>= 0.10.5)
+      guard (>= 0.2.1)
+    guard-shell (0.5.1)
+      guard (>= 1.1.0)
+    listen (0.5.3)
+    lumberjack (1.0.2)
+    method_source (0.8.1)
+    multi_json (1.3.7)
+    pry (0.9.10)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.3.1)
+    rb-fchange (0.0.6)
+      ffi
+    rb-fsevent (0.9.1)
+    rb-inotify (0.8.8)
+      ffi (>= 0.5.0)
+    sass (3.2.2)
+    slop (3.3.3)
+    stitch-rb (0.0.8)
+    thor (0.16.0)
+    uglifier (1.3.0)
+      execjs (>= 0.3.0)
+      multi_json (~> 1.0, >= 1.0.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  compass (= 0.11.beta.2)
-  guard-livereload
+  compass
+  guard
+  guard-coffeescript
+  guard-compass
   guard-shell
+  rb-fchange
   rb-fsevent
+  rb-inotify
+  stitch-rb
+  uglifier

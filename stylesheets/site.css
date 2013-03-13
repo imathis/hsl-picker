@@ -112,28 +112,112 @@
 /* line 60, ../assets/stylesheets/_picker.scss */
 .foreground {
   z-index: 2;
-  cursor: pointer;
 }
 
-/* line 65, ../assets/stylesheets/_picker.scss */
+/* line 63, ../assets/stylesheets/_picker.scss */
+.background {
+  background-color: rgba(255, 255, 255, 0);
+}
+
+/* line 67, ../assets/stylesheets/_picker.scss */
+.expose {
+  -webkit-transition: all 0.15s ease-out;
+  -moz-transition: all 0.15s ease-out;
+  -o-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 16px;
+  height: 16px;
+  z-index: 2;
+  cursor: pointer;
+  opacity: .4;
+  background: rgba(0, 0, 0, 0.8);
+}
+/* line 79, ../assets/stylesheets/_picker.scss */
+.expose:before, .expose:after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  width: 5px;
+}
+/* line 84, ../assets/stylesheets/_picker.scss */
+.expose:before {
+  border: solid 2px rgba(255, 255, 255, 0.8);
+  border-bottom: 0;
+  border-right: 0;
+  top: 3px;
+  left: 3px;
+}
+/* line 88, ../assets/stylesheets/_picker.scss */
+.expose:after {
+  border: solid 2px rgba(255, 255, 255, 0.8);
+  border-top: 0;
+  border-left: 0;
+  bottom: 3px;
+  right: 3px;
+}
+
+/* line 94, ../assets/stylesheets/_picker.scss */
+.color-tiles:hover .expose {
+  opacity: 1;
+}
+
+/* line 98, ../assets/stylesheets/_picker.scss */
+.exposed .expose, .expose:hover {
+  width: 20px;
+  height: 20px;
+  top: 3px;
+  right: 3px;
+}
+
+/* line 106, ../assets/stylesheets/_picker.scss */
+.exposed .expose:before, .exposed .expose:after {
+  height: 4px;
+  width: 4px;
+}
+/* line 107, ../assets/stylesheets/_picker.scss */
+.exposed .expose:before {
+  border: solid 2px rgba(255, 255, 255, 0.8);
+  border-top: 0;
+  border-left: 0;
+  top: 3px;
+  left: 3px;
+}
+/* line 111, ../assets/stylesheets/_picker.scss */
+.exposed .expose:after {
+  border: solid 2px rgba(255, 255, 255, 0.8);
+  border-bottom: 0;
+  border-right: 0;
+  bottom: 3px;
+  right: 3px;
+}
+
+/* line 117, ../assets/stylesheets/_picker.scss */
 .background-color {
   z-index: 0;
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0);
 }
 
-/* line 72, ../assets/stylesheets/_picker.scss */
+/* line 124, ../assets/stylesheets/_picker.scss */
 .exposed .bg {
   left: 0;
 }
-/* line 73, ../assets/stylesheets/_picker.scss */
+/* line 125, ../assets/stylesheets/_picker.scss */
 .exposed .foreground {
   left: 29px;
   top: 29px;
   width: 90px;
   height: 90px;
 }
-/* line 77, ../assets/stylesheets/_picker.scss */
+/* line 129, ../assets/stylesheets/_picker.scss */
 .exposed .background {
   right: 29px;
   width: 90px;
@@ -142,13 +226,14 @@
   -moz-box-shadow: rgba(0, 0, 0, 0.8) 0 1px 10px;
   box-shadow: rgba(0, 0, 0, 0.8) 0 1px 10px;
 }
-/* line 82, ../assets/stylesheets/_picker.scss */
+/* line 134, ../assets/stylesheets/_picker.scss */
 .exposed .foreground {
   -webkit-box-shadow: rgba(0, 0, 0, 0.8) 0 1px 10px;
   -moz-box-shadow: rgba(0, 0, 0, 0.8) 0 1px 10px;
   box-shadow: rgba(0, 0, 0, 0.8) 0 1px 10px;
+  cursor: pointer;
 }
-/* line 86, ../assets/stylesheets/_picker.scss */
+/* line 139, ../assets/stylesheets/_picker.scss */
 .exposed .selected:after {
   content: "";
   position: absolute;
@@ -168,7 +253,7 @@
   cursor: pointer;
 }
 
-/* line 97, ../assets/stylesheets/_picker.scss */
+/* line 150, ../assets/stylesheets/_picker.scss */
 .background, .foreground {
   -webkit-transition: all 0.25s ease-in-out;
   -moz-transition: all 0.25s ease-in-out;
@@ -176,13 +261,13 @@
   transition: all 0.25s ease-in-out;
 }
 
-/* line 101, ../assets/stylesheets/_picker.scss */
+/* line 154, ../assets/stylesheets/_picker.scss */
 .bgs {
   position: absolute;
   left: -34px;
   width: 30px;
 }
-/* line 105, ../assets/stylesheets/_picker.scss */
+/* line 158, ../assets/stylesheets/_picker.scss */
 .bgs, .bgs:before, .bgs:after {
   -moz-border-radius-topleft: 6px;
   -webkit-border-top-left-radius: 6px;
@@ -191,15 +276,15 @@
   -webkit-border-bottom-left-radius: 6px;
   border-bottom-left-radius: 6px;
 }
-/* line 106, ../assets/stylesheets/_picker.scss */
+/* line 159, ../assets/stylesheets/_picker.scss */
 .bgs:after {
   right: 0px;
 }
-/* line 107, ../assets/stylesheets/_picker.scss */
+/* line 160, ../assets/stylesheets/_picker.scss */
 .exposed .bgs div {
   left: 0;
 }
-/* line 108, ../assets/stylesheets/_picker.scss */
+/* line 161, ../assets/stylesheets/_picker.scss */
 .bgs div {
   width: 30px;
   height: 29px;
@@ -207,7 +292,7 @@
   margin-top: 1px;
   cursor: pointer;
 }
-/* line 114, ../assets/stylesheets/_picker.scss */
+/* line 167, ../assets/stylesheets/_picker.scss */
 .bgs div:first-child {
   -moz-border-radius-topleft: 5px;
   -webkit-border-top-left-radius: 5px;
@@ -217,7 +302,7 @@
   border-top-right-radius: 5px;
   margin-top: 0;
 }
-/* line 115, ../assets/stylesheets/_picker.scss */
+/* line 168, ../assets/stylesheets/_picker.scss */
 .bgs div:last-child {
   -moz-border-radius-bottomleft: 5px;
   -webkit-border-bottom-left-radius: 5px;
@@ -226,23 +311,23 @@
   -webkit-border-bottom-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-/* line 117, ../assets/stylesheets/_picker.scss */
+/* line 170, ../assets/stylesheets/_picker.scss */
 .bgs .none {
   background-color: rgba(255, 255, 255, 0);
 }
-/* line 120, ../assets/stylesheets/_picker.scss */
+/* line 173, ../assets/stylesheets/_picker.scss */
 .bgs .light {
   background: #fff;
 }
-/* line 121, ../assets/stylesheets/_picker.scss */
+/* line 174, ../assets/stylesheets/_picker.scss */
 .bgs .dark {
   background: #000;
 }
-/* line 122, ../assets/stylesheets/_picker.scss */
+/* line 175, ../assets/stylesheets/_picker.scss */
 .bgs .random {
   background: #007fff;
 }
-/* line 124, ../assets/stylesheets/_picker.scss */
+/* line 177, ../assets/stylesheets/_picker.scss */
 .bgs .random:after {
   content: "";
   height: 6px;
@@ -260,7 +345,7 @@
   box-shadow: rgba(0, 0, 0, 0.8) 6px 5px, rgba(255, 255, 255, 0.4) 6px 6px 1px, rgba(0, 0, 0, 0.8) 18px 5px, rgba(255, 255, 255, 0.4) 18px 6px 1px, rgba(0, 0, 0, 0.8) 12px 12px, rgba(255, 255, 255, 0.4) 12px 13px 1px, rgba(0, 0, 0, 0.8) 6px 19px, rgba(255, 255, 255, 0.4) 6px 20px 1px, rgba(0, 0, 0, 0.8) 18px 19px, rgba(255, 255, 255, 0.4) 18px 20px 1px;
 }
 
-/* line 144, ../assets/stylesheets/_picker.scss */
+/* line 197, ../assets/stylesheets/_picker.scss */
 .slider {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -280,7 +365,7 @@
   float: left;
   clear: left;
 }
-/* line 145, ../assets/stylesheets/_picker.scss */
+/* line 198, ../assets/stylesheets/_picker.scss */
 .slider, .slider > div {
   width: 381px;
   height: 20px;
@@ -288,7 +373,7 @@
   -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 2px 1px inset, rgba(255, 255, 255, 0.2) 0 1px inset, rgba(0, 0, 0, 0.4) 0 -1px 1px inset, rgba(0, 0, 0, 0.4) 0 1px 1px, black 0 0 2px 1px;
   box-shadow: rgba(255, 255, 255, 0.1) 0 1px 2px 1px inset, rgba(255, 255, 255, 0.2) 0 1px inset, rgba(0, 0, 0, 0.4) 0 -1px 1px inset, rgba(0, 0, 0, 0.4) 0 1px 1px, black 0 0 2px 1px;
 }
-/* line 149, ../assets/stylesheets/_picker.scss */
+/* line 202, ../assets/stylesheets/_picker.scss */
 .slider > div {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -296,7 +381,7 @@
   -o-border-radius: 10px;
   border-radius: 10px;
 }
-/* line 161, ../assets/stylesheets/_picker.scss */
+/* line 214, ../assets/stylesheets/_picker.scss */
 .slider:after, .slider:before {
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
@@ -304,12 +389,12 @@
   -o-border-radius: 15px;
   border-radius: 15px;
 }
-/* line 164, ../assets/stylesheets/_picker.scss */
+/* line 217, ../assets/stylesheets/_picker.scss */
 .slider:hover .handle {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* line 169, ../assets/stylesheets/_picker.scss */
+/* line 222, ../assets/stylesheets/_picker.scss */
 .handle {
   position: absolute;
   cursor: pointer;
@@ -339,12 +424,12 @@
   box-shadow: white 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px -1px 1px inset, rgba(0, 0, 0, 0.4) 0px 1px 4px 0px, rgba(0, 0, 0, 0.6) 0 0 2px;
 }
 
-/* line 185, ../assets/stylesheets/_picker.scss */
+/* line 238, ../assets/stylesheets/_picker.scss */
 #controls {
   overflow: hidden;
   *zoom: 1;
 }
-/* line 187, ../assets/stylesheets/_picker.scss */
+/* line 240, ../assets/stylesheets/_picker.scss */
 #controls input {
   width: 40px;
   text-align: right;
@@ -354,21 +439,21 @@
   margin-left: 8px;
 }
 
-/* line 197, ../assets/stylesheets/_picker.scss */
+/* line 250, ../assets/stylesheets/_picker.scss */
 #colors {
   clear: left;
 }
-/* line 199, ../assets/stylesheets/_picker.scss */
+/* line 252, ../assets/stylesheets/_picker.scss */
 #colors input {
   text-align: center;
   margin-left: 2px;
 }
-/* line 201, ../assets/stylesheets/_picker.scss */
+/* line 254, ../assets/stylesheets/_picker.scss */
 #colors input:first-child {
   margin-left: 0;
 }
 
-/* line 205, ../assets/stylesheets/_picker.scss */
+/* line 258, ../assets/stylesheets/_picker.scss */
 input {
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
@@ -389,28 +474,28 @@ input {
   color: rgba(255, 255, 255, 0.8);
   text-shadow: rgba(0, 0, 0, 0.5) 0 2px 1px;
 }
-/* line 215, ../assets/stylesheets/_picker.scss */
+/* line 268, ../assets/stylesheets/_picker.scss */
 input:focus {
   outline: none;
   color: #fff;
 }
 
-/* line 218, ../assets/stylesheets/_picker.scss */
+/* line 271, ../assets/stylesheets/_picker.scss */
 #hex {
   width: 5.7em;
 }
 
-/* line 219, ../assets/stylesheets/_picker.scss */
+/* line 272, ../assets/stylesheets/_picker.scss */
 #rgba {
   width: 14em;
 }
 
-/* line 220, ../assets/stylesheets/_picker.scss */
+/* line 273, ../assets/stylesheets/_picker.scss */
 #hsla {
   width: 15em;
 }
 
-/* line 222, ../assets/stylesheets/_picker.scss */
+/* line 275, ../assets/stylesheets/_picker.scss */
 input.error {
   -webkit-box-shadow: rgba(255, 127, 127, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
   -moz-box-shadow: rgba(255, 127, 127, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;

@@ -59,7 +59,59 @@
 
 .foreground {
   z-index: 2;
+}
+.background {
+  background-color: rgba(#fff, 0);
+}
+
+.expose {
+  @include transition(all .15s ease-out);
+  @include border-radius(2px);
+  position: absolute; top: 5px; right: 5px;
+  width: 16px; height: 16px;
+  z-index: 2;
   cursor: pointer;
+  opacity: .4;
+  background: rgba(#000, .8);
+  $pad: 3px;
+  $arrow-color: rgba(#fff, .8);
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    height: 5px; width: 5px;
+  }
+  &:before {
+    border: solid 2px $arrow-color { bottom: 0; right: 0 }
+    top: $pad; left: $pad;
+  }
+  &:after {
+    border: solid 2px $arrow-color { top: 0; left: 0 }
+    bottom: $pad; right: $pad;
+  }
+}
+
+.color-tiles:hover .expose {
+  opacity: 1;
+}
+
+.exposed .expose, .expose:hover {
+  width: 20px; height: 20px;
+  top: 3px; right: 3px;
+}
+
+.exposed .expose {
+  $arrow-color: rgba(#fff, .8);
+  $pad: 3px;
+  &:before, &:after { height: 4px; width: 4px; }
+  &:before {
+    border: solid 2px $arrow-color { top: 0; left: 0 }
+    top: $pad; left: $pad;
+  }
+  &:after {
+    border: solid 2px $arrow-color { bottom: 0; right: 0 }
+    bottom: $pad; right: $pad;
+  }
 }
 
 .background-color {
@@ -81,6 +133,7 @@
   }
   .foreground {
     @include box-shadow(rgba(#000, .8) 0 1px 10px);
+    cursor: pointer;
   }
   .selected {
     &:after {

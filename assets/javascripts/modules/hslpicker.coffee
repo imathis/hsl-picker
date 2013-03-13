@@ -3,7 +3,7 @@ HSL =
 
     initialize: (options) ->
       @setElement $(options.el)
-      @backgroundColor = 'hsla(360, 100, 100, 0)'
+      @backgroundColor = 'hsla(360, 100%, 100%, 0)'
       @model.on 'change:h', @setHue, this
       @model.on 'change:s', @setSat, this
       @model.on 'change:l', @setLum, this
@@ -18,7 +18,7 @@ HSL =
       'keydown #controls input'        : 'bumpHsl'
       'keyup #controls input'          : 'editHsl'
       'keyup #colors input'            : 'changeColor'
-      'click .color-tiles'             : 'toggleExposed'
+      'click .expose'                  : 'toggleExposed'
       'click .foreground, .background' : 'cycleSelectedTile'
       'click .bg'                      : 'setTileBg'
 
@@ -58,28 +58,24 @@ HSL =
       else
         el.addClass 'error'
     
-    exposed: ->
-      $('.color-tiles').hasClass 'exposed'
-
     toggleExposed: ->
-      if @exposed() and $('.foreground').hasClass('selected')
-        $('.color-tiles').removeClass 'exposed' 
-        $('.slider').css 'background-color': @backgroundColor
-      else
-        $('.color-tiles').addClass('exposed')
-        $('.slider').css 'background-color': 'transparent'
+      $('.color-tiles').toggleClass 'exposed' 
+      $('.slider').css 'background-color', if $('.color-tiles').hasClass('exposed') then 'transparent' else @backgroundColor
+      unless $('.foreground').hasClass('selected')
+        $('.foreground').addClass('selected')
+        $('.background').removeClass('selected')
+        @model.hsla @foregroundColor
 
     cycleSelectedTile: (e)->
-      if @exposed()
-        tile = $(e.currentTarget)
-        unless tile.hasClass 'selected'
-          e.stopPropagation()
-          $('.tile.selected').removeClass 'selected'
-          tile.addClass 'selected'
-          @model.hsla if tile.hasClass 'foreground'
-            @foregroundColor
-          else
-            @backgroundColor 
+      tile = $(e.currentTarget)
+      unless tile.hasClass 'selected'
+        $('.tile.selected').removeClass 'selected'
+        tile.addClass 'selected'
+        color = if tile.hasClass 'foreground'
+          @foregroundColor
+        else
+          @backgroundColor 
+        @model.hsla color
       
     setTile: ->
       if $('.foreground').hasClass 'selected'

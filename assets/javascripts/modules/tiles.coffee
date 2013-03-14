@@ -4,6 +4,7 @@ tiles = Backbone.View.extend
     @model.on 'change:foreground', @updateForeground, this
     @model.on 'change:background', @updateBackground, this
     @model.set background: [360, 100, 100, 0] unless @model.get('background')
+    _.delay @toggleExposed, 1000
 
   events:
     'click .expose'                  : 'toggleExposed'

@@ -57,7 +57,6 @@ site = Backbone.View.extend
       @model.set foreground: foreground if foreground?
       if background?
         @model.set background: background 
-        _.delay @tiles.toggleExposed, 500
       foreground
   
   setUrl: ->

@@ -68,6 +68,8 @@ site = Backbone.View.extend
 
     input=$('.url')
     url = "#{host}/#{hash}"
+    update = @throttle ((h)-> window.location.replace(h)), 300
+    update(hash)
     width = url.length*7.8
     input.css width: width
     input.val(url) 
@@ -107,6 +109,14 @@ site = Backbone.View.extend
     
   adjustLum: (l, color=@model.hsla())->
     @model.hslaStr [color[0], color[1], color[2] + 1, @model.get('a')]
+
+  throttle: (fn, delay=50) ->
+    timer = null
+    ->
+      context = @
+      args = arguments
+      clearTimeout timer
+      timer = setTimeout (-> fn.apply(context, args)), delay
 
 module.exports = ->
   color = color()

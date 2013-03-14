@@ -68,7 +68,7 @@ site = Backbone.View.extend
 
     input=$('.url')
     url = "#{host}/#{hash}"
-    width = url.length*7.45
+    width = url.length*7.8
     input.css width: width
     input.val(url) 
 

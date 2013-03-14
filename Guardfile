@@ -11,7 +11,7 @@ end
 guard :shell do
   watch /^assets\/javascripts\/.+\.(js|coffee)/ do |change|
     file = "javascripts/hslpicker.js"
-    env = 'dev'
+    env = 'production'
 
     lib = ['underscore.js', 'backbone.js', 'dragdealer.js'].collect {|item| Dir.glob("assets/javascripts/lib/#{item}") }.flatten.uniq
     modules = Dir.glob('assets/javascripts/modules/*.*')

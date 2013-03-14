@@ -235,7 +235,7 @@
   @include box-shadow(rgba(#fff, 1) 0px 1px 1px inset, rgba(#000, 0.4) 0px -1px 1px inset, rgba(#000, 0.4) 0px 1px 4px 0px, rgba(#000, .6) 0 0 2px);
 }
 
-#controls {
+.sliders {
   @include clearfix;
   input {
     width: 40px;
@@ -247,7 +247,7 @@
   }
 }
 
-#colors {
+.color-inputs {
   clear: left;
   input {
     text-align: center; margin-left: 2px;

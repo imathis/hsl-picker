@@ -11,10 +11,10 @@ end
 guard :shell do
   watch /^assets\/javascripts\/.+\.(js|coffee)/ do |change|
     file = "javascripts/hslpicker.js"
-    env = 'production'
+    env = 'dev'
 
     lib = ['underscore.js', 'backbone.js', 'dragdealer.js'].collect {|item| Dir.glob("assets/javascripts/lib/#{item}") }.flatten.uniq
-    modules = ['assets/javascripts/modules/hslpicker.coffee']
+    modules = Dir.glob('assets/javascripts/modules/*.*')
     fingerprint = Digest::MD5.hexdigest((lib|modules).map! { |path| "#{File.mtime(path).to_i}" }.join+env)
 
     if File.exists?(file) and File.open(file) {|f| f.readline} =~ /#{fingerprint}/

@@ -1,7 +1,4262 @@
-/* fingerprint: bf1f84c5e403a55925622adf9dc8fd29 */
+/* fingerprint: 9c318404240e0f571b41fba74bf253ac */
 //     Underscore.js 1.4.2
 //     http://underscorejs.org
 //     (c) 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
 //     Underscore may be freely distributed under the MIT license.
-(function(){var e=this,t=e._,n={},r=Array.prototype,i=Object.prototype,s=Function.prototype,o=r.push,u=r.slice,a=r.concat,f=r.unshift,l=i.toString,c=i.hasOwnProperty,h=r.forEach,p=r.map,d=r.reduce,v=r.reduceRight,m=r.filter,g=r.every,y=r.some,b=r.indexOf,w=r.lastIndexOf,E=Array.isArray,S=Object.keys,x=s.bind,T=function(e){if(e instanceof T)return e;if(!(this instanceof T))return new T(e);this._wrapped=e};typeof exports!="undefined"?(typeof module!="undefined"&&module.exports&&(exports=module.exports=T),exports._=T):e._=T,T.VERSION="1.4.2";var N=T.each=T.forEach=function(e,t,r){if(e==null)return;if(h&&e.forEach===h)e.forEach(t,r);else if(e.length===+e.length){for(var i=0,s=e.length;i<s;i++)if(t.call(r,e[i],i,e)===n)return}else for(var o in e)if(T.has(e,o)&&t.call(r,e[o],o,e)===n)return};T.map=T.collect=function(e,t,n){var r=[];return e==null?r:p&&e.map===p?e.map(t,n):(N(e,function(e,i,s){r[r.length]=t.call(n,e,i,s)}),r)},T.reduce=T.foldl=T.inject=function(e,t,n,r){var i=arguments.length>2;e==null&&(e=[]);if(d&&e.reduce===d)return r&&(t=T.bind(t,r)),i?e.reduce(t,n):e.reduce(t);N(e,function(e,s,o){i?n=t.call(r,n,e,s,o):(n=e,i=!0)});if(!i)throw new TypeError("Reduce of empty array with no initial value");return n},T.reduceRight=T.foldr=function(e,t,n,r){var i=arguments.length>2;e==null&&(e=[]);if(v&&e.reduceRight===v)return r&&(t=T.bind(t,r)),arguments.length>2?e.reduceRight(t,n):e.reduceRight(t);var s=e.length;if(s!==+s){var o=T.keys(e);s=o.length}N(e,function(u,a,f){a=o?o[--s]:--s,i?n=t.call(r,n,e[a],a,f):(n=e[a],i=!0)});if(!i)throw new TypeError("Reduce of empty array with no initial value");return n},T.find=T.detect=function(e,t,n){var r;return C(e,function(e,i,s){if(t.call(n,e,i,s))return r=e,!0}),r},T.filter=T.select=function(e,t,n){var r=[];return e==null?r:m&&e.filter===m?e.filter(t,n):(N(e,function(e,i,s){t.call(n,e,i,s)&&(r[r.length]=e)}),r)},T.reject=function(e,t,n){var r=[];return e==null?r:(N(e,function(e,i,s){t.call(n,e,i,s)||(r[r.length]=e)}),r)},T.every=T.all=function(e,t,r){t||(t=T.identity);var i=!0;return e==null?i:g&&e.every===g?e.every(t,r):(N(e,function(e,s,o){if(!(i=i&&t.call(r,e,s,o)))return n}),!!i)};var C=T.some=T.any=function(e,t,r){t||(t=T.identity);var i=!1;return e==null?i:y&&e.some===y?e.some(t,r):(N(e,function(e,s,o){if(i||(i=t.call(r,e,s,o)))return n}),!!i)};T.contains=T.include=function(e,t){var n=!1;return e==null?n:b&&e.indexOf===b?e.indexOf(t)!=-1:(n=C(e,function(e){return e===t}),n)},T.invoke=function(e,t){var n=u.call(arguments,2);return T.map(e,function(e){return(T.isFunction(t)?t:e[t]).apply(e,n)})},T.pluck=function(e,t){return T.map(e,function(e){return e[t]})},T.where=function(e,t){return T.isEmpty(t)?[]:T.filter(e,function(e){for(var n in t)if(t[n]!==e[n])return!1;return!0})},T.max=function(e,t,n){if(!t&&T.isArray(e)&&e[0]===+e[0]&&e.length<65535)return Math.max.apply(Math,e);if(!t&&T.isEmpty(e))return-Infinity;var r={computed:-Infinity};return N(e,function(e,i,s){var o=t?t.call(n,e,i,s):e;o>=r.computed&&(r={value:e,computed:o})}),r.value},T.min=function(e,t,n){if(!t&&T.isArray(e)&&e[0]===+e[0]&&e.length<65535)return Math.min.apply(Math,e);if(!t&&T.isEmpty(e))return Infinity;var r={computed:Infinity};return N(e,function(e,i,s){var o=t?t.call(n,e,i,s):e;o<r.computed&&(r={value:e,computed:o})}),r.value},T.shuffle=function(e){var t,n=0,r=[];return N(e,function(e){t=T.random(n++),r[n-1]=r[t],r[t]=e}),r};var k=function(e){return T.isFunction(e)?e:function(t){return t[e]}};T.sortBy=function(e,t,n){var r=k(t);return T.pluck(T.map(e,function(e,t,i){return{value:e,index:t,criteria:r.call(n,e,t,i)}}).sort(function(e,t){var n=e.criteria,r=t.criteria;if(n!==r){if(n>r||n===void 0)return 1;if(n<r||r===void 0)return-1}return e.index<t.index?-1:1}),"value")};var L=function(e,t,n,r){var i={},s=k(t);return N(e,function(t,o){var u=s.call(n,t,o,e);r(i,u,t)}),i};T.groupBy=function(e,t,n){return L(e,t,n,function(e,t,n){(T.has(e,t)?e[t]:e[t]=[]).push(n)})},T.countBy=function(e,t,n){return L(e,t,n,function(e,t,n){T.has(e,t)||(e[t]=0),e[t]++})},T.sortedIndex=function(e,t,n,r){n=n==null?T.identity:k(n);var i=n.call(r,t),s=0,o=e.length;while(s<o){var u=s+o>>>1;n.call(r,e[u])<i?s=u+1:o=u}return s},T.toArray=function(e){return e?e.length===+e.length?u.call(e):T.values(e):[]},T.size=function(e){return e.length===+e.length?e.length:T.keys(e).length},T.first=T.head=T.take=function(e,t,n){return t!=null&&!n?u.call(e,0,t):e[0]},T.initial=function(e,t,n){return u.call(e,0,e.length-(t==null||n?1:t))},T.last=function(e,t,n){return t!=null&&!n?u.call(e,Math.max(e.length-t,0)):e[e.length-1]},T.rest=T.tail=T.drop=function(e,t,n){return u.call(e,t==null||n?1:t)},T.compact=function(e){return T.filter(e,function(e){return!!e})};var A=function(e,t,n){return N(e,function(e){T.isArray(e)?t?o.apply(n,e):A(e,t,n):n.push(e)}),n};T.flatten=function(e,t){return A(e,t,[])},T.without=function(e){return T.difference(e,u.call(arguments,1))},T.uniq=T.unique=function(e,t,n,r){var i=n?T.map(e,n,r):e,s=[],o=[];return N(i,function(n,r){if(t?!r||o[o.length-1]!==n:!T.contains(o,n))o.push(n),s.push(e[r])}),s},T.union=function(){return T.uniq(a.apply(r,arguments))},T.intersection=function(e){var t=u.call(arguments,1);return T.filter(T.uniq(e),function(e){return T.every(t,function(t){return T.indexOf(t,e)>=0})})},T.difference=function(e){var t=a.apply(r,u.call(arguments,1));return T.filter(e,function(e){return!T.contains(t,e)})},T.zip=function(){var e=u.call(arguments),t=T.max(T.pluck(e,"length")),n=new Array(t);for(var r=0;r<t;r++)n[r]=T.pluck(e,""+r);return n},T.object=function(e,t){var n={};for(var r=0,i=e.length;r<i;r++)t?n[e[r]]=t[r]:n[e[r][0]]=e[r][1];return n},T.indexOf=function(e,t,n){if(e==null)return-1;var r=0,i=e.length;if(n){if(typeof n!="number")return r=T.sortedIndex(e,t),e[r]===t?r:-1;r=n<0?Math.max(0,i+n):n}if(b&&e.indexOf===b)return e.indexOf(t,n);for(;r<i;r++)if(e[r]===t)return r;return-1},T.lastIndexOf=function(e,t,n){if(e==null)return-1;var r=n!=null;if(w&&e.lastIndexOf===w)return r?e.lastIndexOf(t,n):e.lastIndexOf(t);var i=r?n:e.length;while(i--)if(e[i]===t)return i;return-1},T.range=function(e,t,n){arguments.length<=1&&(t=e||0,e=0),n=arguments[2]||1;var r=Math.max(Math.ceil((t-e)/n),0),i=0,s=new Array(r);while(i<r)s[i++]=e,e+=n;return s};var O=function(){};T.bind=function(t,n){var r,i;if(t.bind===x&&x)return x.apply(t,u.call(arguments,1));if(!T.isFunction(t))throw new TypeError;return i=u.call(arguments,2),r=function(){if(this instanceof r){O.prototype=t.prototype;var e=new O,s=t.apply(e,i.concat(u.call(arguments)));return Object(s)===s?s:e}return t.apply(n,i.concat(u.call(arguments)))}},T.bindAll=function(e){var t=u.call(arguments,1);return t.length==0&&(t=T.functions(e)),N(t,function(t){e[t]=T.bind(e[t],e)}),e},T.memoize=function(e,t){var n={};return t||(t=T.identity),function(){var r=t.apply(this,arguments);return T.has(n,r)?n[r]:n[r]=e.apply(this,arguments)}},T.delay=function(e,t){var n=u.call(arguments,2);return setTimeout(function(){return e.apply(null,n)},t)},T.defer=function(e){return T.delay.apply(T,[e,1].concat(u.call(arguments,1)))},T.throttle=function(e,t){var n,r,i,s,o,u,a=T.debounce(function(){o=s=!1},t);return function(){n=this,r=arguments;var f=function(){i=null,o&&(u=e.apply(n,r)),a()};return i||(i=setTimeout(f,t)),s?o=!0:(s=!0,u=e.apply(n,r)),a(),u}},T.debounce=function(e,t,n){var r,i;return function(){var s=this,o=arguments,u=function(){r=null,n||(i=e.apply(s,o))},a=n&&!r;return clearTimeout(r),r=setTimeout(u,t),a&&(i=e.apply(s,o)),i}},T.once=function(e){var t=!1,n;return function(){return t?n:(t=!0,n=e.apply(this,arguments),e=null,n)}},T.wrap=function(e,t){return function(){var n=[e];return o.apply(n,arguments),t.apply(this,n)}},T.compose=function(){var e=arguments;return function(){var t=arguments;for(var n=e.length-1;n>=0;n--)t=[e[n].apply(this,t)];return t[0]}},T.after=function(e,t){return e<=0?t():function(){if(--e<1)return t.apply(this,arguments)}},T.keys=S||function(e){if(e!==Object(e))throw new TypeError("Invalid object");var t=[];for(var n in e)T.has(e,n)&&(t[t.length]=n);return t},T.values=function(e){var t=[];for(var n in e)T.has(e,n)&&t.push(e[n]);return t},T.pairs=function(e){var t=[];for(var n in e)T.has(e,n)&&t.push([n,e[n]]);return t},T.invert=function(e){var t={};for(var n in e)T.has(e,n)&&(t[e[n]]=n);return t},T.functions=T.methods=function(e){var t=[];for(var n in e)T.isFunction(e[n])&&t.push(n);return t.sort()},T.extend=function(e){return N(u.call(arguments,1),function(t){for(var n in t)e[n]=t[n]}),e},T.pick=function(e){var t={},n=a.apply(r,u.call(arguments,1));return N(n,function(n){n in e&&(t[n]=e[n])}),t},T.omit=function(e){var t={},n=a.apply(r,u.call(arguments,1));for(var i in e)T.contains(n,i)||(t[i]=e[i]);return t},T.defaults=function(e){return N(u.call(arguments,1),function(t){for(var n in t)e[n]==null&&(e[n]=t[n])}),e},T.clone=function(e){return T.isObject(e)?T.isArray(e)?e.slice():T.extend({},e):e},T.tap=function(e,t){return t(e),e};var M=function(e,t,n,r){if(e===t)return e!==0||1/e==1/t;if(e==null||t==null)return e===t;e instanceof T&&(e=e._wrapped),t instanceof T&&(t=t._wrapped);var i=l.call(e);if(i!=l.call(t))return!1;switch(i){case"[object String]":return e==String(t);case"[object Number]":return e!=+e?t!=+t:e==0?1/e==1/t:e==+t;case"[object Date]":case"[object Boolean]":return+e==+t;case"[object RegExp]":return e.source==t.source&&e.global==t.global&&e.multiline==t.multiline&&e.ignoreCase==t.ignoreCase}if(typeof e!="object"||typeof t!="object")return!1;var s=n.length;while(s--)if(n[s]==e)return r[s]==t;n.push(e),r.push(t);var o=0,u=!0;if(i=="[object Array]"){o=e.length,u=o==t.length;if(u)while(o--)if(!(u=M(e[o],t[o],n,r)))break}else{var a=e.constructor,f=t.constructor;if(a!==f&&!(T.isFunction(a)&&a instanceof a&&T.isFunction(f)&&f instanceof f))return!1;for(var c in e)if(T.has(e,c)){o++;if(!(u=T.has(t,c)&&M(e[c],t[c],n,r)))break}if(u){for(c in t)if(T.has(t,c)&&!(o--))break;u=!o}}return n.pop(),r.pop(),u};T.isEqual=function(e,t){return M(e,t,[],[])},T.isEmpty=function(e){if(e==null)return!0;if(T.isArray(e)||T.isString(e))return e.length===0;for(var t in e)if(T.has(e,t))return!1;return!0},T.isElement=function(e){return!!e&&e.nodeType===1},T.isArray=E||function(e){return l.call(e)=="[object Array]"},T.isObject=function(e){return e===Object(e)},N(["Arguments","Function","String","Number","Date","RegExp"],function(e){T["is"+e]=function(t){return l.call(t)=="[object "+e+"]"}}),T.isArguments(arguments)||(T.isArguments=function(e){return!!e&&!!T.has(e,"callee")}),typeof /./!="function"&&(T.isFunction=function(e){return typeof e=="function"}),T.isFinite=function(e){return T.isNumber(e)&&isFinite(e)},T.isNaN=function(e){return T.isNumber(e)&&e!=+e},T.isBoolean=function(e){return e===!0||e===!1||l.call(e)=="[object Boolean]"},T.isNull=function(e){return e===null},T.isUndefined=function(e){return e===void 0},T.has=function(e,t){return c.call(e,t)},T.noConflict=function(){return e._=t,this},T.identity=function(e){return e},T.times=function(e,t,n){for(var r=0;r<e;r++)t.call(n,r)},T.random=function(e,t){return t==null&&(t=e,e=0),e+(0|Math.random()*(t-e+1))};var _={escape:{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","/":"&#x2F;"}};_.unescape=T.invert(_.escape);var D={escape:new RegExp("["+T.keys(_.escape).join("")+"]","g"),unescape:new RegExp("("+T.keys(_.unescape).join("|")+")","g")};T.each(["escape","unescape"],function(e){T[e]=function(t){return t==null?"":(""+t).replace(D[e],function(t){return _[e][t]})}}),T.result=function(e,t){if(e==null)return null;var n=e[t];return T.isFunction(n)?n.call(e):n},T.mixin=function(e){N(T.functions(e),function(t){var n=T[t]=e[t];T.prototype[t]=function(){var e=[this._wrapped];return o.apply(e,arguments),F.call(this,n.apply(T,e))}})};var P=0;T.uniqueId=function(e){var t=P++;return e?e+t:t},T.templateSettings={evaluate:/<%([\s\S]+?)%>/g,interpolate:/<%=([\s\S]+?)%>/g,escape:/<%-([\s\S]+?)%>/g};var H=/(.)^/,B={"'":"'","\\":"\\","\r":"r","\n":"n","	":"t","\u2028":"u2028","\u2029":"u2029"},j=/\\|'|\r|\n|\t|\u2028|\u2029/g;T.template=function(e,t,n){n=T.defaults({},n,T.templateSettings);var r=new RegExp([(n.escape||H).source,(n.interpolate||H).source,(n.evaluate||H).source].join("|")+"|$","g"),i=0,s="__p+='";e.replace(r,function(t,n,r,o,u){s+=e.slice(i,u).replace(j,function(e){return"\\"+B[e]}),s+=n?"'+\n((__t=("+n+"))==null?'':_.escape(__t))+\n'":r?"'+\n((__t=("+r+"))==null?'':__t)+\n'":o?"';\n"+o+"\n__p+='":"",i=u+t.length}),s+="';\n",n.variable||(s="with(obj||{}){\n"+s+"}\n"),s="var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};\n"+s+"return __p;\n";try{var o=new Function(n.variable||"obj","_",s)}catch(u){throw u.source=s,u}if(t)return o(t,T);var a=function(e){return o.call(this,e,T)};return a.source="function("+(n.variable||"obj")+"){\n"+s+"}",a},T.chain=function(e){return T(e).chain()};var F=function(e){return this._chain?T(e).chain():e};T.mixin(T),N(["pop","push","reverse","shift","sort","splice","unshift"],function(e){var t=r[e];T.prototype[e]=function(){var n=this._wrapped;return t.apply(n,arguments),(e=="shift"||e=="splice")&&n.length===0&&delete n[0],F.call(this,n)}}),N(["concat","join","slice"],function(e){var t=r[e];T.prototype[e]=function(){return F.call(this,t.apply(this._wrapped,arguments))}}),T.extend(T.prototype,{chain:function(){return this._chain=!0,this},value:function(){return this._wrapped}})}).call(this),function(){var e=this,t=e.Backbone,n=[],r=n.push,i=n.slice,s=n.splice,o;typeof exports!="undefined"?o=exports:o=e.Backbone={},o.VERSION="0.9.10";var u=e._;!u&&typeof require!="undefined"&&(u=require("underscore")),o.$=e.jQuery||e.Zepto||e.ender,o.noConflict=function(){return e.Backbone=t,this},o.emulateHTTP=!1,o.emulateJSON=!1;var a=/\s+/,f=function(e,t,n,r){if(!n)return!0;if(typeof n=="object")for(var i in n)e[t].apply(e,[i,n[i]].concat(r));else{if(!a.test(n))return!0;var s=n.split(a);for(var o=0,u=s.length;o<u;o++)e[t].apply(e,[s[o]].concat(r))}},l=function(e,t){var n,r=-1,i=e.length;switch(t.length){case 0:while(++r<i)(n=e[r]).callback.call(n.ctx);return;case 1:while(++r<i)(n=e[r]).callback.call(n.ctx,t[0]);return;case 2:while(++r<i)(n=e[r]).callback.call(n.ctx,t[0],t[1]);return;case 3:while(++r<i)(n=e[r]).callback.call(n.ctx,t[0],t[1],t[2]);return;default:while(++r<i)(n=e[r]).callback.apply(n.ctx,t)}},c=o.Events={on:function(e,t,n){if(!f(this,"on",e,[t,n])||!t)return this;this._events||(this._events={});var r=this._events[e]||(this._events[e]=[]);return r.push({callback:t,context:n,ctx:n||this}),this},once:function(e,t,n){if(!f(this,"once",e,[t,n])||!t)return this;var r=this,i=u.once(function(){r.off(e,i),t.apply(this,arguments)});return i._callback=t,this.on(e,i,n),this},off:function(e,t,n){var r,i,s,o,a,l,c,h;if(!this._events||!f(this,"off",e,[t,n]))return this;if(!e&&!t&&!n)return this._events={},this;o=e?[e]:u.keys(this._events);for(a=0,l=o.length;a<l;a++){e=o[a];if(r=this._events[e]){s=[];if(t||n)for(c=0,h=r.length;c<h;c++)i=r[c],(t&&t!==i.callback&&t!==i.callback._callback||n&&n!==i.context)&&s.push(i);this._events[e]=s}}return this},trigger:function(e){if(!this._events)return this;var t=i.call(arguments,1);if(!f(this,"trigger",e,t))return this;var n=this._events[e],r=this._events.all;return n&&l(n,t),r&&l(r,arguments),this},listenTo:function(e,t,n){var r=this._listeners||(this._listeners={}),i=e._listenerId||(e._listenerId=u.uniqueId("l"));return r[i]=e,e.on(t,typeof t=="object"?this:n,this),this},stopListening:function(e,t,n){var r=this._listeners;if(!r)return;if(e)e.off(t,typeof t=="object"?this:n,this),!t&&!n&&delete r[e._listenerId];else{typeof t=="object"&&(n=this);for(var i in r)r[i].off(t,n,this);this._listeners={}}return this}};c.bind=c.on,c.unbind=c.off,u.extend(o,c);var h=o.Model=function(e,t){var n,r=e||{};this.cid=u.uniqueId("c"),this.attributes={},t&&t.collection&&(this.collection=t.collection),t&&t.parse&&(r=this.parse(r,t)||{});if(n=u.result(this,"defaults"))r=u.defaults({},r,n);this.set(r,t),this.changed={},this.initialize.apply(this,arguments)};u.extend(h.prototype,c,{changed:null,idAttribute:"id",initialize:function(){},toJSON:function(e){return u.clone(this.attributes)},sync:function(){return o.sync.apply(this,arguments)},get:function(e){return this.attributes[e]},escape:function(e){return u.escape(this.get(e))},has:function(e){return this.get(e)!=null},set:function(e,t,n){var r,i,s,o,a,f,l,c;if(e==null)return this;typeof e=="object"?(i=e,n=t):(i={})[e]=t,n||(n={});if(!this._validate(i,n))return!1;s=n.unset,a=n.silent,o=[],f=this._changing,this._changing=!0,f||(this._previousAttributes=u.clone(this.attributes),this.changed={}),c=this.attributes,l=this._previousAttributes,this.idAttribute in i&&(this.id=i[this.idAttribute]);for(r in i)t=i[r],u.isEqual(c[r],t)||o.push(r),u.isEqual(l[r],t)?delete this.changed[r]:this.changed[r]=t,s?delete c[r]:c[r]=t;if(!a){o.length&&(this._pending=!0);for(var h=0,p=o.length;h<p;h++)this.trigger("change:"+o[h],this,c[o[h]],n)}if(f)return this;if(!a)while(this._pending)this._pending=!1,this.trigger("change",this,n);return this._pending=!1,this._changing=!1,this},unset:function(e,t){return this.set(e,void 0,u.extend({},t,{unset:!0}))},clear:function(e){var t={};for(var n in this.attributes)t[n]=void 0;return this.set(t,u.extend({},e,{unset:!0}))},hasChanged:function(e){return e==null?!u.isEmpty(this.changed):u.has(this.changed,e)},changedAttributes:function(e){if(!e)return this.hasChanged()?u.clone(this.changed):!1;var t,n=!1,r=this._changing?this._previousAttributes:this.attributes;for(var i in e){if(u.isEqual(r[i],t=e[i]))continue;(n||(n={}))[i]=t}return n},previous:function(e){return e==null||!this._previousAttributes?null:this._previousAttributes[e]},previousAttributes:function(){return u.clone(this._previousAttributes)},fetch:function(e){e=e?u.clone(e):{},e.parse===void 0&&(e.parse=!0);var t=e.success;return e.success=function(e,n,r){if(!e.set(e.parse(n,r),r))return!1;t&&t(e,n,r)},this.sync("read",this,e)},save:function(e,t,n){var r,i,s,o,a=this.attributes;return e==null||typeof e=="object"?(r=e,n=t):(r={})[e]=t,r&&(!n||!n.wait)&&!this.set(r,n)?!1:(n=u.extend({validate:!0},n),this._validate(r,n)?(r&&n.wait&&(this.attributes=u.extend({},a,r)),n.parse===void 0&&(n.parse=!0),i=n.success,n.success=function(e,t,n){e.attributes=a;var s=e.parse(t,n);n.wait&&(s=u.extend(r||{},s));if(u.isObject(s)&&!e.set(s,n))return!1;i&&i(e,t,n)},s=this.isNew()?"create":n.patch?"patch":"update",s==="patch"&&(n.attrs=r),o=this.sync(s,this,n),r&&n.wait&&(this.attributes=a),o):!1)},destroy:function(e){e=e?u.clone(e):{};var t=this,n=e.success,r=function(){t.trigger("destroy",t,t.collection,e)};e.success=function(e,t,i){(i.wait||e.isNew())&&r(),n&&n(e,t,i)};if(this.isNew())return e.success(this,null,e),!1;var i=this.sync("delete",this,e);return e.wait||r(),i},url:function(){var e=u.result(this,"urlRoot")||u.result(this.collection,"url")||M();return this.isNew()?e:e+(e.charAt(e.length-1)==="/"?"":"/")+encodeURIComponent(this.id)},parse:function(e,t){return e},clone:function(){return new this.constructor(this.attributes)},isNew:function(){return this.id==null},isValid:function(e){return!this.validate||!this.validate(this.attributes,e)},_validate:function(e,t){if(!t.validate||!this.validate)return!0;e=u.extend({},this.attributes,e);var n=this.validationError=this.validate(e,t)||null;return n?(this.trigger("invalid",this,n,t||{}),!1):!0}});var p=o.Collection=function(e,t){t||(t={}),t.model&&(this.model=t.model),t.comparator!==void 0&&(this.comparator=t.comparator),this.models=[],this._reset(),this.initialize.apply(this,arguments),e&&this.reset(e,u.extend({silent:!0},t))};u.extend(p.prototype,c,{model:h,initialize:function(){},toJSON:function(e){return this.map(function(t){return t.toJSON(e)})},sync:function(){return o.sync.apply(this,arguments)},add:function(e,t){e=u.isArray(e)?e.slice():[e],t||(t={});var n,i,o,a,f,l,c,h,p,d;c=[],h=t.at,p=this.comparator&&h==null&&t.sort!=0,d=u.isString(this.comparator)?this.comparator:null;for(n=0,i=e.length;n<i;n++){if(!(o=this._prepareModel(a=e[n],t))){this.trigger("invalid",this,a,t);continue}if(f=this.get(o)){t.merge&&(f.set(a===o?o.attributes:a,t),p&&!l&&f.hasChanged(d)&&(l=!0));continue}c.push(o),o.on("all",this._onModelEvent,this),this._byId[o.cid]=o,o.id!=null&&(this._byId[o.id]=o)}c.length&&(p&&(l=!0),this.length+=c.length,h!=null?s.apply(this.models,[h,0].concat(c)):r.apply(this.models,c)),l&&this.sort({silent:!0});if(t.silent)return this;for(n=0,i=c.length;n<i;n++)(o=c[n]).trigger("add",o,this,t);return l&&this.trigger("sort",this,t),this},remove:function(e,t){e=u.isArray(e)?e.slice():[e],t||(t={});var n,r,i,s;for(n=0,r=e.length;n<r;n++){s=this.get(e[n]);if(!s)continue;delete this._byId[s.id],delete this._byId[s.cid],i=this.indexOf(s),this.models.splice(i,1),this.length--,t.silent||(t.index=i,s.trigger("remove",s,this,t)),this._removeReference(s)}return this},push:function(e,t){return e=this._prepareModel(e,t),this.add(e,u.extend({at:this.length},t)),e},pop:function(e){var t=this.at(this.length-1);return this.remove(t,e),t},unshift:function(e,t){return e=this._prepareModel(e,t),this.add(e,u.extend({at:0},t)),e},shift:function(e){var t=this.at(0);return this.remove(t,e),t},slice:function(e,t){return this.models.slice(e,t)},get:function(e){return e==null?void 0:(this._idAttr||(this._idAttr=this.model.prototype.idAttribute),this._byId[e.id||e.cid||e[this._idAttr]||e])},at:function(e){return this.models[e]},where:function(e){return u.isEmpty(e)?[]:this.filter(function(t){for(var n in e)if(e[n]!==t.get(n))return!1;return!0})},sort:function(e){if(!this.comparator)throw new Error("Cannot sort a set without a comparator");return e||(e={}),u.isString(this.comparator)||this.comparator.length===1?this.models=this.sortBy(this.comparator,this):this.models.sort(u.bind(this.comparator,this)),e.silent||this.trigger("sort",this,e),this},pluck:function(e){return u.invoke(this.models,"get",e)},update:function(e,t){t=u.extend({add:!0,merge:!0,remove:!0},t),t.parse&&(e=this.parse(e,t));var n,r,i,s,o=[],a=[],f={};u.isArray(e)||(e=e?[e]:[]);if(t.add&&!t.remove)return this.add(e,t);for(r=0,i=e.length;r<i;r++)n=e[r],s=this.get(n),t.remove&&s&&(f[s.cid]=!0),(t.add&&!s||t.merge&&s)&&o.push(n);if(t.remove)for(r=0,i=this.models.length;r<i;r++)n=this.models[r],f[n.cid]||a.push(n);return a.length&&this.remove(a,t),o.length&&this.add(o,t),this},reset:function(e,t){t||(t={}),t.parse&&(e=this.parse(e,t));for(var n=0,r=this.models.length;n<r;n++)this._removeReference(this.models[n]);return t.previousModels=this.models.slice(),this._reset(),e&&this.add(e,u.extend({silent:!0},t)),t.silent||this.trigger("reset",this,t),this},fetch:function(e){e=e?u.clone(e):{},e.parse===void 0&&(e.parse=!0);var t=e.success;return e.success=function(e,n,r){var i=r.update?"update":"reset";e[i](n,r),t&&t(e,n,r)},this.sync("read",this,e)},create:function(e,t){t=t?u.clone(t):{};if(!(e=this._prepareModel(e,t)))return!1;t.wait||this.add(e,t);var n=this,r=t.success;return t.success=function(e,t,i){i.wait&&n.add(e,i),r&&r(e,t,i)},e.save(null,t),e},parse:function(e,t){return e},clone:function(){return new this.constructor(this.models)},_reset:function(){this.length=0,this.models.length=0,this._byId={}},_prepareModel:function(e,t){if(e instanceof h)return e.collection||(e.collection=this),e;t||(t={}),t.collection=this;var n=new this.model(e,t);return n._validate(e,t)?n:!1},_removeReference:function(e){this===e.collection&&delete e.collection,e.off("all",this._onModelEvent,this)},_onModelEvent:function(e,t,n,r){if((e==="add"||e==="remove")&&n!==this)return;e==="destroy"&&this.remove(t,r),t&&e==="change:"+t.idAttribute&&(delete this._byId[t.previous(t.idAttribute)],t.id!=null&&(this._byId[t.id]=t)),this.trigger.apply(this,arguments)},sortedIndex:function(e,t,n){t||(t=this.comparator);var r=u.isFunction(t)?t:function(e){return e.get(t)};return u.sortedIndex(this.models,e,r,n)}});var d=["forEach","each","map","collect","reduce","foldl","inject","reduceRight","foldr","find","detect","filter","select","reject","every","all","some","any","include","contains","invoke","max","min","toArray","size","first","head","take","initial","rest","tail","drop","last","without","indexOf","shuffle","lastIndexOf","isEmpty","chain"];u.each(d,function(e){p.prototype[e]=function(){var t=i.call(arguments);return t.unshift(this.models),u[e].apply(u,t)}});var v=["groupBy","countBy","sortBy"];u.each(v,function(e){p.prototype[e]=function(t,n){var r=u.isFunction(t)?t:function(e){return e.get(t)};return u[e](this.models,r,n)}});var m=o.Router=function(e){e||(e={}),e.routes&&(this.routes=e.routes),this._bindRoutes(),this.initialize.apply(this,arguments)},g=/\((.*?)\)/g,y=/(\(\?)?:\w+/g,b=/\*\w+/g,w=/[\-{}\[\]+?.,\\\^$|#\s]/g;u.extend(m.prototype,c,{initialize:function(){},route:function(e,t,n){return u.isRegExp(e)||(e=this._routeToRegExp(e)),n||(n=this[t]),o.history.route(e,u.bind(function(r){var i=this._extractParameters(e,r);n&&n.apply(this,i),this.trigger.apply(this,["route:"+t].concat(i)),this.trigger("route",t,i),o.history.trigger("route",this,t,i)},this)),this},navigate:function(e,t){return o.history.navigate(e,t),this},_bindRoutes:function(){if(!this.routes)return;var e,t=u.keys(this.routes);while((e=t.pop())!=null)this.route(e,this.routes[e])},_routeToRegExp:function(e){return e=e.replace(w,"\\$&").replace(g,"(?:$1)?").replace(y,function(e,t){return t?e:"([^/]+)"}).replace(b,"(.*?)"),new RegExp("^"+e+"$")},_extractParameters:function(e,t){return e.exec(t).slice(1)}});var E=o.History=function(){this.handlers=[],u.bindAll(this,"checkUrl"),typeof window!="undefined"&&(this.location=window.location,this.history=window.history)},S=/^[#\/]|\s+$/g,x=/^\/+|\/+$/g,T=/msie [\w.]+/,N=/\/$/;E.started=!1,u.extend(E.prototype,c,{interval:50,getHash:function(e){var t=(e||this).location.href.match(/#(.*)$/);return t?t[1]:""},getFragment:function(e,t){if(e==null)if(this._hasPushState||!this._wantsHashChange||t){e=this.location.pathname;var n=this.root.replace(N,"");e.indexOf(n)||(e=e.substr(n.length))}else e=this.getHash();return e.replace(S,"")},start:function(e){if(E.started)throw new Error("Backbone.history has already been started");E.started=!0,this.options=u.extend({},{root:"/"},this.options,e),this.root=this.options.root,this._wantsHashChange=this.options.hashChange!==!1,this._wantsPushState=!!this.options.pushState,this._hasPushState=!!(this.options.pushState&&this.history&&this.history.pushState);var t=this.getFragment(),n=document.documentMode,r=T.exec(navigator.userAgent.toLowerCase())&&(!n||n<=7);this.root=("/"+this.root+"/").replace(x,"/"),r&&this._wantsHashChange&&(this.iframe=o.$('<iframe src="javascript:0" tabindex="-1" />').hide().appendTo("body")[0].contentWindow,this.navigate(t)),this._hasPushState?o.$(window).on("popstate",this.checkUrl):this._wantsHashChange&&"onhashchange"in window&&!r?o.$(window).on("hashchange",this.checkUrl):this._wantsHashChange&&(this._checkUrlInterval=setInterval(this.checkUrl,this.interval)),this.fragment=t;var i=this.location,s=i.pathname.replace(/[^\/]$/,"$&/")===this.root;if(this._wantsHashChange&&this._wantsPushState&&!this._hasPushState&&!s)return this.fragment=this.getFragment(null,!0),this.location.replace(this.root+this.location.search+"#"+this.fragment),!0;this._wantsPushState&&this._hasPushState&&s&&i.hash&&(this.fragment=this.getHash().replace(S,""),this.history.replaceState({},document.title,this.root+this.fragment+i.search));if(!this.options.silent)return this.loadUrl()},stop:function(){o.$(window).off("popstate",this.checkUrl).off("hashchange",this.checkUrl),clearInterval(this._checkUrlInterval),E.started=!1},route:function(e,t){this.handlers.unshift({route:e,callback:t})},checkUrl:function(e){var t=this.getFragment();t===this.fragment&&this.iframe&&(t=this.getFragment(this.getHash(this.iframe)));if(t===this.fragment)return!1;this.iframe&&this.navigate(t),this.loadUrl()||this.loadUrl(this.getHash())},loadUrl:function(e){var t=this.fragment=this.getFragment(e),n=u.any(this.handlers,function(e){if(e.route.test(t))return e.callback(t),!0});return n},navigate:function(e,t){if(!E.started)return!1;if(!t||t===!0)t={trigger:t};e=this.getFragment(e||"");if(this.fragment===e)return;this.fragment=e;var n=this.root+e;if(this._hasPushState)this.history[t.replace?"replaceState":"pushState"]({},document.title,n);else{if(!this._wantsHashChange)return this.location.assign(n);this._updateHash(this.location,e,t.replace),this.iframe&&e!==this.getFragment(this.getHash(this.iframe))&&(t.replace||this.iframe.document.open().close(),this._updateHash(this.iframe.location,e,t.replace))}t.trigger&&this.loadUrl(e)},_updateHash:function(e,t,n){if(n){var r=e.href.replace(/(javascript:|#).*$/,"");e.replace(r+"#"+t)}else e.hash="#"+t}}),o.history=new E;var C=o.View=function(e){this.cid=u.uniqueId("view"),this._configure(e||{}),this._ensureElement(),this.initialize.apply(this,arguments),this.delegateEvents()},k=/^(\S+)\s*(.*)$/,L=["model","collection","el","id","attributes","className","tagName","events"];u.extend(C.prototype,c,{tagName:"div",$:function(e){return this.$el.find(e)},initialize:function(){},render:function(){return this},remove:function(){return this.$el.remove(),this.stopListening(),this},setElement:function(e,t){return this.$el&&this.undelegateEvents(),this.$el=e instanceof o.$?e:o.$(e),this.el=this.$el[0],t!==!1&&this.delegateEvents(),this},delegateEvents:function(e){if(!e&&!(e=u.result(this,"events")))return;this.undelegateEvents();for(var t in e){var n=e[t];u.isFunction(n)||(n=this[e[t]]);if(!n)throw new Error('Method "'+e[t]+'" does not exist');var r=t.match(k),i=r[1],s=r[2];n=u.bind(n,this),i+=".delegateEvents"+this.cid,s===""?this.$el.on(i,n):this.$el.on(i,s,n)}},undelegateEvents:function(){this.$el.off(".delegateEvents"+this.cid)},_configure:function(e){this.options&&(e=u.extend({},u.result(this,"options"),e)),u.extend(this,u.pick(e,L)),this.options=e},_ensureElement:function(){if(!this.el){var e=u.extend({},u.result(this,"attributes"));this.id&&(e.id=u.result(this,"id")),this.className&&(e["class"]=u.result(this,"className"));var t=o.$("<"+u.result(this,"tagName")+">").attr(e);this.setElement(t,!1)}else this.setElement(u.result(this,"el"),!1)}});var A={create:"POST",update:"PUT",patch:"PATCH","delete":"DELETE",read:"GET"};o.sync=function(e,t,n){var r=A[e];u.defaults(n||(n={}),{emulateHTTP:o.emulateHTTP,emulateJSON:o.emulateJSON});var i={type:r,dataType:"json"};n.url||(i.url=u.result(t,"url")||M()),n.data==null&&t&&(e==="create"||e==="update"||e==="patch")&&(i.contentType="application/json",i.data=JSON.stringify(n.attrs||t.toJSON(n))),n.emulateJSON&&(i.contentType="application/x-www-form-urlencoded",i.data=i.data?{model:i.data}:{});if(n.emulateHTTP&&(r==="PUT"||r==="DELETE"||r==="PATCH")){i.type="POST",n.emulateJSON&&(i.data._method=r);var s=n.beforeSend;n.beforeSend=function(e){e.setRequestHeader("X-HTTP-Method-Override",r);if(s)return s.apply(this,arguments)}}i.type!=="GET"&&!n.emulateJSON&&(i.processData=!1);var a=n.success;n.success=function(e){a&&a(t,e,n),t.trigger("sync",t,e,n)};var f=n.error;n.error=function(e){f&&f(t,e,n),t.trigger("error",t,e,n)};var l=n.xhr=o.ajax(u.extend(i,n));return t.trigger("request",t,l,n),l},o.ajax=function(){return o.$.ajax.apply(o.$,arguments)};var O=function(e,t){var n=this,r;e&&u.has(e,"constructor")?r=e.constructor:r=function(){return n.apply(this,arguments)},u.extend(r,n,t);var i=function(){this.constructor=r};return i.prototype=n.prototype,r.prototype=new i,e&&u.extend(r.prototype,e),r.__super__=n.prototype,r};h.extend=p.extend=m.extend=C.extend=E.extend=O;var M=function(){throw new Error('A "url" property or function must be specified')}}.call(this);var Cursor={x:0,y:0,init:function(){this.setEvent("mouse"),this.setEvent("touch")},setEvent:function(e){var t=document["on"+e+"move"]||function(){};document["on"+e+"move"]=function(e){t(e),Cursor.refresh(e)}},refresh:function(e){e||(e=window.event),e.type=="mousemove"?this.set(e):e.touches&&this.set(e.touches[0])},set:function(e){if(e.pageX||e.pageY)this.x=e.pageX,this.y=e.pageY;else if(e.clientX||e.clientY)this.x=e.clientX+document.body.scrollLeft+document.documentElement.scrollLeft,this.y=e.clientY+document.body.scrollTop+document.documentElement.scrollTop}};Cursor.init();var Position={get:function(e){var t=curtop=0;if(e.offsetParent)do t+=e.offsetLeft,curtop+=e.offsetTop;while(e=e.offsetParent);return[t,curtop]}},Dragdealer=function(e,t){typeof e=="string"&&(e=document.getElementById(e));if(!e)return;var n=e.getElementsByTagName("div")[0];if(!n||n.className.search(/(^|\s)handle(\s|$)/)==-1)return;this.init(e,
-n,t||{}),this.setup()};Dragdealer.prototype={init:function(e,t,n){this.wrapper=e,this.handle=t,this.options=n,this.disabled=this.getOption("disabled",!1),this.horizontal=this.getOption("horizontal",!0),this.vertical=this.getOption("vertical",!1),this.slide=this.getOption("slide",!0),this.steps=this.getOption("steps",0),this.snap=this.getOption("snap",!1),this.loose=this.getOption("loose",!1),this.speed=this.getOption("speed",10)/100,this.xPrecision=this.getOption("xPrecision",0),this.yPrecision=this.getOption("yPrecision",0),this.callback=n.callback||null,this.animationCallback=n.animationCallback||null,this.bounds={left:n.left||0,right:-(n.right||0),top:n.top||0,bottom:-(n.bottom||0),x0:0,x1:0,xRange:0,y0:0,y1:0,yRange:0},this.value={prev:[-1,-1],current:[n.x||0,n.y||0],target:[n.x||0,n.y||0]},this.offset={wrapper:[0,0],mouse:[0,0],prev:[-999999,-999999],current:[0,0],target:[0,0]},this.change=[0,0],this.activity=!1,this.dragging=!1,this.tapping=!1},getOption:function(e,t){return this.options[e]!==undefined?this.options[e]:t},setup:function(){this.setWrapperOffset(),this.setBoundsPadding(),this.setBounds(),this.setSteps(),this.addListeners()},setWrapperOffset:function(){this.offset.wrapper=Position.get(this.wrapper)},setBoundsPadding:function(){!this.bounds.left&&!this.bounds.right&&(this.bounds.left=Position.get(this.handle)[0]-this.offset.wrapper[0],this.bounds.right=-this.bounds.left),!this.bounds.top&&!this.bounds.bottom&&(this.bounds.top=Position.get(this.handle)[1]-this.offset.wrapper[1],this.bounds.bottom=-this.bounds.top)},setBounds:function(){this.bounds.x0=this.bounds.left,this.bounds.x1=this.wrapper.offsetWidth+this.bounds.right,this.bounds.xRange=this.bounds.x1-this.bounds.x0-this.handle.offsetWidth,this.bounds.y0=this.bounds.top,this.bounds.y1=this.wrapper.offsetHeight+this.bounds.bottom,this.bounds.yRange=this.bounds.y1-this.bounds.y0-this.handle.offsetHeight,this.bounds.xStep=1/(this.xPrecision||Math.max(this.wrapper.offsetWidth,this.handle.offsetWidth)),this.bounds.yStep=1/(this.yPrecision||Math.max(this.wrapper.offsetHeight,this.handle.offsetHeight))},setSteps:function(){if(this.steps>1){this.stepRatios=[];for(var e=0;e<=this.steps-1;e++)this.stepRatios[e]=e/(this.steps-1)}},addListeners:function(){var e=this;this.wrapper.onselectstart=function(){return!1},this.handle.onmousedown=this.handle.ontouchstart=function(t){e.handleDownHandler(t)},this.wrapper.onmousedown=this.wrapper.ontouchstart=function(t){e.wrapperDownHandler(t)};var t=document.onmouseup||function(){};document.onmouseup=function(n){t(n),e.documentUpHandler(n)};var n=document.ontouchend||function(){};document.ontouchend=function(t){n(t),e.documentUpHandler(t)};var r=window.onresize||function(){};window.onresize=function(t){r(t),e.documentResizeHandler(t)},this.wrapper.onmousemove=function(t){e.activity=!0},this.wrapper.onclick=function(t){return!e.activity},this.interval=setInterval(function(){e.animate()},25),e.animate(!1,!0)},handleDownHandler:function(e){this.activity=!1,Cursor.refresh(e),this.preventDefaults(e,!0),this.startDrag(),this.cancelEvent(e)},wrapperDownHandler:function(e){Cursor.refresh(e),this.preventDefaults(e,!0),this.startTap()},documentUpHandler:function(e){this.stopDrag(),this.stopTap()},documentResizeHandler:function(e){this.setWrapperOffset(),this.setBounds(),this.update()},enable:function(){this.disabled=!1,this.handle.className=this.handle.className.replace(/\s?disabled/g,"")},disable:function(){this.disabled=!0,this.handle.className+=" disabled"},setStep:function(e,t,n){this.setValue(this.steps&&e>1?(e-1)/(this.steps-1):0,this.steps&&t>1?(t-1)/(this.steps-1):0,n)},setValue:function(e,t,n){this.setTargetValue([e,t||0]),n&&this.groupCopy(this.value.current,this.value.target)},startTap:function(e){if(this.disabled)return;this.tapping=!0,e===undefined&&(e=[Cursor.x-this.offset.wrapper[0]-this.handle.offsetWidth/2,Cursor.y-this.offset.wrapper[1]-this.handle.offsetHeight/2]),this.setTargetOffset(e)},stopTap:function(){if(this.disabled||!this.tapping)return;this.tapping=!1,this.setTargetValue(this.value.current),this.result()},startDrag:function(){if(this.disabled)return;this.offset.mouse=[Cursor.x-Position.get(this.handle)[0],Cursor.y-Position.get(this.handle)[1]],this.dragging=!0},stopDrag:function(){if(this.disabled||!this.dragging)return;this.dragging=!1;var e=this.groupClone(this.value.current);if(this.slide){var t=this.change;e[0]+=t[0]*4,e[1]+=t[1]*4}this.setTargetValue(e),this.result()},feedback:function(){var e=this.value.current;this.snap&&this.steps>1&&(e=this.getClosestSteps(e)),this.groupCompare(e,this.value.prev)||(typeof this.animationCallback=="function"&&this.animationCallback(e[0],e[1]),this.groupCopy(this.value.prev,e))},result:function(){typeof this.callback=="function"&&this.callback(this.value.target[0],this.value.target[1])},animate:function(e,t){if(e&&!this.dragging)return;if(this.dragging){var n=this.groupClone(this.value.target),r=[Cursor.x-this.offset.wrapper[0]-this.offset.mouse[0],Cursor.y-this.offset.wrapper[1]-this.offset.mouse[1]];this.setTargetOffset(r,this.loose),this.change=[this.value.target[0]-n[0],this.value.target[1]-n[1]]}(this.dragging||t)&&this.groupCopy(this.value.current,this.value.target);if(this.dragging||this.glide()||t)this.update(),this.feedback()},glide:function(){var e=[this.value.target[0]-this.value.current[0],this.value.target[1]-this.value.current[1]];return!e[0]&&!e[1]?!1:(Math.abs(e[0])>this.bounds.xStep||Math.abs(e[1])>this.bounds.yStep?(this.value.current[0]+=e[0]*this.speed,this.value.current[1]+=e[1]*this.speed):this.groupCopy(this.value.current,this.value.target),!0)},update:function(){this.snap?this.offset.current=this.getOffsetsByRatios(this.getClosestSteps(this.value.current)):this.offset.current=this.getOffsetsByRatios(this.value.current),this.show()},show:function(){this.groupCompare(this.offset.current,this.offset.prev)||(this.horizontal&&(this.handle.style.left=String(this.offset.current[0])+"px"),this.vertical&&(this.handle.style.top=String(this.offset.current[1])+"px"),this.groupCopy(this.offset.prev,this.offset.current))},setTargetValue:function(e,t){var n=t?this.getLooseValue(e):this.getProperValue(e);this.groupCopy(this.value.target,n),this.offset.target=this.getOffsetsByRatios(n)},setTargetOffset:function(e,t){var n=this.getRatiosByOffsets(e),r=t?this.getLooseValue(n):this.getProperValue(n);this.groupCopy(this.value.target,r),this.offset.target=this.getOffsetsByRatios(r)},getLooseValue:function(e){var t=this.getProperValue(e);return[t[0]+(e[0]-t[0])/4,t[1]+(e[1]-t[1])/4]},getProperValue:function(e){var t=this.groupClone(e);return t[0]=Math.max(t[0],0),t[1]=Math.max(t[1],0),t[0]=Math.min(t[0],1),t[1]=Math.min(t[1],1),(!this.dragging&&!this.tapping||this.snap)&&this.steps>1&&(t=this.getClosestSteps(t)),t},getRatiosByOffsets:function(e){return[this.getRatioByOffset(e[0],this.bounds.xRange,this.bounds.x0),this.getRatioByOffset(e[1],this.bounds.yRange,this.bounds.y0)]},getRatioByOffset:function(e,t,n){return t?(e-n)/t:0},getOffsetsByRatios:function(e){return[this.getOffsetByRatio(e[0],this.bounds.xRange,this.bounds.x0),this.getOffsetByRatio(e[1],this.bounds.yRange,this.bounds.y0)]},getOffsetByRatio:function(e,t,n){return Math.round(e*t)+n},getClosestSteps:function(e){return[this.getClosestStep(e[0]),this.getClosestStep(e[1])]},getClosestStep:function(e){var t=0,n=1;for(var r=0;r<=this.steps-1;r++)Math.abs(this.stepRatios[r]-e)<n&&(n=Math.abs(this.stepRatios[r]-e),t=r);return this.stepRatios[t]},groupCompare:function(e,t){return e[0]==t[0]&&e[1]==t[1]},groupCopy:function(e,t){e[0]=t[0],e[1]=t[1]},groupClone:function(e){return[e[0],e[1]]},preventDefaults:function(e,t){e||(e=window.event),e.preventDefault&&e.preventDefault(),e.returnValue=!1,t&&document.selection&&document.selection.empty()},cancelEvent:function(e){e||(e=window.event),e.stopPropagation&&e.stopPropagation(),e.cancelBubble=!0}},!function(e){e.fn.dragdealer=function(e){return new Dragdealer(this[0],e)}}(jQuery),function(){if(!this.require){var e={},t={},n=function(s,o){var u=r(o,s),a=r(u,"./index"),f,l;f=t[u]||t[a];if(f)return f;if(l=e[u]||e[u=a])return f={id:u,exports:{}},t[u]=f.exports,l(f.exports,function(e){return n(e,i(u))},f),t[u]=f.exports;throw"module "+s+" not found"},r=function(e,t){var n=[],r,i;/^\.\.?(\/|$)/.test(t)?r=[e,t].join("/").split("/"):r=t.split("/");for(var s=0,o=r.length;s<o;s++)i=r[s],i==".."?n.pop():i!="."&&i!=""&&n.push(i);return n.join("/")},i=function(e){return e.split("/").slice(0,-1).join("/")};this.require=function(e){return n(e,"")},this.require.define=function(t){for(var n in t)e[n]=t[n]},this.require.modules=e,this.require.cache=t}return this.require.define}.call(this)({hslpicker:function(e,t,n){(function(){var e;e={inputs:Backbone.View.extend({initialize:function(e){return this.setElement($(e.el)),this.backgroundColor="hsla(360, 100%, 100%, 0)",this.model.on("change:h",this.setHue,this),this.model.on("change:s",this.setSat,this),this.model.on("change:l",this.setLum,this),this.model.on("change:a",this.setAlpha,this),this.model.on("change:a",this.changeRgb,this),this.model.on("change:hex",this.changeHex,this),this.model.on("change:rgb",this.changeRgb,this),this.style=$("<style>"),$("head").append(this.style)},events:{"keydown #controls input":"bumpHsl","keyup #controls input":"editHsl","keyup #colors input":"changeColor","click .expose":"toggleExposed","click .foreground, .background":"cycleSelectedTile","click .bg":"setTileBg"},changeColor:function(e){var t;return t=$(e.target),this.model[t.attr("id")](t.val())?t.removeClass("error"):t.addClass("error")},bumpHsl:function(e){var t,n;if(e.keyCode===38||e.keyCode===40)return t=$(e.target).attr("id"),n=e.shiftKey?10:1,e.keyCode===40&&(n=-n),this.bumpValue(t,n),e.preventDefault()},bumpValue:function(e,t){var n,r;n=this.model.get(e),r=e==="a"?Math.round(n*100+t)/100:n+t;switch(e){case"h":r=this.gate(r,360);break;case"s":case"l":r=this.gate(r,100);break;case"a":r=this.gate(r,1)}return this.model[e](r)},gate:function(e,t){return e<0?0:e>t?t:e},editHsl:function(e){var t,n,r;return t=$(e.target),n=t.attr("id"),r=parseFloat(t.val()),this.model.inRange(n,r)?(t.removeClass("error"),this.model[n](r)):t.addClass("error")},toggleExposed:function(){$(".color-tiles").toggleClass("exposed"),$(".slider").css("background-color",$(".color-tiles").hasClass("exposed")?"transparent":this.backgroundColor);if(!$(".foreground").hasClass("selected"))return $(".foreground").addClass("selected"),$(".background").removeClass("selected"),this.model.hsla(this.foregroundColor)},cycleSelectedTile:function(e){var t,n;n=$(e.currentTarget);if(!n.hasClass("selected"))return $(".tile.selected").removeClass("selected"),n.addClass("selected"),t=n.hasClass("foreground")?this.foregroundColor:this.backgroundColor,this.model.hsla(t)},setTile:function(){return $(".foreground").hasClass("selected")?(this.foregroundColor=this.model.hslaStr(),$(".foreground-color").css({"background-color":this.foregroundColor}),this.setPageStyles()):(this.backgroundColor=this.model.hslaStr(),$(".background-color").css({"background-color":this.backgroundColor}))},setTileBg:function(e){var t;return e.stopPropagation(),$(e.target).hasClass("none")?this.model.hsla([360,100,100,0]):$(e.target).hasClass("random")?(t=this.model.randomColor(),t[3]=this.model.get("a"),this.model.hsla(t)):this.model.rgba($(e.target).css("background-color"))},changeHex:function(){var e;return this.update($("#hex"),this.model.get("hex")),e=""+window.location.host+"/"+this.model.get("hex"),$("#url").val(e)},changeRgb:function(){return this.update($("#rgba"),this.model.rgbaStr())},changeHsl:function(){return this.update($("#hsla"),this.model.hslaStr())},setHue:function(){return this.update($("#h"),this.model.get("h")),this.changeHsl(),this.setTile()},setSat:function(){return this.update($("#s"),this.model.get("s")),this.changeHsl(),this.setTile()},setLum:function(){return this.update($("#l"),this.model.get("l")),this.changeHsl(),this.setTile()},setAlpha:function(){return this.update($("#a"),this.model.get("a")),this.changeHsl(),this.setTile()},update:function(e,t){if(e.val()!==""+t)return e.val(""+t)},setPageStyles:function(){var e;e=this.model.hsla();if(!_.contains(e,void 0))return $("h1").css("text-shadow",this.getTextShadow(e)),this.style.text("body a:hover { color: "+this.model.hslaStr([e[0],100,70,1])+" !important }          h1 + p { color: "+this.model.hslaStr([e[0],40,70,1])+" }          body h2, body h3, code { color: "+this.model.hslaStr([e[0],40,70,1])+" }")},getTextShadow:function(e){var t,n,r,i,s,o=this;return i=e[2],s=i<35?30:i>80?30:e[1],r=i<35?35:i>80?80:i,t=[e[0],Math.round(s/2.7),r],n=[],_(4).times(function(e){return n.push(o.adjustLum(Math.round(-5.5*(e-1)),t))}),n[0]+" 0px 1px 0px, "+n[1]+" 0px 2px 0px, "+n[2]+" 0px 3px 0px, "+n[3]+" 0px 4px 0px, "+"rgba(0, 0, 0, 0.2) 0px 5px 1px, "+"rgba(0, 0, 0, 0.3) 0px 0px 10px, "+"rgba(0, 0, 0, 0.4) 0px 3px 5px, "+"rgba(0, 0, 0, 0.5) 0px 6px 5px, "+"rgba(0, 0, 0, 0.6) 0px 10px 10px"},adjustLum:function(e,t){return t==null&&(t=this.model.hsla()),this.model.hslaStr([t[0],t[1],t[2]+1,this.model.get("a")])}}),picker:Backbone.View.extend({initialize:function(e){var t,n,r;return this.setElement($(e.el)),((t=e.hex)!=null?t.length:void 0)&&this.model.isHex(e.hex)?this.model.hex(e.hex):((n=e.rgba)!=null?n.length:void 0)&&this.model.isRgb(e.rgba)?this.model.rgb(e.rgba):((r=e.hsla)!=null?r.length:void 0)&&this.model.isHsl(e.hsla)?this.model.hsla(e.hsla):this.model.hsla(this.model.randomColor())},render:function(){var e=this;return this.hueSlider=this.$("#h-slider").dragdealer({slide:!1,steps:361,speed:100,x:this.model.get("h")/360,animationCallback:function(t,n){var r;r=Math.round(t*360);if(e.model.get("h")!==r)return e.model.h(r)}}),this.satSlider=this.$("#s-slider").dragdealer({slide:!1,steps:101,speed:100,x:this.model.get("s")/100,animationCallback:function(t,n){var r;r=Math.round(t*100);if(e.model.get("s")!==r)return e.model.s(r)}}),this.lumSlider=this.$("#l-slider").dragdealer({slide:!1,steps:101,speed:100,x:this.model.get("l")/100,animationCallback:function(t,n){var r;r=Math.round(t*100);if(e.model.get("l")!==r)return e.model.l(r)}}),this.alphaSlider=this.$("#a-slider").dragdealer({slide:!1,steps:101,speed:100,x:this.model.get("a"),animationCallback:function(t,n){var r;r=Math.round(t*100)/100;if(e.model.get("a")!==r)return e.model.a(r)}}),this.updateSliderStyles("all"),this.model.on("change:h",this.setHue,this),this.model.on("change:s",this.setSat,this),this.model.on("change:l",this.setLum,this),this.model.on("change:a",this.setAlpha,this),this},setHue:function(){return this.setSlider(this.hueSlider,this.model.get("h"),360),this.updateSliderStyles("h")},setSat:function(){return this.setSlider(this.satSlider,this.model.get("s"),100),this.updateSliderStyles("s")},setLum:function(){return this.setSlider(this.lumSlider,this.model.get("l"),100),this.updateSliderStyles("l")},setAlpha:function(){return this.setSlider(this.alphaSlider,this.model.get("a")*100,100),this.updateSliderStyles("a")},setSlider:function(e,t,n){if(Math.round(e.value.current[0]*n)!==Math.round(t))return e.setValue(t/n)},updateSliderStyles:function(e){var t,n,r,i,s;n=_.without(["h","s","l","a"],e),s=[];for(r=0,i=n.length;r<i;r++)t=n[r],s.push(this.setSliderBg(t));return s},setSliderBg:function(e){return $("#"+e+"-slider").attr("style","background: -webkit-"+this.gradient(e)+"; background: -moz-"+this.gradient(e))},gradient:function(e){var t,n,r,i;switch(e){case"h":i=36,n=10;break;case"s":case"l":i=5,n=20;break;case"a":i=5,n=.2}return t=function(){var t,s;s=[];for(r=t=0;0<=i?t<=i:t>=i;r=0<=i?++t:--t)s.push(this.model.hslaStr(this.tweakHsla(e,r*n)));return s}.call(this),"linear-gradient(left, "+t.join(",")+");"},tweakHsla:function(e,t){var n,r;n=this.model.hsla();switch(e){case"h":r=0;break;case"s":r=1;break;case"l":r=2;break;case"a":r=3}return n.splice(r,1,t),n}}),color:Backbone.Model.extend({defaults:{},randomColor:function(){return[_.random(0,360),100,50,1]},updateRgb:function(e){return e||(e=this.hslToRgb(this.hsla())),this.set({rgb:[e[0],e[1],e[2]]}),e},updateHsl:function(e){return this.set({h:e[0],s:e[1],l:e[2]})},updateHex:function(e){return this.set({hex:this.rgbToHex(e||this.rgba())})},h:function(e){return this.inRange("h",e)?(this.get("h")!==e&&(this.set({h:e}),this.updateHex(this.updateRgb())),e):!1},s:function(e){return this.inRange("s",e)?(this.get("s")!==e&&(this.set({s:e}),this.updateHex(this.updateRgb())),e):!1},l:function(e){return this.inRange("l",e)?(this.get("l")!==e&&(this.set({l:e}),this.updateHex(this.updateRgb())),e):!1},a:function(e){return this.inRange("a",e)?(this.get("a")!==e&&(this.set({a:e}),this.updateHex(this.updateRgb())),e):!1},hsla:function(e){return e!=null?(e=this.isHsl(e),e?(this.hsla().join(",")!==e.join(",")&&(this.updateHex(this.updateRgb(this.hslToRgb(e))),this.updateHsl(e),this.set({a:e[3]!=null?e[3]:1})),e):!1):[this.get("h"),this.get("s"),this.get("l"),this.get("a")]},hslaStr:function(e){return e||(e=this.hsla()),"hsla("+e[0]+", "+e[1]+"%, "+e[2]+"%, "+e[3]+")"},rgba:function(e){return e!=null?(e=this.isRgb(e),e?(e.join(",")!==this.rgba().join(",")&&(this.set({rgb:[e[0],e[1],e[2]],a:e[3]!=null?e[3]:1}),this.updateHex(e),this.updateHsl(this.rgbToHsl(e))),e):!1):this.get("rgb").concat(this.get("a"))},rgbaStr:function(){var e;return e=this.get("rgb"),"rgba("+e[0]+", "+e[1]+", "+e[2]+", "+this.get("a")+")"},hex:function(e){var t;return e!=null?(e=this.isHex(e),e?(this.hex()!==e&&(this.set({hex:e}),t=this.hexToRgb(e),this.updateRgb(t),this.set({a:t[3]||1}),this.updateHsl(this.rgbToHsl(t))),e):!1):this.get("hex")},isHex:function(e,t){var n,r,i;return t==null&&(t=!0),r=(i=e.match(/^#?([0-9a-fA-F]{3})([0-9a-fA-F]{3})?$/))!=null?i.slice(1):void 0,r==null?!1:(n=_.compact(r).join(""),t?"#"+n:n)},isRgb:function(e){var t,n,r,i;if(typeof e=="string"){n=(i=e.match(/rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,?\s*(0?\.?\d+)?\s*\)$/))!=null?i.slice(1):void 0;if(n==null)return!1;e=function(){var e,r,i,s;i=_.compact(n),s=[];for(e=0,r=i.length;e<r;e++)t=i[e],s.push(parseFloat(t));return s}()}return e[3]==null&&(e[3]=1),r=e[0]<=255&&e[1]<=255&&e[2]<=255&&e[3]<=1,r?e:!1},isHsl:function(e){var t,n,r,i;if(typeof e=="string"){n=(i=e.match(/hsla?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\%\s*,\s*(\d{1,3})\%\s*,?\s*(0?\.?\d+)?\s*\)$/))!=null?i.slice(1):void 0;if(n==null)return!1;e=function(){var e,r,i,s;i=_.compact(n),s=[];for(e=0,r=i.length;e<r;e++)t=i[e],s.push(parseFloat(t));return s}()}return e[3]==null&&(e[3]=1),r=e[0]<=360&&e[1]<=100&&e[2]<=100&&e[3]<=1,r?e:!1},valid:function(e){var t;return t=this.type(e),t==="hex"?this.isHex(e):t==="rgb"?this.isRgb(e):t==="hsl"?this.isHsl(e):!1},inRange:function(e,t){var n;switch(e){case"h":n=t>=0&&t<=360;break;case"s":case"l":n=t>=0&&t<=100;break;case"a":n=t>=0&&t<=1}return n},type:function(e){var t,n;return t=e.toString(),n=t.indexOf("#")>=0||t.length===3||t.length===6?"hex":t.indexOf("%")?"hsl":"rgb"},hexToRgb:function(e){var t,n;return e=this.isHex(e,!1),e?(e.length!==6&&(e=function(){var n,r,i;i=[];for(n=0,r=e.length;n<r;n++)t=e[n],i.push(""+t+t);return i}().join("")),n=e.match(/#?(.{2})(.{2})(.{2})/).slice(1),n=function(){var e,r,i;i=[];for(e=0,r=n.length;e<r;e++)t=n[e],i.push(parseInt(t,16));return i}().concat([1])):!1},hexToHsl:function(e){if(e.indexOf("#")>=0||e.length<6)e=this.isHex(e);return e?this.rgbToHsl(this.hexToRgb(e)):!1},rgbToHex:function(e){var t,n,r;typeof e=="string"&&(e=this.isRgb(e));if(e)return n=function(){var n,r,i,s;i=e.slice(0,3),s=[];for(n=0,r=i.length;n<r;n++)t=i[n],s.push(parseFloat(t).toString(16));return s}(),n=function(){var e,r,i;i=[];for(e=0,r=n.length;e<r;e++)t=n[e],t.length===1?i.push("0"+t):i.push(t);return i}(),n=n.join(""),_.compact(function(){var e,t,s,o;s=n.match(/.{1,2}/g),o=[];for(e=0,t=s.length;e<t;e++)r=s[e],o.push(r[0]===r[1]);return o}()).length===3?"#"+n[0]+n[2]+n[4]:"#"+n},rgbToHsl:function(e){var t,n,r,i,s,o,u,a,f,l,c,h,p,d;return typeof e=="string"&&(e=this.isRgb(e)),e?(h=parseFloat(e[0])/255,s=parseFloat(e[1])/255,r=parseFloat(e[2])/255,l=Math.max(h,s,r),c=Math.min(h,s,r),i=l-c,n=l+c,u=c===l?0:h===l?(60*(s-r)/i+360)%360:s===l?60*(r-h)/i+120:60*(h-s)/i+240,f=.5*n,d=f===0?0:f===1?1:f<=.5?i/n:i/(2-n),o=Math.round(u),p=Math.round(d*100),a=Math.round(f*100),t=parseFloat(e[3])||1,[o,p,a,t]):!1},hslToRgb:function(e){var t,n,r,i,s,o,u,a,f,l,c,h;return typeof e=="string"&&(e=this.isHsl(e)),e?(o=parseInt(e[0])/360,h=parseInt(e[1])/100,u=parseInt(e[2])/100,f=u<=.5?u*(1+h):u+h-u*h,a=2*u-f,c=o+1/3,s=o,r=o-1/3,l=Math.round(this.hueToRgb(a,f,c)*255),i=Math.round(this.hueToRgb(a,f,s)*255),n=Math.round(this.hueToRgb(a,f,r)*255),t=parseFloat(e[3])||1,[l,i,n,t]):!1},hslToHex:function(e){return typeof e=="string"&&(e=this.isHsl(e)),e?this.rgbToHex(this.hslToRgb(e)):!1},hueToRgb:function(e,t,n){return n<0&&(n+=1),n>1&&(n-=1),n*6<1?e+(t-e)*n*6:n*2<1?t:n*3<2?e+(t-e)*(2/3-n)*6:e}})},n.exports=e}).call(this)}});
+
+(function() {
+
+  // Baseline setup
+  // --------------
+
+  // Establish the root object, `window` in the browser, or `global` on the server.
+  var root = this;
+
+  // Save the previous value of the `_` variable.
+  var previousUnderscore = root._;
+
+  // Establish the object that gets returned to break out of a loop iteration.
+  var breaker = {};
+
+  // Save bytes in the minified (but not gzipped) version:
+  var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
+
+  // Create quick reference variables for speed access to core prototypes.
+  var push             = ArrayProto.push,
+      slice            = ArrayProto.slice,
+      concat           = ArrayProto.concat,
+      unshift          = ArrayProto.unshift,
+      toString         = ObjProto.toString,
+      hasOwnProperty   = ObjProto.hasOwnProperty;
+
+  // All **ECMAScript 5** native function implementations that we hope to use
+  // are declared here.
+  var
+    nativeForEach      = ArrayProto.forEach,
+    nativeMap          = ArrayProto.map,
+    nativeReduce       = ArrayProto.reduce,
+    nativeReduceRight  = ArrayProto.reduceRight,
+    nativeFilter       = ArrayProto.filter,
+    nativeEvery        = ArrayProto.every,
+    nativeSome         = ArrayProto.some,
+    nativeIndexOf      = ArrayProto.indexOf,
+    nativeLastIndexOf  = ArrayProto.lastIndexOf,
+    nativeIsArray      = Array.isArray,
+    nativeKeys         = Object.keys,
+    nativeBind         = FuncProto.bind;
+
+  // Create a safe reference to the Underscore object for use below.
+  var _ = function(obj) {
+    if (obj instanceof _) return obj;
+    if (!(this instanceof _)) return new _(obj);
+    this._wrapped = obj;
+  };
+
+  // Export the Underscore object for **Node.js**, with
+  // backwards-compatibility for the old `require()` API. If we're in
+  // the browser, add `_` as a global object via a string identifier,
+  // for Closure Compiler "advanced" mode.
+  if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+      exports = module.exports = _;
+    }
+    exports._ = _;
+  } else {
+    root['_'] = _;
+  }
+
+  // Current version.
+  _.VERSION = '1.4.2';
+
+  // Collection Functions
+  // --------------------
+
+  // The cornerstone, an `each` implementation, aka `forEach`.
+  // Handles objects with the built-in `forEach`, arrays, and raw objects.
+  // Delegates to **ECMAScript 5**'s native `forEach` if available.
+  var each = _.each = _.forEach = function(obj, iterator, context) {
+    if (obj == null) return;
+    if (nativeForEach && obj.forEach === nativeForEach) {
+      obj.forEach(iterator, context);
+    } else if (obj.length === +obj.length) {
+      for (var i = 0, l = obj.length; i < l; i++) {
+        if (iterator.call(context, obj[i], i, obj) === breaker) return;
+      }
+    } else {
+      for (var key in obj) {
+        if (_.has(obj, key)) {
+          if (iterator.call(context, obj[key], key, obj) === breaker) return;
+        }
+      }
+    }
+  };
+
+  // Return the results of applying the iterator to each element.
+  // Delegates to **ECMAScript 5**'s native `map` if available.
+  _.map = _.collect = function(obj, iterator, context) {
+    var results = [];
+    if (obj == null) return results;
+    if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
+    each(obj, function(value, index, list) {
+      results[results.length] = iterator.call(context, value, index, list);
+    });
+    return results;
+  };
+
+  // **Reduce** builds up a single result from a list of values, aka `inject`,
+  // or `foldl`. Delegates to **ECMAScript 5**'s native `reduce` if available.
+  _.reduce = _.foldl = _.inject = function(obj, iterator, memo, context) {
+    var initial = arguments.length > 2;
+    if (obj == null) obj = [];
+    if (nativeReduce && obj.reduce === nativeReduce) {
+      if (context) iterator = _.bind(iterator, context);
+      return initial ? obj.reduce(iterator, memo) : obj.reduce(iterator);
+    }
+    each(obj, function(value, index, list) {
+      if (!initial) {
+        memo = value;
+        initial = true;
+      } else {
+        memo = iterator.call(context, memo, value, index, list);
+      }
+    });
+    if (!initial) throw new TypeError('Reduce of empty array with no initial value');
+    return memo;
+  };
+
+  // The right-associative version of reduce, also known as `foldr`.
+  // Delegates to **ECMAScript 5**'s native `reduceRight` if available.
+  _.reduceRight = _.foldr = function(obj, iterator, memo, context) {
+    var initial = arguments.length > 2;
+    if (obj == null) obj = [];
+    if (nativeReduceRight && obj.reduceRight === nativeReduceRight) {
+      if (context) iterator = _.bind(iterator, context);
+      return arguments.length > 2 ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);
+    }
+    var length = obj.length;
+    if (length !== +length) {
+      var keys = _.keys(obj);
+      length = keys.length;
+    }
+    each(obj, function(value, index, list) {
+      index = keys ? keys[--length] : --length;
+      if (!initial) {
+        memo = obj[index];
+        initial = true;
+      } else {
+        memo = iterator.call(context, memo, obj[index], index, list);
+      }
+    });
+    if (!initial) throw new TypeError('Reduce of empty array with no initial value');
+    return memo;
+  };
+
+  // Return the first value which passes a truth test. Aliased as `detect`.
+  _.find = _.detect = function(obj, iterator, context) {
+    var result;
+    any(obj, function(value, index, list) {
+      if (iterator.call(context, value, index, list)) {
+        result = value;
+        return true;
+      }
+    });
+    return result;
+  };
+
+  // Return all the elements that pass a truth test.
+  // Delegates to **ECMAScript 5**'s native `filter` if available.
+  // Aliased as `select`.
+  _.filter = _.select = function(obj, iterator, context) {
+    var results = [];
+    if (obj == null) return results;
+    if (nativeFilter && obj.filter === nativeFilter) return obj.filter(iterator, context);
+    each(obj, function(value, index, list) {
+      if (iterator.call(context, value, index, list)) results[results.length] = value;
+    });
+    return results;
+  };
+
+  // Return all the elements for which a truth test fails.
+  _.reject = function(obj, iterator, context) {
+    var results = [];
+    if (obj == null) return results;
+    each(obj, function(value, index, list) {
+      if (!iterator.call(context, value, index, list)) results[results.length] = value;
+    });
+    return results;
+  };
+
+  // Determine whether all of the elements match a truth test.
+  // Delegates to **ECMAScript 5**'s native `every` if available.
+  // Aliased as `all`.
+  _.every = _.all = function(obj, iterator, context) {
+    iterator || (iterator = _.identity);
+    var result = true;
+    if (obj == null) return result;
+    if (nativeEvery && obj.every === nativeEvery) return obj.every(iterator, context);
+    each(obj, function(value, index, list) {
+      if (!(result = result && iterator.call(context, value, index, list))) return breaker;
+    });
+    return !!result;
+  };
+
+  // Determine if at least one element in the object matches a truth test.
+  // Delegates to **ECMAScript 5**'s native `some` if available.
+  // Aliased as `any`.
+  var any = _.some = _.any = function(obj, iterator, context) {
+    iterator || (iterator = _.identity);
+    var result = false;
+    if (obj == null) return result;
+    if (nativeSome && obj.some === nativeSome) return obj.some(iterator, context);
+    each(obj, function(value, index, list) {
+      if (result || (result = iterator.call(context, value, index, list))) return breaker;
+    });
+    return !!result;
+  };
+
+  // Determine if the array or object contains a given value (using `===`).
+  // Aliased as `include`.
+  _.contains = _.include = function(obj, target) {
+    var found = false;
+    if (obj == null) return found;
+    if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
+    found = any(obj, function(value) {
+      return value === target;
+    });
+    return found;
+  };
+
+  // Invoke a method (with arguments) on every item in a collection.
+  _.invoke = function(obj, method) {
+    var args = slice.call(arguments, 2);
+    return _.map(obj, function(value) {
+      return (_.isFunction(method) ? method : value[method]).apply(value, args);
+    });
+  };
+
+  // Convenience version of a common use case of `map`: fetching a property.
+  _.pluck = function(obj, key) {
+    return _.map(obj, function(value){ return value[key]; });
+  };
+
+  // Convenience version of a common use case of `filter`: selecting only objects
+  // with specific `key:value` pairs.
+  _.where = function(obj, attrs) {
+    if (_.isEmpty(attrs)) return [];
+    return _.filter(obj, function(value) {
+      for (var key in attrs) {
+        if (attrs[key] !== value[key]) return false;
+      }
+      return true;
+    });
+  };
+
+  // Return the maximum element or (element-based computation).
+  // Can't optimize arrays of integers longer than 65,535 elements.
+  // See: https://bugs.webkit.org/show_bug.cgi?id=80797
+  _.max = function(obj, iterator, context) {
+    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
+      return Math.max.apply(Math, obj);
+    }
+    if (!iterator && _.isEmpty(obj)) return -Infinity;
+    var result = {computed : -Infinity};
+    each(obj, function(value, index, list) {
+      var computed = iterator ? iterator.call(context, value, index, list) : value;
+      computed >= result.computed && (result = {value : value, computed : computed});
+    });
+    return result.value;
+  };
+
+  // Return the minimum element (or element-based computation).
+  _.min = function(obj, iterator, context) {
+    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
+      return Math.min.apply(Math, obj);
+    }
+    if (!iterator && _.isEmpty(obj)) return Infinity;
+    var result = {computed : Infinity};
+    each(obj, function(value, index, list) {
+      var computed = iterator ? iterator.call(context, value, index, list) : value;
+      computed < result.computed && (result = {value : value, computed : computed});
+    });
+    return result.value;
+  };
+
+  // Shuffle an array.
+  _.shuffle = function(obj) {
+    var rand;
+    var index = 0;
+    var shuffled = [];
+    each(obj, function(value) {
+      rand = _.random(index++);
+      shuffled[index - 1] = shuffled[rand];
+      shuffled[rand] = value;
+    });
+    return shuffled;
+  };
+
+  // An internal function to generate lookup iterators.
+  var lookupIterator = function(value) {
+    return _.isFunction(value) ? value : function(obj){ return obj[value]; };
+  };
+
+  // Sort the object's values by a criterion produced by an iterator.
+  _.sortBy = function(obj, value, context) {
+    var iterator = lookupIterator(value);
+    return _.pluck(_.map(obj, function(value, index, list) {
+      return {
+        value : value,
+        index : index,
+        criteria : iterator.call(context, value, index, list)
+      };
+    }).sort(function(left, right) {
+      var a = left.criteria;
+      var b = right.criteria;
+      if (a !== b) {
+        if (a > b || a === void 0) return 1;
+        if (a < b || b === void 0) return -1;
+      }
+      return left.index < right.index ? -1 : 1;
+    }), 'value');
+  };
+
+  // An internal function used for aggregate "group by" operations.
+  var group = function(obj, value, context, behavior) {
+    var result = {};
+    var iterator = lookupIterator(value);
+    each(obj, function(value, index) {
+      var key = iterator.call(context, value, index, obj);
+      behavior(result, key, value);
+    });
+    return result;
+  };
+
+  // Groups the object's values by a criterion. Pass either a string attribute
+  // to group by, or a function that returns the criterion.
+  _.groupBy = function(obj, value, context) {
+    return group(obj, value, context, function(result, key, value) {
+      (_.has(result, key) ? result[key] : (result[key] = [])).push(value);
+    });
+  };
+
+  // Counts instances of an object that group by a certain criterion. Pass
+  // either a string attribute to count by, or a function that returns the
+  // criterion.
+  _.countBy = function(obj, value, context) {
+    return group(obj, value, context, function(result, key, value) {
+      if (!_.has(result, key)) result[key] = 0;
+      result[key]++;
+    });
+  };
+
+  // Use a comparator function to figure out the smallest index at which
+  // an object should be inserted so as to maintain order. Uses binary search.
+  _.sortedIndex = function(array, obj, iterator, context) {
+    iterator = iterator == null ? _.identity : lookupIterator(iterator);
+    var value = iterator.call(context, obj);
+    var low = 0, high = array.length;
+    while (low < high) {
+      var mid = (low + high) >>> 1;
+      iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
+    }
+    return low;
+  };
+
+  // Safely convert anything iterable into a real, live array.
+  _.toArray = function(obj) {
+    if (!obj) return [];
+    if (obj.length === +obj.length) return slice.call(obj);
+    return _.values(obj);
+  };
+
+  // Return the number of elements in an object.
+  _.size = function(obj) {
+    return (obj.length === +obj.length) ? obj.length : _.keys(obj).length;
+  };
+
+  // Array Functions
+  // ---------------
+
+  // Get the first element of an array. Passing **n** will return the first N
+  // values in the array. Aliased as `head` and `take`. The **guard** check
+  // allows it to work with `_.map`.
+  _.first = _.head = _.take = function(array, n, guard) {
+    return (n != null) && !guard ? slice.call(array, 0, n) : array[0];
+  };
+
+  // Returns everything but the last entry of the array. Especially useful on
+  // the arguments object. Passing **n** will return all the values in
+  // the array, excluding the last N. The **guard** check allows it to work with
+  // `_.map`.
+  _.initial = function(array, n, guard) {
+    return slice.call(array, 0, array.length - ((n == null) || guard ? 1 : n));
+  };
+
+  // Get the last element of an array. Passing **n** will return the last N
+  // values in the array. The **guard** check allows it to work with `_.map`.
+  _.last = function(array, n, guard) {
+    if ((n != null) && !guard) {
+      return slice.call(array, Math.max(array.length - n, 0));
+    } else {
+      return array[array.length - 1];
+    }
+  };
+
+  // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
+  // Especially useful on the arguments object. Passing an **n** will return
+  // the rest N values in the array. The **guard**
+  // check allows it to work with `_.map`.
+  _.rest = _.tail = _.drop = function(array, n, guard) {
+    return slice.call(array, (n == null) || guard ? 1 : n);
+  };
+
+  // Trim out all falsy values from an array.
+  _.compact = function(array) {
+    return _.filter(array, function(value){ return !!value; });
+  };
+
+  // Internal implementation of a recursive `flatten` function.
+  var flatten = function(input, shallow, output) {
+    each(input, function(value) {
+      if (_.isArray(value)) {
+        shallow ? push.apply(output, value) : flatten(value, shallow, output);
+      } else {
+        output.push(value);
+      }
+    });
+    return output;
+  };
+
+  // Return a completely flattened version of an array.
+  _.flatten = function(array, shallow) {
+    return flatten(array, shallow, []);
+  };
+
+  // Return a version of the array that does not contain the specified value(s).
+  _.without = function(array) {
+    return _.difference(array, slice.call(arguments, 1));
+  };
+
+  // Produce a duplicate-free version of the array. If the array has already
+  // been sorted, you have the option of using a faster algorithm.
+  // Aliased as `unique`.
+  _.uniq = _.unique = function(array, isSorted, iterator, context) {
+    var initial = iterator ? _.map(array, iterator, context) : array;
+    var results = [];
+    var seen = [];
+    each(initial, function(value, index) {
+      if (isSorted ? (!index || seen[seen.length - 1] !== value) : !_.contains(seen, value)) {
+        seen.push(value);
+        results.push(array[index]);
+      }
+    });
+    return results;
+  };
+
+  // Produce an array that contains the union: each distinct element from all of
+  // the passed-in arrays.
+  _.union = function() {
+    return _.uniq(concat.apply(ArrayProto, arguments));
+  };
+
+  // Produce an array that contains every item shared between all the
+  // passed-in arrays.
+  _.intersection = function(array) {
+    var rest = slice.call(arguments, 1);
+    return _.filter(_.uniq(array), function(item) {
+      return _.every(rest, function(other) {
+        return _.indexOf(other, item) >= 0;
+      });
+    });
+  };
+
+  // Take the difference between one array and a number of other arrays.
+  // Only the elements present in just the first array will remain.
+  _.difference = function(array) {
+    var rest = concat.apply(ArrayProto, slice.call(arguments, 1));
+    return _.filter(array, function(value){ return !_.contains(rest, value); });
+  };
+
+  // Zip together multiple lists into a single array -- elements that share
+  // an index go together.
+  _.zip = function() {
+    var args = slice.call(arguments);
+    var length = _.max(_.pluck(args, 'length'));
+    var results = new Array(length);
+    for (var i = 0; i < length; i++) {
+      results[i] = _.pluck(args, "" + i);
+    }
+    return results;
+  };
+
+  // Converts lists into objects. Pass either a single array of `[key, value]`
+  // pairs, or two parallel arrays of the same length -- one of keys, and one of
+  // the corresponding values.
+  _.object = function(list, values) {
+    var result = {};
+    for (var i = 0, l = list.length; i < l; i++) {
+      if (values) {
+        result[list[i]] = values[i];
+      } else {
+        result[list[i][0]] = list[i][1];
+      }
+    }
+    return result;
+  };
+
+  // If the browser doesn't supply us with indexOf (I'm looking at you, **MSIE**),
+  // we need this function. Return the position of the first occurrence of an
+  // item in an array, or -1 if the item is not included in the array.
+  // Delegates to **ECMAScript 5**'s native `indexOf` if available.
+  // If the array is large and already in sort order, pass `true`
+  // for **isSorted** to use binary search.
+  _.indexOf = function(array, item, isSorted) {
+    if (array == null) return -1;
+    var i = 0, l = array.length;
+    if (isSorted) {
+      if (typeof isSorted == 'number') {
+        i = (isSorted < 0 ? Math.max(0, l + isSorted) : isSorted);
+      } else {
+        i = _.sortedIndex(array, item);
+        return array[i] === item ? i : -1;
+      }
+    }
+    if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
+    for (; i < l; i++) if (array[i] === item) return i;
+    return -1;
+  };
+
+  // Delegates to **ECMAScript 5**'s native `lastIndexOf` if available.
+  _.lastIndexOf = function(array, item, from) {
+    if (array == null) return -1;
+    var hasIndex = from != null;
+    if (nativeLastIndexOf && array.lastIndexOf === nativeLastIndexOf) {
+      return hasIndex ? array.lastIndexOf(item, from) : array.lastIndexOf(item);
+    }
+    var i = (hasIndex ? from : array.length);
+    while (i--) if (array[i] === item) return i;
+    return -1;
+  };
+
+  // Generate an integer Array containing an arithmetic progression. A port of
+  // the native Python `range()` function. See
+  // [the Python documentation](http://docs.python.org/library/functions.html#range).
+  _.range = function(start, stop, step) {
+    if (arguments.length <= 1) {
+      stop = start || 0;
+      start = 0;
+    }
+    step = arguments[2] || 1;
+
+    var len = Math.max(Math.ceil((stop - start) / step), 0);
+    var idx = 0;
+    var range = new Array(len);
+
+    while(idx < len) {
+      range[idx++] = start;
+      start += step;
+    }
+
+    return range;
+  };
+
+  // Function (ahem) Functions
+  // ------------------
+
+  // Reusable constructor function for prototype setting.
+  var ctor = function(){};
+
+  // Create a function bound to a given object (assigning `this`, and arguments,
+  // optionally). Binding with arguments is also known as `curry`.
+  // Delegates to **ECMAScript 5**'s native `Function.bind` if available.
+  // We check for `func.bind` first, to fail fast when `func` is undefined.
+  _.bind = function bind(func, context) {
+    var bound, args;
+    if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+    if (!_.isFunction(func)) throw new TypeError;
+    args = slice.call(arguments, 2);
+    return bound = function() {
+      if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
+      ctor.prototype = func.prototype;
+      var self = new ctor;
+      var result = func.apply(self, args.concat(slice.call(arguments)));
+      if (Object(result) === result) return result;
+      return self;
+    };
+  };
+
+  // Bind all of an object's methods to that object. Useful for ensuring that
+  // all callbacks defined on an object belong to it.
+  _.bindAll = function(obj) {
+    var funcs = slice.call(arguments, 1);
+    if (funcs.length == 0) funcs = _.functions(obj);
+    each(funcs, function(f) { obj[f] = _.bind(obj[f], obj); });
+    return obj;
+  };
+
+  // Memoize an expensive function by storing its results.
+  _.memoize = function(func, hasher) {
+    var memo = {};
+    hasher || (hasher = _.identity);
+    return function() {
+      var key = hasher.apply(this, arguments);
+      return _.has(memo, key) ? memo[key] : (memo[key] = func.apply(this, arguments));
+    };
+  };
+
+  // Delays a function for the given number of milliseconds, and then calls
+  // it with the arguments supplied.
+  _.delay = function(func, wait) {
+    var args = slice.call(arguments, 2);
+    return setTimeout(function(){ return func.apply(null, args); }, wait);
+  };
+
+  // Defers a function, scheduling it to run after the current call stack has
+  // cleared.
+  _.defer = function(func) {
+    return _.delay.apply(_, [func, 1].concat(slice.call(arguments, 1)));
+  };
+
+  // Returns a function, that, when invoked, will only be triggered at most once
+  // during a given window of time.
+  _.throttle = function(func, wait) {
+    var context, args, timeout, throttling, more, result;
+    var whenDone = _.debounce(function(){ more = throttling = false; }, wait);
+    return function() {
+      context = this; args = arguments;
+      var later = function() {
+        timeout = null;
+        if (more) {
+          result = func.apply(context, args);
+        }
+        whenDone();
+      };
+      if (!timeout) timeout = setTimeout(later, wait);
+      if (throttling) {
+        more = true;
+      } else {
+        throttling = true;
+        result = func.apply(context, args);
+      }
+      whenDone();
+      return result;
+    };
+  };
+
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  _.debounce = function(func, wait, immediate) {
+    var timeout, result;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) result = func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) result = func.apply(context, args);
+      return result;
+    };
+  };
+
+  // Returns a function that will be executed at most one time, no matter how
+  // often you call it. Useful for lazy initialization.
+  _.once = function(func) {
+    var ran = false, memo;
+    return function() {
+      if (ran) return memo;
+      ran = true;
+      memo = func.apply(this, arguments);
+      func = null;
+      return memo;
+    };
+  };
+
+  // Returns the first function passed as an argument to the second,
+  // allowing you to adjust arguments, run code before and after, and
+  // conditionally execute the original function.
+  _.wrap = function(func, wrapper) {
+    return function() {
+      var args = [func];
+      push.apply(args, arguments);
+      return wrapper.apply(this, args);
+    };
+  };
+
+  // Returns a function that is the composition of a list of functions, each
+  // consuming the return value of the function that follows.
+  _.compose = function() {
+    var funcs = arguments;
+    return function() {
+      var args = arguments;
+      for (var i = funcs.length - 1; i >= 0; i--) {
+        args = [funcs[i].apply(this, args)];
+      }
+      return args[0];
+    };
+  };
+
+  // Returns a function that will only be executed after being called N times.
+  _.after = function(times, func) {
+    if (times <= 0) return func();
+    return function() {
+      if (--times < 1) {
+        return func.apply(this, arguments);
+      }
+    };
+  };
+
+  // Object Functions
+  // ----------------
+
+  // Retrieve the names of an object's properties.
+  // Delegates to **ECMAScript 5**'s native `Object.keys`
+  _.keys = nativeKeys || function(obj) {
+    if (obj !== Object(obj)) throw new TypeError('Invalid object');
+    var keys = [];
+    for (var key in obj) if (_.has(obj, key)) keys[keys.length] = key;
+    return keys;
+  };
+
+  // Retrieve the values of an object's properties.
+  _.values = function(obj) {
+    var values = [];
+    for (var key in obj) if (_.has(obj, key)) values.push(obj[key]);
+    return values;
+  };
+
+  // Convert an object into a list of `[key, value]` pairs.
+  _.pairs = function(obj) {
+    var pairs = [];
+    for (var key in obj) if (_.has(obj, key)) pairs.push([key, obj[key]]);
+    return pairs;
+  };
+
+  // Invert the keys and values of an object. The values must be serializable.
+  _.invert = function(obj) {
+    var result = {};
+    for (var key in obj) if (_.has(obj, key)) result[obj[key]] = key;
+    return result;
+  };
+
+  // Return a sorted list of the function names available on the object.
+  // Aliased as `methods`
+  _.functions = _.methods = function(obj) {
+    var names = [];
+    for (var key in obj) {
+      if (_.isFunction(obj[key])) names.push(key);
+    }
+    return names.sort();
+  };
+
+  // Extend a given object with all the properties in passed-in object(s).
+  _.extend = function(obj) {
+    each(slice.call(arguments, 1), function(source) {
+      for (var prop in source) {
+        obj[prop] = source[prop];
+      }
+    });
+    return obj;
+  };
+
+  // Return a copy of the object only containing the whitelisted properties.
+  _.pick = function(obj) {
+    var copy = {};
+    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
+    each(keys, function(key) {
+      if (key in obj) copy[key] = obj[key];
+    });
+    return copy;
+  };
+
+   // Return a copy of the object without the blacklisted properties.
+  _.omit = function(obj) {
+    var copy = {};
+    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
+    for (var key in obj) {
+      if (!_.contains(keys, key)) copy[key] = obj[key];
+    }
+    return copy;
+  };
+
+  // Fill in a given object with default properties.
+  _.defaults = function(obj) {
+    each(slice.call(arguments, 1), function(source) {
+      for (var prop in source) {
+        if (obj[prop] == null) obj[prop] = source[prop];
+      }
+    });
+    return obj;
+  };
+
+  // Create a (shallow-cloned) duplicate of an object.
+  _.clone = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
+  };
+
+  // Invokes interceptor with the obj, and then returns obj.
+  // The primary purpose of this method is to "tap into" a method chain, in
+  // order to perform operations on intermediate results within the chain.
+  _.tap = function(obj, interceptor) {
+    interceptor(obj);
+    return obj;
+  };
+
+  // Internal recursive comparison function for `isEqual`.
+  var eq = function(a, b, aStack, bStack) {
+    // Identical objects are equal. `0 === -0`, but they aren't identical.
+    // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
+    if (a === b) return a !== 0 || 1 / a == 1 / b;
+    // A strict comparison is necessary because `null == undefined`.
+    if (a == null || b == null) return a === b;
+    // Unwrap any wrapped objects.
+    if (a instanceof _) a = a._wrapped;
+    if (b instanceof _) b = b._wrapped;
+    // Compare `[[Class]]` names.
+    var className = toString.call(a);
+    if (className != toString.call(b)) return false;
+    switch (className) {
+      // Strings, numbers, dates, and booleans are compared by value.
+      case '[object String]':
+        // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+        // equivalent to `new String("5")`.
+        return a == String(b);
+      case '[object Number]':
+        // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
+        // other numeric values.
+        return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
+      case '[object Date]':
+      case '[object Boolean]':
+        // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+        // millisecond representations. Note that invalid dates with millisecond representations
+        // of `NaN` are not equivalent.
+        return +a == +b;
+      // RegExps are compared by their source patterns and flags.
+      case '[object RegExp]':
+        return a.source == b.source &&
+               a.global == b.global &&
+               a.multiline == b.multiline &&
+               a.ignoreCase == b.ignoreCase;
+    }
+    if (typeof a != 'object' || typeof b != 'object') return false;
+    // Assume equality for cyclic structures. The algorithm for detecting cyclic
+    // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+    var length = aStack.length;
+    while (length--) {
+      // Linear search. Performance is inversely proportional to the number of
+      // unique nested structures.
+      if (aStack[length] == a) return bStack[length] == b;
+    }
+    // Add the first object to the stack of traversed objects.
+    aStack.push(a);
+    bStack.push(b);
+    var size = 0, result = true;
+    // Recursively compare objects and arrays.
+    if (className == '[object Array]') {
+      // Compare array lengths to determine if a deep comparison is necessary.
+      size = a.length;
+      result = size == b.length;
+      if (result) {
+        // Deep compare the contents, ignoring non-numeric properties.
+        while (size--) {
+          if (!(result = eq(a[size], b[size], aStack, bStack))) break;
+        }
+      }
+    } else {
+      // Objects with different constructors are not equivalent, but `Object`s
+      // from different frames are.
+      var aCtor = a.constructor, bCtor = b.constructor;
+      if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
+                               _.isFunction(bCtor) && (bCtor instanceof bCtor))) {
+        return false;
+      }
+      // Deep compare objects.
+      for (var key in a) {
+        if (_.has(a, key)) {
+          // Count the expected number of properties.
+          size++;
+          // Deep compare each member.
+          if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
+        }
+      }
+      // Ensure that both objects contain the same number of properties.
+      if (result) {
+        for (key in b) {
+          if (_.has(b, key) && !(size--)) break;
+        }
+        result = !size;
+      }
+    }
+    // Remove the first object from the stack of traversed objects.
+    aStack.pop();
+    bStack.pop();
+    return result;
+  };
+
+  // Perform a deep comparison to check if two objects are equal.
+  _.isEqual = function(a, b) {
+    return eq(a, b, [], []);
+  };
+
+  // Is a given array, string, or object empty?
+  // An "empty" object has no enumerable own-properties.
+  _.isEmpty = function(obj) {
+    if (obj == null) return true;
+    if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
+    for (var key in obj) if (_.has(obj, key)) return false;
+    return true;
+  };
+
+  // Is a given value a DOM element?
+  _.isElement = function(obj) {
+    return !!(obj && obj.nodeType === 1);
+  };
+
+  // Is a given value an array?
+  // Delegates to ECMA5's native Array.isArray
+  _.isArray = nativeIsArray || function(obj) {
+    return toString.call(obj) == '[object Array]';
+  };
+
+  // Is a given variable an object?
+  _.isObject = function(obj) {
+    return obj === Object(obj);
+  };
+
+  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
+  each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
+    _['is' + name] = function(obj) {
+      return toString.call(obj) == '[object ' + name + ']';
+    };
+  });
+
+  // Define a fallback version of the method in browsers (ahem, IE), where
+  // there isn't any inspectable "Arguments" type.
+  if (!_.isArguments(arguments)) {
+    _.isArguments = function(obj) {
+      return !!(obj && _.has(obj, 'callee'));
+    };
+  }
+
+  // Optimize `isFunction` if appropriate.
+  if (typeof (/./) !== 'function') {
+    _.isFunction = function(obj) {
+      return typeof obj === 'function';
+    };
+  }
+
+  // Is a given object a finite number?
+  _.isFinite = function(obj) {
+    return _.isNumber(obj) && isFinite(obj);
+  };
+
+  // Is the given value `NaN`? (NaN is the only number which does not equal itself).
+  _.isNaN = function(obj) {
+    return _.isNumber(obj) && obj != +obj;
+  };
+
+  // Is a given value a boolean?
+  _.isBoolean = function(obj) {
+    return obj === true || obj === false || toString.call(obj) == '[object Boolean]';
+  };
+
+  // Is a given value equal to null?
+  _.isNull = function(obj) {
+    return obj === null;
+  };
+
+  // Is a given variable undefined?
+  _.isUndefined = function(obj) {
+    return obj === void 0;
+  };
+
+  // Shortcut function for checking if an object has a given property directly
+  // on itself (in other words, not on a prototype).
+  _.has = function(obj, key) {
+    return hasOwnProperty.call(obj, key);
+  };
+
+  // Utility Functions
+  // -----------------
+
+  // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
+  // previous owner. Returns a reference to the Underscore object.
+  _.noConflict = function() {
+    root._ = previousUnderscore;
+    return this;
+  };
+
+  // Keep the identity function around for default iterators.
+  _.identity = function(value) {
+    return value;
+  };
+
+  // Run a function **n** times.
+  _.times = function(n, iterator, context) {
+    for (var i = 0; i < n; i++) iterator.call(context, i);
+  };
+
+  // Return a random integer between min and max (inclusive).
+  _.random = function(min, max) {
+    if (max == null) {
+      max = min;
+      min = 0;
+    }
+    return min + (0 | Math.random() * (max - min + 1));
+  };
+
+  // List of HTML entities for escaping.
+  var entityMap = {
+    escape: {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;',
+      '/': '&#x2F;'
+    }
+  };
+  entityMap.unescape = _.invert(entityMap.escape);
+
+  // Regexes containing the keys and values listed immediately above.
+  var entityRegexes = {
+    escape:   new RegExp('[' + _.keys(entityMap.escape).join('') + ']', 'g'),
+    unescape: new RegExp('(' + _.keys(entityMap.unescape).join('|') + ')', 'g')
+  };
+
+  // Functions for escaping and unescaping strings to/from HTML interpolation.
+  _.each(['escape', 'unescape'], function(method) {
+    _[method] = function(string) {
+      if (string == null) return '';
+      return ('' + string).replace(entityRegexes[method], function(match) {
+        return entityMap[method][match];
+      });
+    };
+  });
+
+  // If the value of the named property is a function then invoke it;
+  // otherwise, return it.
+  _.result = function(object, property) {
+    if (object == null) return null;
+    var value = object[property];
+    return _.isFunction(value) ? value.call(object) : value;
+  };
+
+  // Add your own custom functions to the Underscore object.
+  _.mixin = function(obj) {
+    each(_.functions(obj), function(name){
+      var func = _[name] = obj[name];
+      _.prototype[name] = function() {
+        var args = [this._wrapped];
+        push.apply(args, arguments);
+        return result.call(this, func.apply(_, args));
+      };
+    });
+  };
+
+  // Generate a unique integer id (unique within the entire client session).
+  // Useful for temporary DOM ids.
+  var idCounter = 0;
+  _.uniqueId = function(prefix) {
+    var id = idCounter++;
+    return prefix ? prefix + id : id;
+  };
+
+  // By default, Underscore uses ERB-style template delimiters, change the
+  // following template settings to use alternative delimiters.
+  _.templateSettings = {
+    evaluate    : /<%([\s\S]+?)%>/g,
+    interpolate : /<%=([\s\S]+?)%>/g,
+    escape      : /<%-([\s\S]+?)%>/g
+  };
+
+  // When customizing `templateSettings`, if you don't want to define an
+  // interpolation, evaluation or escaping regex, we need one that is
+  // guaranteed not to match.
+  var noMatch = /(.)^/;
+
+  // Certain characters need to be escaped so that they can be put into a
+  // string literal.
+  var escapes = {
+    "'":      "'",
+    '\\':     '\\',
+    '\r':     'r',
+    '\n':     'n',
+    '\t':     't',
+    '\u2028': 'u2028',
+    '\u2029': 'u2029'
+  };
+
+  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
+
+  // JavaScript micro-templating, similar to John Resig's implementation.
+  // Underscore templating handles arbitrary delimiters, preserves whitespace,
+  // and correctly escapes quotes within interpolated code.
+  _.template = function(text, data, settings) {
+    settings = _.defaults({}, settings, _.templateSettings);
+
+    // Combine delimiters into one regular expression via alternation.
+    var matcher = new RegExp([
+      (settings.escape || noMatch).source,
+      (settings.interpolate || noMatch).source,
+      (settings.evaluate || noMatch).source
+    ].join('|') + '|$', 'g');
+
+    // Compile the template source, escaping string literals appropriately.
+    var index = 0;
+    var source = "__p+='";
+    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
+      source += text.slice(index, offset)
+        .replace(escaper, function(match) { return '\\' + escapes[match]; });
+      source +=
+        escape ? "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'" :
+        interpolate ? "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'" :
+        evaluate ? "';\n" + evaluate + "\n__p+='" : '';
+      index = offset + match.length;
+    });
+    source += "';\n";
+
+    // If a variable is not specified, place data values in local scope.
+    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+
+    source = "var __t,__p='',__j=Array.prototype.join," +
+      "print=function(){__p+=__j.call(arguments,'');};\n" +
+      source + "return __p;\n";
+
+    try {
+      var render = new Function(settings.variable || 'obj', '_', source);
+    } catch (e) {
+      e.source = source;
+      throw e;
+    }
+
+    if (data) return render(data, _);
+    var template = function(data) {
+      return render.call(this, data, _);
+    };
+
+    // Provide the compiled function source as a convenience for precompilation.
+    template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
+
+    return template;
+  };
+
+  // Add a "chain" function, which will delegate to the wrapper.
+  _.chain = function(obj) {
+    return _(obj).chain();
+  };
+
+  // OOP
+  // ---------------
+  // If Underscore is called as a function, it returns a wrapped object that
+  // can be used OO-style. This wrapper holds altered versions of all the
+  // underscore functions. Wrapped objects may be chained.
+
+  // Helper function to continue chaining intermediate results.
+  var result = function(obj) {
+    return this._chain ? _(obj).chain() : obj;
+  };
+
+  // Add all of the Underscore functions to the wrapper object.
+  _.mixin(_);
+
+  // Add all mutator Array functions to the wrapper.
+  each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      var obj = this._wrapped;
+      method.apply(obj, arguments);
+      if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
+      return result.call(this, obj);
+    };
+  });
+
+  // Add all accessor Array functions to the wrapper.
+  each(['concat', 'join', 'slice'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      return result.call(this, method.apply(this._wrapped, arguments));
+    };
+  });
+
+  _.extend(_.prototype, {
+
+    // Start chaining a wrapped Underscore object.
+    chain: function() {
+      this._chain = true;
+      return this;
+    },
+
+    // Extracts the result from a wrapped and chained object.
+    value: function() {
+      return this._wrapped;
+    }
+
+  });
+
+}).call(this);
+
+
+// Backbone.js
+// ===========
+
+// > (c) 2010-2012 Jeremy Ashkenas, DocumentCloud Inc.
+// > Backbone may be freely distributed under the MIT license.
+// > For all details and documentation: http://backbonejs.org
+
+// Initial Setup
+// -------------
+
+(function(){
+
+  // Save a reference to the global object (`window` in the browser, `exports`
+  // on the server).
+  var root = this;
+
+  // Save the previous value of the `Backbone` variable, so that it can be
+  // restored later on, if `noConflict` is used.
+  var previousBackbone = root.Backbone;
+
+  // Create a local reference to array methods.
+  var array = [];
+  var push = array.push;
+  var slice = array.slice;
+  var splice = array.splice;
+
+  // The top-level namespace. All public Backbone classes and modules will
+  // be attached to this. Exported for both CommonJS and the browser.
+  var Backbone;
+  if (typeof exports !== 'undefined') {
+    Backbone = exports;
+  } else {
+    Backbone = root.Backbone = {};
+  }
+
+  // Current version of the library. Keep in sync with `package.json`.
+  Backbone.VERSION = '0.9.10';
+
+  // Require Underscore, if we're on the server, and it's not already present.
+  var _ = root._;
+  if (!_ && (typeof require !== 'undefined')) _ = require('underscore');
+
+  // For Backbone's purposes, jQuery, Zepto, or Ender owns the `$` variable.
+  Backbone.$ = root.jQuery || root.Zepto || root.ender;
+
+  // Runs Backbone.js in *noConflict* mode, returning the `Backbone` variable
+  // to its previous owner. Returns a reference to this Backbone object.
+  Backbone.noConflict = function() {
+    root.Backbone = previousBackbone;
+    return this;
+  };
+
+  // Turn on `emulateHTTP` to support legacy HTTP servers. Setting this option
+  // will fake `"PUT"` and `"DELETE"` requests via the `_method` parameter and
+  // set a `X-Http-Method-Override` header.
+  Backbone.emulateHTTP = false;
+
+  // Turn on `emulateJSON` to support legacy servers that can't deal with direct
+  // `application/json` requests ... will encode the body as
+  // `application/x-www-form-urlencoded` instead and will send the model in a
+  // form param named `model`.
+  Backbone.emulateJSON = false;
+
+  // Backbone.Events
+  // ---------------
+
+  // Regular expression used to split event strings.
+  var eventSplitter = /\s+/;
+
+  // Implement fancy features of the Events API such as multiple event
+  // names `"change blur"` and jQuery-style event maps `{change: action}`
+  // in terms of the existing API.
+  var eventsApi = function(obj, action, name, rest) {
+    if (!name) return true;
+    if (typeof name === 'object') {
+      for (var key in name) {
+        obj[action].apply(obj, [key, name[key]].concat(rest));
+      }
+    } else if (eventSplitter.test(name)) {
+      var names = name.split(eventSplitter);
+      for (var i = 0, l = names.length; i < l; i++) {
+        obj[action].apply(obj, [names[i]].concat(rest));
+      }
+    } else {
+      return true;
+    }
+  };
+
+  // Optimized internal dispatch function for triggering events. Tries to
+  // keep the usual cases speedy (most Backbone events have 3 arguments).
+  var triggerEvents = function(events, args) {
+    var ev, i = -1, l = events.length;
+    switch (args.length) {
+    case 0: while (++i < l) (ev = events[i]).callback.call(ev.ctx);
+    return;
+    case 1: while (++i < l) (ev = events[i]).callback.call(ev.ctx, args[0]);
+    return;
+    case 2: while (++i < l) (ev = events[i]).callback.call(ev.ctx, args[0], args[1]);
+    return;
+    case 3: while (++i < l) (ev = events[i]).callback.call(ev.ctx, args[0], args[1], args[2]);
+    return;
+    default: while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
+    }
+  };
+
+  // A module that can be mixed in to *any object* in order to provide it with
+  // custom events. You may bind with `on` or remove with `off` callback
+  // functions to an event; `trigger`-ing an event fires all callbacks in
+  // succession.
+  var Events = Backbone.Events = {
+
+    // Bind one or more space separated events, or an events map,
+    // to a `callback` function. Passing `"all"` will bind the callback to
+    // all events fired.
+    on: function(name, callback, context) {
+      if (!(eventsApi(this, 'on', name, [callback, context]) && callback)) return this;
+      this._events || (this._events = {});
+      var list = this._events[name] || (this._events[name] = []);
+      list.push({callback: callback, context: context, ctx: context || this});
+      return this;
+    },
+
+    // Bind events to only be triggered a single time. After the first time
+    // the callback is invoked, it will be removed.
+    once: function(name, callback, context) {
+      if (!(eventsApi(this, 'once', name, [callback, context]) && callback)) return this;
+      var self = this;
+      var once = _.once(function() {
+        self.off(name, once);
+        callback.apply(this, arguments);
+      });
+      once._callback = callback;
+      this.on(name, once, context);
+      return this;
+    },
+
+    // Remove one or many callbacks. If `context` is null, removes all
+    // callbacks with that function. If `callback` is null, removes all
+    // callbacks for the event. If `name` is null, removes all bound
+    // callbacks for all events.
+    off: function(name, callback, context) {
+      var list, ev, events, names, i, l, j, k;
+      if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
+      if (!name && !callback && !context) {
+        this._events = {};
+        return this;
+      }
+
+      names = name ? [name] : _.keys(this._events);
+      for (i = 0, l = names.length; i < l; i++) {
+        name = names[i];
+        if (list = this._events[name]) {
+          events = [];
+          if (callback || context) {
+            for (j = 0, k = list.length; j < k; j++) {
+              ev = list[j];
+              if ((callback && callback !== ev.callback &&
+                               callback !== ev.callback._callback) ||
+                  (context && context !== ev.context)) {
+                events.push(ev);
+              }
+            }
+          }
+          this._events[name] = events;
+        }
+      }
+
+      return this;
+    },
+
+    // Trigger one or many events, firing all bound callbacks. Callbacks are
+    // passed the same arguments as `trigger` is, apart from the event name
+    // (unless you're listening on `"all"`, which will cause your callback to
+    // receive the true name of the event as the first argument).
+    trigger: function(name) {
+      if (!this._events) return this;
+      var args = slice.call(arguments, 1);
+      if (!eventsApi(this, 'trigger', name, args)) return this;
+      var events = this._events[name];
+      var allEvents = this._events.all;
+      if (events) triggerEvents(events, args);
+      if (allEvents) triggerEvents(allEvents, arguments);
+      return this;
+    },
+
+    // An inversion-of-control version of `on`. Tell *this* object to listen to
+    // an event in another object ... keeping track of what it's listening to.
+    listenTo: function(obj, name, callback) {
+      var listeners = this._listeners || (this._listeners = {});
+      var id = obj._listenerId || (obj._listenerId = _.uniqueId('l'));
+      listeners[id] = obj;
+      obj.on(name, typeof name === 'object' ? this : callback, this);
+      return this;
+    },
+
+    // Tell this object to stop listening to either specific events ... or
+    // to every object it's currently listening to.
+    stopListening: function(obj, name, callback) {
+      var listeners = this._listeners;
+      if (!listeners) return;
+      if (obj) {
+        obj.off(name, typeof name === 'object' ? this : callback, this);
+        if (!name && !callback) delete listeners[obj._listenerId];
+      } else {
+        if (typeof name === 'object') callback = this;
+        for (var id in listeners) {
+          listeners[id].off(name, callback, this);
+        }
+        this._listeners = {};
+      }
+      return this;
+    }
+  };
+
+  // Aliases for backwards compatibility.
+  Events.bind   = Events.on;
+  Events.unbind = Events.off;
+
+  // Allow the `Backbone` object to serve as a global event bus, for folks who
+  // want global "pubsub" in a convenient place.
+  _.extend(Backbone, Events);
+
+  // Backbone.Model
+  // --------------
+
+  // Create a new model, with defined attributes. A client id (`cid`)
+  // is automatically generated and assigned for you.
+  var Model = Backbone.Model = function(attributes, options) {
+    var defaults;
+    var attrs = attributes || {};
+    this.cid = _.uniqueId('c');
+    this.attributes = {};
+    if (options && options.collection) this.collection = options.collection;
+    if (options && options.parse) attrs = this.parse(attrs, options) || {};
+    if (defaults = _.result(this, 'defaults')) {
+      attrs = _.defaults({}, attrs, defaults);
+    }
+    this.set(attrs, options);
+    this.changed = {};
+    this.initialize.apply(this, arguments);
+  };
+
+  // Attach all inheritable methods to the Model prototype.
+  _.extend(Model.prototype, Events, {
+
+    // A hash of attributes whose current and previous value differ.
+    changed: null,
+
+    // The default name for the JSON `id` attribute is `"id"`. MongoDB and
+    // CouchDB users may want to set this to `"_id"`.
+    idAttribute: 'id',
+
+    // Initialize is an empty function by default. Override it with your own
+    // initialization logic.
+    initialize: function(){},
+
+    // Return a copy of the model's `attributes` object.
+    toJSON: function(options) {
+      return _.clone(this.attributes);
+    },
+
+    // Proxy `Backbone.sync` by default.
+    sync: function() {
+      return Backbone.sync.apply(this, arguments);
+    },
+
+    // Get the value of an attribute.
+    get: function(attr) {
+      return this.attributes[attr];
+    },
+
+    // Get the HTML-escaped value of an attribute.
+    escape: function(attr) {
+      return _.escape(this.get(attr));
+    },
+
+    // Returns `true` if the attribute contains a value that is not null
+    // or undefined.
+    has: function(attr) {
+      return this.get(attr) != null;
+    },
+
+    // ----------------------------------------------------------------------
+
+    // Set a hash of model attributes on the object, firing `"change"` unless
+    // you choose to silence it.
+    set: function(key, val, options) {
+      var attr, attrs, unset, changes, silent, changing, prev, current;
+      if (key == null) return this;
+
+      // Handle both `"key", value` and `{key: value}` -style arguments.
+      if (typeof key === 'object') {
+        attrs = key;
+        options = val;
+      } else {
+        (attrs = {})[key] = val;
+      }
+
+      options || (options = {});
+
+      // Run validation.
+      if (!this._validate(attrs, options)) return false;
+
+      // Extract attributes and options.
+      unset           = options.unset;
+      silent          = options.silent;
+      changes         = [];
+      changing        = this._changing;
+      this._changing  = true;
+
+      if (!changing) {
+        this._previousAttributes = _.clone(this.attributes);
+        this.changed = {};
+      }
+      current = this.attributes, prev = this._previousAttributes;
+
+      // Check for changes of `id`.
+      if (this.idAttribute in attrs) this.id = attrs[this.idAttribute];
+
+      // For each `set` attribute, update or delete the current value.
+      for (attr in attrs) {
+        val = attrs[attr];
+        if (!_.isEqual(current[attr], val)) changes.push(attr);
+        if (!_.isEqual(prev[attr], val)) {
+          this.changed[attr] = val;
+        } else {
+          delete this.changed[attr];
+        }
+        unset ? delete current[attr] : current[attr] = val;
+      }
+
+      // Trigger all relevant attribute changes.
+      if (!silent) {
+        if (changes.length) this._pending = true;
+        for (var i = 0, l = changes.length; i < l; i++) {
+          this.trigger('change:' + changes[i], this, current[changes[i]], options);
+        }
+      }
+
+      if (changing) return this;
+      if (!silent) {
+        while (this._pending) {
+          this._pending = false;
+          this.trigger('change', this, options);
+        }
+      }
+      this._pending = false;
+      this._changing = false;
+      return this;
+    },
+
+    // Remove an attribute from the model, firing `"change"` unless you choose
+    // to silence it. `unset` is a noop if the attribute doesn't exist.
+    unset: function(attr, options) {
+      return this.set(attr, void 0, _.extend({}, options, {unset: true}));
+    },
+
+    // Clear all attributes on the model, firing `"change"` unless you choose
+    // to silence it.
+    clear: function(options) {
+      var attrs = {};
+      for (var key in this.attributes) attrs[key] = void 0;
+      return this.set(attrs, _.extend({}, options, {unset: true}));
+    },
+
+    // Determine if the model has changed since the last `"change"` event.
+    // If you specify an attribute name, determine if that attribute has changed.
+    hasChanged: function(attr) {
+      if (attr == null) return !_.isEmpty(this.changed);
+      return _.has(this.changed, attr);
+    },
+
+    // Return an object containing all the attributes that have changed, or
+    // false if there are no changed attributes. Useful for determining what
+    // parts of a view need to be updated and/or what attributes need to be
+    // persisted to the server. Unset attributes will be set to undefined.
+    // You can also pass an attributes object to diff against the model,
+    // determining if there *would be* a change.
+    changedAttributes: function(diff) {
+      if (!diff) return this.hasChanged() ? _.clone(this.changed) : false;
+      var val, changed = false;
+      var old = this._changing ? this._previousAttributes : this.attributes;
+      for (var attr in diff) {
+        if (_.isEqual(old[attr], (val = diff[attr]))) continue;
+        (changed || (changed = {}))[attr] = val;
+      }
+      return changed;
+    },
+
+    // Get the previous value of an attribute, recorded at the time the last
+    // `"change"` event was fired.
+    previous: function(attr) {
+      if (attr == null || !this._previousAttributes) return null;
+      return this._previousAttributes[attr];
+    },
+
+    // Get all of the attributes of the model at the time of the previous
+    // `"change"` event.
+    previousAttributes: function() {
+      return _.clone(this._previousAttributes);
+    },
+
+    // ---------------------------------------------------------------------
+
+    // Fetch the model from the server. If the server's representation of the
+    // model differs from its current attributes, they will be overriden,
+    // triggering a `"change"` event.
+    fetch: function(options) {
+      options = options ? _.clone(options) : {};
+      if (options.parse === void 0) options.parse = true;
+      var success = options.success;
+      options.success = function(model, resp, options) {
+        if (!model.set(model.parse(resp, options), options)) return false;
+        if (success) success(model, resp, options);
+      };
+      return this.sync('read', this, options);
+    },
+
+    // Set a hash of model attributes, and sync the model to the server.
+    // If the server returns an attributes hash that differs, the model's
+    // state will be `set` again.
+    save: function(key, val, options) {
+      var attrs, success, method, xhr, attributes = this.attributes;
+
+      // Handle both `"key", value` and `{key: value}` -style arguments.
+      if (key == null || typeof key === 'object') {
+        attrs = key;
+        options = val;
+      } else {
+        (attrs = {})[key] = val;
+      }
+
+      // If we're not waiting and attributes exist, save acts as `set(attr).save(null, opts)`.
+      if (attrs && (!options || !options.wait) && !this.set(attrs, options)) return false;
+
+      options = _.extend({validate: true}, options);
+
+      // Do not persist invalid models.
+      if (!this._validate(attrs, options)) return false;
+
+      // Set temporary attributes if `{wait: true}`.
+      if (attrs && options.wait) {
+        this.attributes = _.extend({}, attributes, attrs);
+      }
+
+      // After a successful server-side save, the client is (optionally)
+      // updated with the server-side state.
+      if (options.parse === void 0) options.parse = true;
+      success = options.success;
+      options.success = function(model, resp, options) {
+        // Ensure attributes are restored during synchronous saves.
+        model.attributes = attributes;
+        var serverAttrs = model.parse(resp, options);
+        if (options.wait) serverAttrs = _.extend(attrs || {}, serverAttrs);
+        if (_.isObject(serverAttrs) && !model.set(serverAttrs, options)) {
+          return false;
+        }
+        if (success) success(model, resp, options);
+      };
+
+      // Finish configuring and sending the Ajax request.
+      method = this.isNew() ? 'create' : (options.patch ? 'patch' : 'update');
+      if (method === 'patch') options.attrs = attrs;
+      xhr = this.sync(method, this, options);
+
+      // Restore attributes.
+      if (attrs && options.wait) this.attributes = attributes;
+
+      return xhr;
+    },
+
+    // Destroy this model on the server if it was already persisted.
+    // Optimistically removes the model from its collection, if it has one.
+    // If `wait: true` is passed, waits for the server to respond before removal.
+    destroy: function(options) {
+      options = options ? _.clone(options) : {};
+      var model = this;
+      var success = options.success;
+
+      var destroy = function() {
+        model.trigger('destroy', model, model.collection, options);
+      };
+
+      options.success = function(model, resp, options) {
+        if (options.wait || model.isNew()) destroy();
+        if (success) success(model, resp, options);
+      };
+
+      if (this.isNew()) {
+        options.success(this, null, options);
+        return false;
+      }
+
+      var xhr = this.sync('delete', this, options);
+      if (!options.wait) destroy();
+      return xhr;
+    },
+
+    // Default URL for the model's representation on the server -- if you're
+    // using Backbone's restful methods, override this to change the endpoint
+    // that will be called.
+    url: function() {
+      var base = _.result(this, 'urlRoot') || _.result(this.collection, 'url') || urlError();
+      if (this.isNew()) return base;
+      return base + (base.charAt(base.length - 1) === '/' ? '' : '/') + encodeURIComponent(this.id);
+    },
+
+    // **parse** converts a response into the hash of attributes to be `set` on
+    // the model. The default implementation is just to pass the response along.
+    parse: function(resp, options) {
+      return resp;
+    },
+
+    // Create a new model with identical attributes to this one.
+    clone: function() {
+      return new this.constructor(this.attributes);
+    },
+
+    // A model is new if it has never been saved to the server, and lacks an id.
+    isNew: function() {
+      return this.id == null;
+    },
+
+    // Check if the model is currently in a valid state.
+    isValid: function(options) {
+      return !this.validate || !this.validate(this.attributes, options);
+    },
+
+    // Run validation against the next complete set of model attributes,
+    // returning `true` if all is well. Otherwise, fire a general
+    // `"error"` event and call the error callback, if specified.
+    _validate: function(attrs, options) {
+      if (!options.validate || !this.validate) return true;
+      attrs = _.extend({}, this.attributes, attrs);
+      var error = this.validationError = this.validate(attrs, options) || null;
+      if (!error) return true;
+      this.trigger('invalid', this, error, options || {});
+      return false;
+    }
+
+  });
+
+  // Backbone.Collection
+  // -------------------
+
+  // Provides a standard collection class for our sets of models, ordered
+  // or unordered. If a `comparator` is specified, the Collection will maintain
+  // its models in sort order, as they're added and removed.
+  var Collection = Backbone.Collection = function(models, options) {
+    options || (options = {});
+    if (options.model) this.model = options.model;
+    if (options.comparator !== void 0) this.comparator = options.comparator;
+    this.models = [];
+    this._reset();
+    this.initialize.apply(this, arguments);
+    if (models) this.reset(models, _.extend({silent: true}, options));
+  };
+
+  // Define the Collection's inheritable methods.
+  _.extend(Collection.prototype, Events, {
+
+    // The default model for a collection is just a **Backbone.Model**.
+    // This should be overridden in most cases.
+    model: Model,
+
+    // Initialize is an empty function by default. Override it with your own
+    // initialization logic.
+    initialize: function(){},
+
+    // The JSON representation of a Collection is an array of the
+    // models' attributes.
+    toJSON: function(options) {
+      return this.map(function(model){ return model.toJSON(options); });
+    },
+
+    // Proxy `Backbone.sync` by default.
+    sync: function() {
+      return Backbone.sync.apply(this, arguments);
+    },
+
+    // Add a model, or list of models to the set.
+    add: function(models, options) {
+      models = _.isArray(models) ? models.slice() : [models];
+      options || (options = {});
+      var i, l, model, attrs, existing, doSort, add, at, sort, sortAttr;
+      add = [];
+      at = options.at;
+      sort = this.comparator && (at == null) && options.sort != false;
+      sortAttr = _.isString(this.comparator) ? this.comparator : null;
+
+      // Turn bare objects into model references, and prevent invalid models
+      // from being added.
+      for (i = 0, l = models.length; i < l; i++) {
+        if (!(model = this._prepareModel(attrs = models[i], options))) {
+          this.trigger('invalid', this, attrs, options);
+          continue;
+        }
+
+        // If a duplicate is found, prevent it from being added and
+        // optionally merge it into the existing model.
+        if (existing = this.get(model)) {
+          if (options.merge) {
+            existing.set(attrs === model ? model.attributes : attrs, options);
+            if (sort && !doSort && existing.hasChanged(sortAttr)) doSort = true;
+          }
+          continue;
+        }
+
+        // This is a new model, push it to the `add` list.
+        add.push(model);
+
+        // Listen to added models' events, and index models for lookup by
+        // `id` and by `cid`.
+        model.on('all', this._onModelEvent, this);
+        this._byId[model.cid] = model;
+        if (model.id != null) this._byId[model.id] = model;
+      }
+
+      // See if sorting is needed, update `length` and splice in new models.
+      if (add.length) {
+        if (sort) doSort = true;
+        this.length += add.length;
+        if (at != null) {
+          splice.apply(this.models, [at, 0].concat(add));
+        } else {
+          push.apply(this.models, add);
+        }
+      }
+
+      // Silently sort the collection if appropriate.
+      if (doSort) this.sort({silent: true});
+
+      if (options.silent) return this;
+
+      // Trigger `add` events.
+      for (i = 0, l = add.length; i < l; i++) {
+        (model = add[i]).trigger('add', model, this, options);
+      }
+
+      // Trigger `sort` if the collection was sorted.
+      if (doSort) this.trigger('sort', this, options);
+
+      return this;
+    },
+
+    // Remove a model, or a list of models from the set.
+    remove: function(models, options) {
+      models = _.isArray(models) ? models.slice() : [models];
+      options || (options = {});
+      var i, l, index, model;
+      for (i = 0, l = models.length; i < l; i++) {
+        model = this.get(models[i]);
+        if (!model) continue;
+        delete this._byId[model.id];
+        delete this._byId[model.cid];
+        index = this.indexOf(model);
+        this.models.splice(index, 1);
+        this.length--;
+        if (!options.silent) {
+          options.index = index;
+          model.trigger('remove', model, this, options);
+        }
+        this._removeReference(model);
+      }
+      return this;
+    },
+
+    // Add a model to the end of the collection.
+    push: function(model, options) {
+      model = this._prepareModel(model, options);
+      this.add(model, _.extend({at: this.length}, options));
+      return model;
+    },
+
+    // Remove a model from the end of the collection.
+    pop: function(options) {
+      var model = this.at(this.length - 1);
+      this.remove(model, options);
+      return model;
+    },
+
+    // Add a model to the beginning of the collection.
+    unshift: function(model, options) {
+      model = this._prepareModel(model, options);
+      this.add(model, _.extend({at: 0}, options));
+      return model;
+    },
+
+    // Remove a model from the beginning of the collection.
+    shift: function(options) {
+      var model = this.at(0);
+      this.remove(model, options);
+      return model;
+    },
+
+    // Slice out a sub-array of models from the collection.
+    slice: function(begin, end) {
+      return this.models.slice(begin, end);
+    },
+
+    // Get a model from the set by id.
+    get: function(obj) {
+      if (obj == null) return void 0;
+      this._idAttr || (this._idAttr = this.model.prototype.idAttribute);
+      return this._byId[obj.id || obj.cid || obj[this._idAttr] || obj];
+    },
+
+    // Get the model at the given index.
+    at: function(index) {
+      return this.models[index];
+    },
+
+    // Return models with matching attributes. Useful for simple cases of `filter`.
+    where: function(attrs) {
+      if (_.isEmpty(attrs)) return [];
+      return this.filter(function(model) {
+        for (var key in attrs) {
+          if (attrs[key] !== model.get(key)) return false;
+        }
+        return true;
+      });
+    },
+
+    // Force the collection to re-sort itself. You don't need to call this under
+    // normal circumstances, as the set will maintain sort order as each item
+    // is added.
+    sort: function(options) {
+      if (!this.comparator) {
+        throw new Error('Cannot sort a set without a comparator');
+      }
+      options || (options = {});
+
+      // Run sort based on type of `comparator`.
+      if (_.isString(this.comparator) || this.comparator.length === 1) {
+        this.models = this.sortBy(this.comparator, this);
+      } else {
+        this.models.sort(_.bind(this.comparator, this));
+      }
+
+      if (!options.silent) this.trigger('sort', this, options);
+      return this;
+    },
+
+    // Pluck an attribute from each model in the collection.
+    pluck: function(attr) {
+      return _.invoke(this.models, 'get', attr);
+    },
+
+    // Smartly update a collection with a change set of models, adding,
+    // removing, and merging as necessary.
+    update: function(models, options) {
+      options = _.extend({add: true, merge: true, remove: true}, options);
+      if (options.parse) models = this.parse(models, options);
+      var model, i, l, existing;
+      var add = [], remove = [], modelMap = {};
+
+      // Allow a single model (or no argument) to be passed.
+      if (!_.isArray(models)) models = models ? [models] : [];
+
+      // Proxy to `add` for this case, no need to iterate...
+      if (options.add && !options.remove) return this.add(models, options);
+
+      // Determine which models to add and merge, and which to remove.
+      for (i = 0, l = models.length; i < l; i++) {
+        model = models[i];
+        existing = this.get(model);
+        if (options.remove && existing) modelMap[existing.cid] = true;
+        if ((options.add && !existing) || (options.merge && existing)) {
+          add.push(model);
+        }
+      }
+      if (options.remove) {
+        for (i = 0, l = this.models.length; i < l; i++) {
+          model = this.models[i];
+          if (!modelMap[model.cid]) remove.push(model);
+        }
+      }
+
+      // Remove models (if applicable) before we add and merge the rest.
+      if (remove.length) this.remove(remove, options);
+      if (add.length) this.add(add, options);
+      return this;
+    },
+
+    // When you have more items than you want to add or remove individually,
+    // you can reset the entire set with a new list of models, without firing
+    // any `add` or `remove` events. Fires `reset` when finished.
+    reset: function(models, options) {
+      options || (options = {});
+      if (options.parse) models = this.parse(models, options);
+      for (var i = 0, l = this.models.length; i < l; i++) {
+        this._removeReference(this.models[i]);
+      }
+      options.previousModels = this.models.slice();
+      this._reset();
+      if (models) this.add(models, _.extend({silent: true}, options));
+      if (!options.silent) this.trigger('reset', this, options);
+      return this;
+    },
+
+    // Fetch the default set of models for this collection, resetting the
+    // collection when they arrive. If `update: true` is passed, the response
+    // data will be passed through the `update` method instead of `reset`.
+    fetch: function(options) {
+      options = options ? _.clone(options) : {};
+      if (options.parse === void 0) options.parse = true;
+      var success = options.success;
+      options.success = function(collection, resp, options) {
+        var method = options.update ? 'update' : 'reset';
+        collection[method](resp, options);
+        if (success) success(collection, resp, options);
+      };
+      return this.sync('read', this, options);
+    },
+
+    // Create a new instance of a model in this collection. Add the model to the
+    // collection immediately, unless `wait: true` is passed, in which case we
+    // wait for the server to agree.
+    create: function(model, options) {
+      options = options ? _.clone(options) : {};
+      if (!(model = this._prepareModel(model, options))) return false;
+      if (!options.wait) this.add(model, options);
+      var collection = this;
+      var success = options.success;
+      options.success = function(model, resp, options) {
+        if (options.wait) collection.add(model, options);
+        if (success) success(model, resp, options);
+      };
+      model.save(null, options);
+      return model;
+    },
+
+    // **parse** converts a response into a list of models to be added to the
+    // collection. The default implementation is just to pass it through.
+    parse: function(resp, options) {
+      return resp;
+    },
+
+    // Create a new collection with an identical list of models as this one.
+    clone: function() {
+      return new this.constructor(this.models);
+    },
+
+    // Reset all internal state. Called when the collection is reset.
+    _reset: function() {
+      this.length = 0;
+      this.models.length = 0;
+      this._byId  = {};
+    },
+
+    // Prepare a model or hash of attributes to be added to this collection.
+    _prepareModel: function(attrs, options) {
+      if (attrs instanceof Model) {
+        if (!attrs.collection) attrs.collection = this;
+        return attrs;
+      }
+      options || (options = {});
+      options.collection = this;
+      var model = new this.model(attrs, options);
+      if (!model._validate(attrs, options)) return false;
+      return model;
+    },
+
+    // Internal method to remove a model's ties to a collection.
+    _removeReference: function(model) {
+      if (this === model.collection) delete model.collection;
+      model.off('all', this._onModelEvent, this);
+    },
+
+    // Internal method called every time a model in the set fires an event.
+    // Sets need to update their indexes when models change ids. All other
+    // events simply proxy through. "add" and "remove" events that originate
+    // in other collections are ignored.
+    _onModelEvent: function(event, model, collection, options) {
+      if ((event === 'add' || event === 'remove') && collection !== this) return;
+      if (event === 'destroy') this.remove(model, options);
+      if (model && event === 'change:' + model.idAttribute) {
+        delete this._byId[model.previous(model.idAttribute)];
+        if (model.id != null) this._byId[model.id] = model;
+      }
+      this.trigger.apply(this, arguments);
+    },
+
+    sortedIndex: function (model, value, context) {
+      value || (value = this.comparator);
+      var iterator = _.isFunction(value) ? value : function(model) {
+        return model.get(value);
+      };
+      return _.sortedIndex(this.models, model, iterator, context);
+    }
+
+  });
+
+  // Underscore methods that we want to implement on the Collection.
+  var methods = ['forEach', 'each', 'map', 'collect', 'reduce', 'foldl',
+    'inject', 'reduceRight', 'foldr', 'find', 'detect', 'filter', 'select',
+    'reject', 'every', 'all', 'some', 'any', 'include', 'contains', 'invoke',
+    'max', 'min', 'toArray', 'size', 'first', 'head', 'take', 'initial', 'rest',
+    'tail', 'drop', 'last', 'without', 'indexOf', 'shuffle', 'lastIndexOf',
+    'isEmpty', 'chain'];
+
+  // Mix in each Underscore method as a proxy to `Collection#models`.
+  _.each(methods, function(method) {
+    Collection.prototype[method] = function() {
+      var args = slice.call(arguments);
+      args.unshift(this.models);
+      return _[method].apply(_, args);
+    };
+  });
+
+  // Underscore methods that take a property name as an argument.
+  var attributeMethods = ['groupBy', 'countBy', 'sortBy'];
+
+  // Use attributes instead of properties.
+  _.each(attributeMethods, function(method) {
+    Collection.prototype[method] = function(value, context) {
+      var iterator = _.isFunction(value) ? value : function(model) {
+        return model.get(value);
+      };
+      return _[method](this.models, iterator, context);
+    };
+  });
+
+  // Backbone.Router
+  // ---------------
+
+  // Routers map faux-URLs to actions, and fire events when routes are
+  // matched. Creating a new one sets its `routes` hash, if not set statically.
+  var Router = Backbone.Router = function(options) {
+    options || (options = {});
+    if (options.routes) this.routes = options.routes;
+    this._bindRoutes();
+    this.initialize.apply(this, arguments);
+  };
+
+  // Cached regular expressions for matching named param parts and splatted
+  // parts of route strings.
+  var optionalParam = /\((.*?)\)/g;
+  var namedParam    = /(\(\?)?:\w+/g;
+  var splatParam    = /\*\w+/g;
+  var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+
+  // Set up all inheritable **Backbone.Router** properties and methods.
+  _.extend(Router.prototype, Events, {
+
+    // Initialize is an empty function by default. Override it with your own
+    // initialization logic.
+    initialize: function(){},
+
+    // Manually bind a single named route to a callback function.
+    route: function(route, name, callback) {
+      if (!_.isRegExp(route)) route = this._routeToRegExp(route);
+      if (!callback) callback = this[name];
+      Backbone.history.route(route, _.bind(function(fragment) {
+        var args = this._extractParameters(route, fragment);
+        callback && callback.apply(this, args);
+        this.trigger.apply(this, ['route:' + name].concat(args));
+        this.trigger('route', name, args);
+        Backbone.history.trigger('route', this, name, args);
+      }, this));
+      return this;
+    },
+
+    // Simple proxy to `Backbone.history` to save a fragment into the history.
+    navigate: function(fragment, options) {
+      Backbone.history.navigate(fragment, options);
+      return this;
+    },
+
+    // Bind all defined routes to `Backbone.history`. We have to reverse the
+    // order of the routes here to support behavior where the most general
+    // routes can be defined at the bottom of the route map.
+    _bindRoutes: function() {
+      if (!this.routes) return;
+      var route, routes = _.keys(this.routes);
+      while ((route = routes.pop()) != null) {
+        this.route(route, this.routes[route]);
+      }
+    },
+
+    // Convert a route string into a regular expression, suitable for matching
+    // against the current location hash.
+    _routeToRegExp: function(route) {
+      route = route.replace(escapeRegExp, '\\$&')
+                   .replace(optionalParam, '(?:$1)?')
+                   .replace(namedParam, function(match, optional){
+                     return optional ? match : '([^\/]+)';
+                   })
+                   .replace(splatParam, '(.*?)');
+      return new RegExp('^' + route + '$');
+    },
+
+    // Given a route, and a URL fragment that it matches, return the array of
+    // extracted parameters.
+    _extractParameters: function(route, fragment) {
+      return route.exec(fragment).slice(1);
+    }
+
+  });
+
+  // Backbone.History
+  // ----------------
+
+  // Handles cross-browser history management, based on URL fragments. If the
+  // browser does not support `onhashchange`, falls back to polling.
+  var History = Backbone.History = function() {
+    this.handlers = [];
+    _.bindAll(this, 'checkUrl');
+
+    // Ensure that `History` can be used outside of the browser.
+    if (typeof window !== 'undefined') {
+      this.location = window.location;
+      this.history = window.history;
+    }
+  };
+
+  // Cached regex for stripping a leading hash/slash and trailing space.
+  var routeStripper = /^[#\/]|\s+$/g;
+
+  // Cached regex for stripping leading and trailing slashes.
+  var rootStripper = /^\/+|\/+$/g;
+
+  // Cached regex for detecting MSIE.
+  var isExplorer = /msie [\w.]+/;
+
+  // Cached regex for removing a trailing slash.
+  var trailingSlash = /\/$/;
+
+  // Has the history handling already been started?
+  History.started = false;
+
+  // Set up all inheritable **Backbone.History** properties and methods.
+  _.extend(History.prototype, Events, {
+
+    // The default interval to poll for hash changes, if necessary, is
+    // twenty times a second.
+    interval: 50,
+
+    // Gets the true hash value. Cannot use location.hash directly due to bug
+    // in Firefox where location.hash will always be decoded.
+    getHash: function(window) {
+      var match = (window || this).location.href.match(/#(.*)$/);
+      return match ? match[1] : '';
+    },
+
+    // Get the cross-browser normalized URL fragment, either from the URL,
+    // the hash, or the override.
+    getFragment: function(fragment, forcePushState) {
+      if (fragment == null) {
+        if (this._hasPushState || !this._wantsHashChange || forcePushState) {
+          fragment = this.location.pathname;
+          var root = this.root.replace(trailingSlash, '');
+          if (!fragment.indexOf(root)) fragment = fragment.substr(root.length);
+        } else {
+          fragment = this.getHash();
+        }
+      }
+      return fragment.replace(routeStripper, '');
+    },
+
+    // Start the hash change handling, returning `true` if the current URL matches
+    // an existing route, and `false` otherwise.
+    start: function(options) {
+      if (History.started) throw new Error("Backbone.history has already been started");
+      History.started = true;
+
+      // Figure out the initial configuration. Do we need an iframe?
+      // Is pushState desired ... is it available?
+      this.options          = _.extend({}, {root: '/'}, this.options, options);
+      this.root             = this.options.root;
+      this._wantsHashChange = this.options.hashChange !== false;
+      this._wantsPushState  = !!this.options.pushState;
+      this._hasPushState    = !!(this.options.pushState && this.history && this.history.pushState);
+      var fragment          = this.getFragment();
+      var docMode           = document.documentMode;
+      var oldIE             = (isExplorer.exec(navigator.userAgent.toLowerCase()) && (!docMode || docMode <= 7));
+
+      // Normalize root to always include a leading and trailing slash.
+      this.root = ('/' + this.root + '/').replace(rootStripper, '/');
+
+      if (oldIE && this._wantsHashChange) {
+        this.iframe = Backbone.$('<iframe src="javascript:0" tabindex="-1" />').hide().appendTo('body')[0].contentWindow;
+        this.navigate(fragment);
+      }
+
+      // Depending on whether we're using pushState or hashes, and whether
+      // 'onhashchange' is supported, determine how we check the URL state.
+      if (this._hasPushState) {
+        Backbone.$(window).on('popstate', this.checkUrl);
+      } else if (this._wantsHashChange && ('onhashchange' in window) && !oldIE) {
+        Backbone.$(window).on('hashchange', this.checkUrl);
+      } else if (this._wantsHashChange) {
+        this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
+      }
+
+      // Determine if we need to change the base url, for a pushState link
+      // opened by a non-pushState browser.
+      this.fragment = fragment;
+      var loc = this.location;
+      var atRoot = loc.pathname.replace(/[^\/]$/, '$&/') === this.root;
+
+      // If we've started off with a route from a `pushState`-enabled browser,
+      // but we're currently in a browser that doesn't support it...
+      if (this._wantsHashChange && this._wantsPushState && !this._hasPushState && !atRoot) {
+        this.fragment = this.getFragment(null, true);
+        this.location.replace(this.root + this.location.search + '#' + this.fragment);
+        // Return immediately as browser will do redirect to new url
+        return true;
+
+      // Or if we've started out with a hash-based route, but we're currently
+      // in a browser where it could be `pushState`-based instead...
+      } else if (this._wantsPushState && this._hasPushState && atRoot && loc.hash) {
+        this.fragment = this.getHash().replace(routeStripper, '');
+        this.history.replaceState({}, document.title, this.root + this.fragment + loc.search);
+      }
+
+      if (!this.options.silent) return this.loadUrl();
+    },
+
+    // Disable Backbone.history, perhaps temporarily. Not useful in a real app,
+    // but possibly useful for unit testing Routers.
+    stop: function() {
+      Backbone.$(window).off('popstate', this.checkUrl).off('hashchange', this.checkUrl);
+      clearInterval(this._checkUrlInterval);
+      History.started = false;
+    },
+
+    // Add a route to be tested when the fragment changes. Routes added later
+    // may override previous routes.
+    route: function(route, callback) {
+      this.handlers.unshift({route: route, callback: callback});
+    },
+
+    // Checks the current URL to see if it has changed, and if it has,
+    // calls `loadUrl`, normalizing across the hidden iframe.
+    checkUrl: function(e) {
+      var current = this.getFragment();
+      if (current === this.fragment && this.iframe) {
+        current = this.getFragment(this.getHash(this.iframe));
+      }
+      if (current === this.fragment) return false;
+      if (this.iframe) this.navigate(current);
+      this.loadUrl() || this.loadUrl(this.getHash());
+    },
+
+    // Attempt to load the current URL fragment. If a route succeeds with a
+    // match, returns `true`. If no defined routes matches the fragment,
+    // returns `false`.
+    loadUrl: function(fragmentOverride) {
+      var fragment = this.fragment = this.getFragment(fragmentOverride);
+      var matched = _.any(this.handlers, function(handler) {
+        if (handler.route.test(fragment)) {
+          handler.callback(fragment);
+          return true;
+        }
+      });
+      return matched;
+    },
+
+    // Save a fragment into the hash history, or replace the URL state if the
+    // 'replace' option is passed. You are responsible for properly URL-encoding
+    // the fragment in advance.
+    //
+    // The options object can contain `trigger: true` if you wish to have the
+    // route callback be fired (not usually desirable), or `replace: true`, if
+    // you wish to modify the current URL without adding an entry to the history.
+    navigate: function(fragment, options) {
+      if (!History.started) return false;
+      if (!options || options === true) options = {trigger: options};
+      fragment = this.getFragment(fragment || '');
+      if (this.fragment === fragment) return;
+      this.fragment = fragment;
+      var url = this.root + fragment;
+
+      // If pushState is available, we use it to set the fragment as a real URL.
+      if (this._hasPushState) {
+        this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
+
+      // If hash changes haven't been explicitly disabled, update the hash
+      // fragment to store history.
+      } else if (this._wantsHashChange) {
+        this._updateHash(this.location, fragment, options.replace);
+        if (this.iframe && (fragment !== this.getFragment(this.getHash(this.iframe)))) {
+          // Opening and closing the iframe tricks IE7 and earlier to push a
+          // history entry on hash-tag change.  When replace is true, we don't
+          // want this.
+          if(!options.replace) this.iframe.document.open().close();
+          this._updateHash(this.iframe.location, fragment, options.replace);
+        }
+
+      // If you've told us that you explicitly don't want fallback hashchange-
+      // based history, then `navigate` becomes a page refresh.
+      } else {
+        return this.location.assign(url);
+      }
+      if (options.trigger) this.loadUrl(fragment);
+    },
+
+    // Update the hash location, either replacing the current entry, or adding
+    // a new one to the browser history.
+    _updateHash: function(location, fragment, replace) {
+      if (replace) {
+        var href = location.href.replace(/(javascript:|#).*$/, '');
+        location.replace(href + '#' + fragment);
+      } else {
+        // Some browsers require that `hash` contains a leading #.
+        location.hash = '#' + fragment;
+      }
+    }
+
+  });
+
+  // Create the default Backbone.history.
+  Backbone.history = new History;
+
+  // Backbone.View
+  // -------------
+
+  // Creating a Backbone.View creates its initial element outside of the DOM,
+  // if an existing element is not provided...
+  var View = Backbone.View = function(options) {
+    this.cid = _.uniqueId('view');
+    this._configure(options || {});
+    this._ensureElement();
+    this.initialize.apply(this, arguments);
+    this.delegateEvents();
+  };
+
+  // Cached regex to split keys for `delegate`.
+  var delegateEventSplitter = /^(\S+)\s*(.*)$/;
+
+  // List of view options to be merged as properties.
+  var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
+
+  // Set up all inheritable **Backbone.View** properties and methods.
+  _.extend(View.prototype, Events, {
+
+    // The default `tagName` of a View's element is `"div"`.
+    tagName: 'div',
+
+    // jQuery delegate for element lookup, scoped to DOM elements within the
+    // current view. This should be prefered to global lookups where possible.
+    $: function(selector) {
+      return this.$el.find(selector);
+    },
+
+    // Initialize is an empty function by default. Override it with your own
+    // initialization logic.
+    initialize: function(){},
+
+    // **render** is the core function that your view should override, in order
+    // to populate its element (`this.el`), with the appropriate HTML. The
+    // convention is for **render** to always return `this`.
+    render: function() {
+      return this;
+    },
+
+    // Remove this view by taking the element out of the DOM, and removing any
+    // applicable Backbone.Events listeners.
+    remove: function() {
+      this.$el.remove();
+      this.stopListening();
+      return this;
+    },
+
+    // Change the view's element (`this.el` property), including event
+    // re-delegation.
+    setElement: function(element, delegate) {
+      if (this.$el) this.undelegateEvents();
+      this.$el = element instanceof Backbone.$ ? element : Backbone.$(element);
+      this.el = this.$el[0];
+      if (delegate !== false) this.delegateEvents();
+      return this;
+    },
+
+    // Set callbacks, where `this.events` is a hash of
+    //
+    // *{"event selector": "callback"}*
+    //
+    //     {
+    //       'mousedown .title':  'edit',
+    //       'click .button':     'save'
+    //       'click .open':       function(e) { ... }
+    //     }
+    //
+    // pairs. Callbacks will be bound to the view, with `this` set properly.
+    // Uses event delegation for efficiency.
+    // Omitting the selector binds the event to `this.el`.
+    // This only works for delegate-able events: not `focus`, `blur`, and
+    // not `change`, `submit`, and `reset` in Internet Explorer.
+    delegateEvents: function(events) {
+      if (!(events || (events = _.result(this, 'events')))) return;
+      this.undelegateEvents();
+      for (var key in events) {
+        var method = events[key];
+        if (!_.isFunction(method)) method = this[events[key]];
+        if (!method) throw new Error('Method "' + events[key] + '" does not exist');
+        var match = key.match(delegateEventSplitter);
+        var eventName = match[1], selector = match[2];
+        method = _.bind(method, this);
+        eventName += '.delegateEvents' + this.cid;
+        if (selector === '') {
+          this.$el.on(eventName, method);
+        } else {
+          this.$el.on(eventName, selector, method);
+        }
+      }
+    },
+
+    // Clears all callbacks previously bound to the view with `delegateEvents`.
+    // You usually don't need to use this, but may wish to if you have multiple
+    // Backbone views attached to the same DOM element.
+    undelegateEvents: function() {
+      this.$el.off('.delegateEvents' + this.cid);
+    },
+
+    // Performs the initial configuration of a View with a set of options.
+    // Keys with special meaning *(model, collection, id, className)*, are
+    // attached directly to the view.
+    _configure: function(options) {
+      if (this.options) options = _.extend({}, _.result(this, 'options'), options);
+      _.extend(this, _.pick(options, viewOptions));
+      this.options = options;
+    },
+
+    // Ensure that the View has a DOM element to render into.
+    // If `this.el` is a string, pass it through `$()`, take the first
+    // matching element, and re-assign it to `el`. Otherwise, create
+    // an element from the `id`, `className` and `tagName` properties.
+    _ensureElement: function() {
+      if (!this.el) {
+        var attrs = _.extend({}, _.result(this, 'attributes'));
+        if (this.id) attrs.id = _.result(this, 'id');
+        if (this.className) attrs['class'] = _.result(this, 'className');
+        var $el = Backbone.$('<' + _.result(this, 'tagName') + '>').attr(attrs);
+        this.setElement($el, false);
+      } else {
+        this.setElement(_.result(this, 'el'), false);
+      }
+    }
+
+  });
+
+  // Backbone.sync
+  // -------------
+
+  // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
+  var methodMap = {
+    'create': 'POST',
+    'update': 'PUT',
+    'patch':  'PATCH',
+    'delete': 'DELETE',
+    'read':   'GET'
+  };
+
+  // Override this function to change the manner in which Backbone persists
+  // models to the server. You will be passed the type of request, and the
+  // model in question. By default, makes a RESTful Ajax request
+  // to the model's `url()`. Some possible customizations could be:
+  //
+  // * Use `setTimeout` to batch rapid-fire updates into a single request.
+  // * Send up the models as XML instead of JSON.
+  // * Persist models via WebSockets instead of Ajax.
+  //
+  // Turn on `Backbone.emulateHTTP` in order to send `PUT` and `DELETE` requests
+  // as `POST`, with a `_method` parameter containing the true HTTP method,
+  // as well as all requests with the body as `application/x-www-form-urlencoded`
+  // instead of `application/json` with the model in a param named `model`.
+  // Useful when interfacing with server-side languages like **PHP** that make
+  // it difficult to read the body of `PUT` requests.
+  Backbone.sync = function(method, model, options) {
+    var type = methodMap[method];
+
+    // Default options, unless specified.
+    _.defaults(options || (options = {}), {
+      emulateHTTP: Backbone.emulateHTTP,
+      emulateJSON: Backbone.emulateJSON
+    });
+
+    // Default JSON-request options.
+    var params = {type: type, dataType: 'json'};
+
+    // Ensure that we have a URL.
+    if (!options.url) {
+      params.url = _.result(model, 'url') || urlError();
+    }
+
+    // Ensure that we have the appropriate request data.
+    if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+      params.contentType = 'application/json';
+      params.data = JSON.stringify(options.attrs || model.toJSON(options));
+    }
+
+    // For older servers, emulate JSON by encoding the request into an HTML-form.
+    if (options.emulateJSON) {
+      params.contentType = 'application/x-www-form-urlencoded';
+      params.data = params.data ? {model: params.data} : {};
+    }
+
+    // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
+    // And an `X-HTTP-Method-Override` header.
+    if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
+      params.type = 'POST';
+      if (options.emulateJSON) params.data._method = type;
+      var beforeSend = options.beforeSend;
+      options.beforeSend = function(xhr) {
+        xhr.setRequestHeader('X-HTTP-Method-Override', type);
+        if (beforeSend) return beforeSend.apply(this, arguments);
+      };
+    }
+
+    // Don't process data on a non-GET request.
+    if (params.type !== 'GET' && !options.emulateJSON) {
+      params.processData = false;
+    }
+
+    var success = options.success;
+    options.success = function(resp) {
+      if (success) success(model, resp, options);
+      model.trigger('sync', model, resp, options);
+    };
+
+    var error = options.error;
+    options.error = function(xhr) {
+      if (error) error(model, xhr, options);
+      model.trigger('error', model, xhr, options);
+    };
+
+    // Make the request, allowing the user to override any Ajax options.
+    var xhr = options.xhr = Backbone.ajax(_.extend(params, options));
+    model.trigger('request', model, xhr, options);
+    return xhr;
+  };
+
+  // Set the default implementation of `Backbone.ajax` to proxy through to `$`.
+  Backbone.ajax = function() {
+    return Backbone.$.ajax.apply(Backbone.$, arguments);
+  };
+
+  // Helpers
+  // -------
+
+  // Helper function to correctly set up the prototype chain, for subclasses.
+  // Similar to `goog.inherits`, but uses a hash of prototype properties and
+  // class properties to be extended.
+  var extend = function(protoProps, staticProps) {
+    var parent = this;
+    var child;
+
+    // The constructor function for the new subclass is either defined by you
+    // (the "constructor" property in your `extend` definition), or defaulted
+    // by us to simply call the parent's constructor.
+    if (protoProps && _.has(protoProps, 'constructor')) {
+      child = protoProps.constructor;
+    } else {
+      child = function(){ return parent.apply(this, arguments); };
+    }
+
+    // Add static properties to the constructor function, if supplied.
+    _.extend(child, parent, staticProps);
+
+    // Set the prototype chain to inherit from `parent`, without calling
+    // `parent`'s constructor function.
+    var Surrogate = function(){ this.constructor = child; };
+    Surrogate.prototype = parent.prototype;
+    child.prototype = new Surrogate;
+
+    // Add prototype properties (instance properties) to the subclass,
+    // if supplied.
+    if (protoProps) _.extend(child.prototype, protoProps);
+
+    // Set a convenience property in case the parent's prototype is needed
+    // later.
+    child.__super__ = parent.prototype;
+
+    return child;
+  };
+
+  // Set up inheritance for the model, collection, router, view and history.
+  Model.extend = Collection.extend = Router.extend = View.extend = History.extend = extend;
+
+  // Throw an error when a URL is needed, and none is supplied.
+  var urlError = function() {
+    throw new Error('A "url" property or function must be specified');
+  };
+
+}).call(this);
+
+/**
+ * Dragdealer JS v0.9.5
+ * http://code.ovidiu.ch/dragdealer-js
+ *
+ * Copyright (c) 2010, Ovidiu Chereches
+ * MIT License
+ * http://legal.ovidiu.ch/licenses/MIT
+ */
+
+/* Cursor */
+var Cursor =
+{
+    x: 0, y: 0,
+    init: function()
+    {
+        this.setEvent('mouse');
+        this.setEvent('touch');
+    },
+    setEvent: function(type)
+    {
+        var moveHandler = document['on' + type + 'move'] || function(){};
+        document['on' + type + 'move'] = function(e)
+        {
+            moveHandler(e);
+            Cursor.refresh(e);
+        }
+    },
+    refresh: function(e)
+    {
+        if(!e)
+        {
+            e = window.event;
+        }
+        if(e.type == 'mousemove')
+        {
+            this.set(e);
+        }
+        else if(e.touches)
+        {
+            this.set(e.touches[0]);
+        }
+    },
+    set: function(e)
+    {
+        if(e.pageX || e.pageY)
+        {
+            this.x = e.pageX;
+            this.y = e.pageY;
+        }
+        else if(e.clientX || e.clientY)
+        {
+            this.x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            this.y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+    }
+};
+Cursor.init();
+
+/* Position */
+
+var Position =
+{
+    get: function(obj)
+    {
+        var curleft = curtop = 0;
+        if(obj.offsetParent)
+        {
+            do
+            {
+                curleft += obj.offsetLeft;
+                curtop += obj.offsetTop;
+            }
+            while((obj = obj.offsetParent));
+        }
+        return [curleft, curtop];
+    }
+};
+
+/* Dragdealer */
+
+var Dragdealer = function(wrapper, options)
+{
+    if(typeof(wrapper) == 'string')
+    {
+        wrapper = document.getElementById(wrapper);
+    }
+    if(!wrapper)
+    {
+        return;
+    }
+    var handle = wrapper.getElementsByTagName('div')[0];
+    if(!handle || handle.className.search(/(^|\s)handle(\s|$)/) == -1)
+    {
+        return;
+    }
+    this.init(wrapper, handle, options || {});
+    this.setup();
+};
+Dragdealer.prototype =
+{
+    init: function(wrapper, handle, options)
+    {
+        this.wrapper = wrapper;
+        this.handle = handle;
+        this.options = options;
+        
+        this.disabled = this.getOption('disabled', false);
+        this.horizontal = this.getOption('horizontal', true);
+        this.vertical = this.getOption('vertical', false);
+        this.slide = this.getOption('slide', true);
+        this.steps = this.getOption('steps', 0);
+        this.snap = this.getOption('snap', false);
+        this.loose = this.getOption('loose', false);
+        this.speed = this.getOption('speed', 10) / 100;
+        this.xPrecision = this.getOption('xPrecision', 0);
+        this.yPrecision = this.getOption('yPrecision', 0);
+        
+        this.callback = options.callback || null;
+        this.animationCallback = options.animationCallback || null;
+        
+        this.bounds = {
+            left: options.left || 0, right: -(options.right || 0),
+            top: options.top || 0, bottom: -(options.bottom || 0),
+            x0: 0, x1: 0, xRange: 0,
+            y0: 0, y1: 0, yRange: 0
+        };
+        this.value = {
+            prev: [-1, -1],
+            current: [options.x || 0, options.y || 0],
+            target: [options.x || 0, options.y || 0]
+        };
+        this.offset = {
+            wrapper: [0, 0],
+            mouse: [0, 0],
+            prev: [-999999, -999999],
+            current: [0, 0],
+            target: [0, 0]
+        };
+        this.change = [0, 0];
+        
+        this.activity = false;
+        this.dragging = false;
+        this.tapping = false;
+    },
+    getOption: function(name, defaultValue)
+    {
+        return this.options[name] !== undefined ? this.options[name] : defaultValue;
+    },
+    setup: function()
+    {
+        this.setWrapperOffset();
+        this.setBoundsPadding();
+        this.setBounds();
+        this.setSteps();
+        
+        this.addListeners();
+    },
+    setWrapperOffset: function()
+    {
+        this.offset.wrapper = Position.get(this.wrapper);
+    },
+    setBoundsPadding: function()
+    {
+        if(!this.bounds.left && !this.bounds.right)
+        {
+            this.bounds.left = Position.get(this.handle)[0] - this.offset.wrapper[0];
+            this.bounds.right = -this.bounds.left;
+        }
+        if(!this.bounds.top && !this.bounds.bottom)
+        {
+            this.bounds.top = Position.get(this.handle)[1] - this.offset.wrapper[1];
+            this.bounds.bottom = -this.bounds.top;
+        }
+    },
+    setBounds: function()
+    {
+        this.bounds.x0 = this.bounds.left;
+        this.bounds.x1 = this.wrapper.offsetWidth + this.bounds.right;
+        this.bounds.xRange = (this.bounds.x1 - this.bounds.x0) - this.handle.offsetWidth;
+        
+        this.bounds.y0 = this.bounds.top;
+        this.bounds.y1 = this.wrapper.offsetHeight + this.bounds.bottom;
+        this.bounds.yRange = (this.bounds.y1 - this.bounds.y0) - this.handle.offsetHeight;
+        
+        this.bounds.xStep = 1 / (this.xPrecision || Math.max(this.wrapper.offsetWidth, this.handle.offsetWidth));
+        this.bounds.yStep = 1 / (this.yPrecision || Math.max(this.wrapper.offsetHeight, this.handle.offsetHeight));
+    },
+    setSteps: function()
+    {
+        if(this.steps > 1)
+        {
+            this.stepRatios = [];
+            for(var i = 0; i <= this.steps - 1; i++)
+            {
+                this.stepRatios[i] = i / (this.steps - 1);
+            }
+        }
+    },
+    addListeners: function()
+    {
+        var self = this;
+        
+        this.wrapper.onselectstart = function()
+        {
+            return false;
+        }
+        this.handle.onmousedown = this.handle.ontouchstart = function(e)
+        {
+            self.handleDownHandler(e);
+        };
+        this.wrapper.onmousedown = this.wrapper.ontouchstart = function(e)
+        {
+            self.wrapperDownHandler(e);
+        };
+        var mouseUpHandler = document.onmouseup || function(){};
+        document.onmouseup = function(e)
+        {
+            mouseUpHandler(e);
+            self.documentUpHandler(e);
+        };
+        var touchEndHandler = document.ontouchend || function(){};
+        document.ontouchend = function(e)
+        {
+            touchEndHandler(e);
+            self.documentUpHandler(e);
+        };
+        var resizeHandler = window.onresize || function(){};
+        window.onresize = function(e)
+        {
+            resizeHandler(e);
+            self.documentResizeHandler(e);
+        };
+        this.wrapper.onmousemove = function(e)
+        {
+            self.activity = true;
+        }
+        this.wrapper.onclick = function(e)
+        {
+            return !self.activity;
+        }
+        
+        this.interval = setInterval(function(){ self.animate() }, 25);
+        self.animate(false, true);
+    },
+    handleDownHandler: function(e)
+    {
+        this.activity = false;
+        Cursor.refresh(e);
+        
+        this.preventDefaults(e, true);
+        this.startDrag();
+        this.cancelEvent(e);
+    },
+    wrapperDownHandler: function(e)
+    {
+        Cursor.refresh(e);
+        
+        this.preventDefaults(e, true);
+        this.startTap();
+    },
+    documentUpHandler: function(e)
+    {
+        this.stopDrag();
+        this.stopTap();
+        //this.cancelEvent(e);
+    },
+    documentResizeHandler: function(e)
+    {
+        this.setWrapperOffset();
+        this.setBounds();
+        
+        this.update();
+    },
+    enable: function()
+    {
+        this.disabled = false;
+        this.handle.className = this.handle.className.replace(/\s?disabled/g, '');
+    },
+    disable: function()
+    {
+        this.disabled = true;
+        this.handle.className += ' disabled';
+    },
+    setStep: function(x, y, snap)
+    {
+        this.setValue(
+            this.steps && x > 1 ? (x - 1) / (this.steps - 1) : 0,
+            this.steps && y > 1 ? (y - 1) / (this.steps - 1) : 0,
+            snap
+        );
+    },
+    setValue: function(x, y, snap)
+    {
+        this.setTargetValue([x, y || 0]);
+        if(snap)
+        {
+            this.groupCopy(this.value.current, this.value.target);
+        }
+    },
+    startTap: function(target)
+    {
+        if(this.disabled)
+        {
+            return;
+        }
+        this.tapping = true;
+        
+        if(target === undefined)
+        {
+            target = [
+                Cursor.x - this.offset.wrapper[0] - (this.handle.offsetWidth / 2),
+                Cursor.y - this.offset.wrapper[1] - (this.handle.offsetHeight / 2)
+            ];
+        }
+        this.setTargetOffset(target);
+    },
+    stopTap: function()
+    {
+        if(this.disabled || !this.tapping)
+        {
+            return;
+        }
+        this.tapping = false;
+        
+        this.setTargetValue(this.value.current);
+        this.result();
+    },
+    startDrag: function()
+    {
+        if(this.disabled)
+        {
+            return;
+        }
+        this.offset.mouse = [
+            Cursor.x - Position.get(this.handle)[0],
+            Cursor.y - Position.get(this.handle)[1]
+        ];
+        
+        this.dragging = true;
+    },
+    stopDrag: function()
+    {
+        if(this.disabled || !this.dragging)
+        {
+            return;
+        }
+        this.dragging = false;
+        
+        var target = this.groupClone(this.value.current);
+        if(this.slide)
+        {
+            var ratioChange = this.change;
+            target[0] += ratioChange[0] * 4;
+            target[1] += ratioChange[1] * 4;
+        }
+        this.setTargetValue(target);
+        this.result();
+    },
+    feedback: function()
+    {
+        var value = this.value.current;
+        if(this.snap && this.steps > 1)
+        {
+            value = this.getClosestSteps(value);
+        }
+        if(!this.groupCompare(value, this.value.prev))
+        {
+            if(typeof(this.animationCallback) == 'function')
+            {
+                this.animationCallback(value[0], value[1]);
+            }
+            this.groupCopy(this.value.prev, value);
+        }
+    },
+    result: function()
+    {
+        if(typeof(this.callback) == 'function')
+        {
+            this.callback(this.value.target[0], this.value.target[1]);
+        }
+    },
+    animate: function(direct, first)
+    {
+        if(direct && !this.dragging)
+        {
+            return;
+        }
+        if(this.dragging)
+        {
+            var prevTarget = this.groupClone(this.value.target);
+            
+            var offset = [
+                Cursor.x - this.offset.wrapper[0] - this.offset.mouse[0],
+                Cursor.y - this.offset.wrapper[1] - this.offset.mouse[1]
+            ];
+            this.setTargetOffset(offset, this.loose);
+            
+            this.change = [
+                this.value.target[0] - prevTarget[0],
+                this.value.target[1] - prevTarget[1]
+            ];
+        }
+        if(this.dragging || first)
+        {
+            this.groupCopy(this.value.current, this.value.target);
+        }
+        if(this.dragging || this.glide() || first)
+        {
+            this.update();
+            this.feedback();
+        }
+    },
+    glide: function()
+    {
+        var diff = [
+            this.value.target[0] - this.value.current[0],
+            this.value.target[1] - this.value.current[1]
+        ];
+        if(!diff[0] && !diff[1])
+        {
+            return false;
+        }
+        if(Math.abs(diff[0]) > this.bounds.xStep || Math.abs(diff[1]) > this.bounds.yStep)
+        {
+            this.value.current[0] += diff[0] * this.speed;
+            this.value.current[1] += diff[1] * this.speed;
+        }
+        else
+        {
+            this.groupCopy(this.value.current, this.value.target);
+        }
+        return true;
+    },
+    update: function()
+    {
+        if(!this.snap)
+        {
+            this.offset.current = this.getOffsetsByRatios(this.value.current);
+        }
+        else
+        {
+            this.offset.current = this.getOffsetsByRatios(
+                this.getClosestSteps(this.value.current)
+            );
+        }
+        this.show();
+    },
+    show: function()
+    {
+        if(!this.groupCompare(this.offset.current, this.offset.prev))
+        {
+            if(this.horizontal)
+            {
+                this.handle.style.left = String(this.offset.current[0]) + 'px';
+            }
+            if(this.vertical)
+            {
+                this.handle.style.top = String(this.offset.current[1]) + 'px';
+            }
+            this.groupCopy(this.offset.prev, this.offset.current);
+        }
+    },
+    setTargetValue: function(value, loose)
+    {
+        var target = loose ? this.getLooseValue(value) : this.getProperValue(value);
+        
+        this.groupCopy(this.value.target, target);
+        this.offset.target = this.getOffsetsByRatios(target);
+    },
+    setTargetOffset: function(offset, loose)
+    {
+        var value = this.getRatiosByOffsets(offset);
+        var target = loose ? this.getLooseValue(value) : this.getProperValue(value);
+        
+        this.groupCopy(this.value.target, target);
+        this.offset.target = this.getOffsetsByRatios(target);
+    },
+    getLooseValue: function(value)
+    {
+        var proper = this.getProperValue(value);
+        return [
+            proper[0] + ((value[0] - proper[0]) / 4),
+            proper[1] + ((value[1] - proper[1]) / 4)
+        ];
+    },
+    getProperValue: function(value)
+    {
+        var proper = this.groupClone(value);
+
+        proper[0] = Math.max(proper[0], 0);
+        proper[1] = Math.max(proper[1], 0);
+        proper[0] = Math.min(proper[0], 1);
+        proper[1] = Math.min(proper[1], 1);
+        
+        if((!this.dragging && !this.tapping) || this.snap)
+        {
+            if(this.steps > 1)
+            {
+                proper = this.getClosestSteps(proper);
+            }
+        }
+        return proper;
+    },
+    getRatiosByOffsets: function(group)
+    {
+        return [
+            this.getRatioByOffset(group[0], this.bounds.xRange, this.bounds.x0),
+            this.getRatioByOffset(group[1], this.bounds.yRange, this.bounds.y0)
+        ];
+    },
+    getRatioByOffset: function(offset, range, padding)
+    {
+        return range ? (offset - padding) / range : 0;
+    },
+    getOffsetsByRatios: function(group)
+    {
+        return [
+            this.getOffsetByRatio(group[0], this.bounds.xRange, this.bounds.x0),
+            this.getOffsetByRatio(group[1], this.bounds.yRange, this.bounds.y0)
+        ];
+    },
+    getOffsetByRatio: function(ratio, range, padding)
+    {
+        return Math.round(ratio * range) + padding;
+    },
+    getClosestSteps: function(group)
+    {
+        return [
+            this.getClosestStep(group[0]),
+            this.getClosestStep(group[1])
+        ];
+    },
+    getClosestStep: function(value)
+    {
+        var k = 0;
+        var min = 1;
+        for(var i = 0; i <= this.steps - 1; i++)
+        {
+            if(Math.abs(this.stepRatios[i] - value) < min)
+            {
+                min = Math.abs(this.stepRatios[i] - value);
+                k = i;
+            }
+        }
+        return this.stepRatios[k];
+    },
+    groupCompare: function(a, b)
+    {
+        return a[0] == b[0] && a[1] == b[1];
+    },
+    groupCopy: function(a, b)
+    {
+        a[0] = b[0];
+        a[1] = b[1];
+    },
+    groupClone: function(a)
+    {
+        return [a[0], a[1]];
+    },
+    preventDefaults: function(e, selection)
+    {
+        if(!e)
+        {
+            e = window.event;
+        }
+        if(e.preventDefault)
+        {
+            e.preventDefault();
+        }
+        e.returnValue = false;
+        
+        if(selection && document.selection)
+        {
+            document.selection.empty();
+        }
+    },
+    cancelEvent: function(e)
+    {
+        if(!e)
+        {
+            e = window.event;
+        }
+        if(e.stopPropagation)
+        {
+            e.stopPropagation();
+        }
+        e.cancelBubble = true;
+    }
+
+  };
+
+!function ($){
+  $.fn.dragdealer = function(options) {
+    return new Dragdealer(this[0], options);
+  }
+}(jQuery);
+
+(function(/*! Stitch !*/) {
+  if (!this.require) {
+    var modules = {}, cache = {};
+    var require = function(name, root) {
+      var path = expand(root, name), indexPath = expand(path, './index'), module, fn;
+      module   = cache[path] || cache[indexPath];
+      if (module) {
+        return module;
+      } else if (fn = modules[path] || modules[path = indexPath]) {
+        module = {id: path, exports: {}};
+        cache[path] = module.exports;
+        fn(module.exports, function(name) {
+          return require(name, dirname(path));
+        }, module);
+        return cache[path] = module.exports;
+      } else {
+        throw 'module ' + name + ' not found';
+      }
+    };
+    var expand = function(root, name) {
+      var results = [], parts, part;
+      // If path is relative
+      if (/^\.\.?(\/|$)/.test(name)) {
+        parts = [root, name].join('/').split('/');
+      } else {
+        parts = name.split('/');
+      }
+      for (var i = 0, length = parts.length; i < length; i++) {
+        part = parts[i];
+        if (part == '..') {
+          results.pop();
+        } else if (part != '.' && part != '') {
+          results.push(part);
+        }
+      }
+      return results.join('/');
+    };
+    var dirname = function(path) {
+      return path.split('/').slice(0, -1).join('/');
+    };
+    this.require = function(name) {
+      return require(name, '');
+    };
+    this.require.define = function(bundle) {
+      for (var key in bundle) {
+        modules[key] = bundle[key];
+      }
+    };
+    this.require.modules = modules;
+    this.require.cache   = cache;
+  }
+  return this.require.define;
+}).call(this)({
+  "color": function(exports, require, module) {
+(function() {
+  var color;
+
+  color = Backbone.Model.extend({
+    defaults: {},
+    randomColor: function() {
+      return [_.random(0, 360), 100, 50, 1];
+    },
+    updateRgb: function(rgba) {
+      rgba || (rgba = this.hslToRgb(this.hsla()));
+      this.set({
+        rgb: [rgba[0], rgba[1], rgba[2]]
+      });
+      return rgba;
+    },
+    updateHsl: function(hsla) {
+      return this.set({
+        h: hsla[0],
+        s: hsla[1],
+        l: hsla[2]
+      });
+    },
+    updateHex: function(rgba) {
+      return this.set({
+        hex: this.rgbToHex(rgba || this.rgba())
+      });
+    },
+    h: function(h) {
+      if (this.inRange('h', h)) {
+        if (this.get('h') !== h) {
+          this.set({
+            h: h
+          });
+          this.updateHex(this.updateRgb());
+        }
+        return h;
+      } else {
+        return false;
+      }
+    },
+    s: function(s) {
+      if (this.inRange('s', s)) {
+        if (this.get('s') !== s) {
+          this.set({
+            s: s
+          });
+          this.updateHex(this.updateRgb());
+        }
+        return s;
+      } else {
+        return false;
+      }
+    },
+    l: function(l) {
+      if (this.inRange('l', l)) {
+        if (this.get('l') !== l) {
+          this.set({
+            l: l
+          });
+          this.updateHex(this.updateRgb());
+        }
+        return l;
+      } else {
+        return false;
+      }
+    },
+    a: function(a) {
+      if (this.inRange('a', a)) {
+        if (this.get('a') !== a) {
+          this.set({
+            a: a
+          });
+          this.updateHex(this.updateRgb());
+        }
+        return a;
+      } else {
+        return false;
+      }
+    },
+    hsla: function(hsla) {
+      if (hsla != null) {
+        hsla = this.isHsl(hsla);
+        if (hsla) {
+          if (this.hsla().join(',') !== hsla.join(',')) {
+            this.updateHex(this.updateRgb(this.hslToRgb(hsla)));
+            this.updateHsl(hsla);
+            this.set({
+              a: hsla[3] != null ? hsla[3] : 1
+            });
+          }
+          return hsla;
+        } else {
+          return false;
+        }
+      } else {
+        return [this.get('h'), this.get('s'), this.get('l'), this.get('a')];
+      }
+    },
+    hslaStr: function(hsla) {
+      hsla || (hsla = this.hsla());
+      return "hsla(" + hsla[0] + ", " + hsla[1] + "%, " + hsla[2] + "%, " + hsla[3] + ")";
+    },
+    rgba: function(rgba) {
+      if (rgba != null) {
+        rgba = this.isRgb(rgba);
+        if (rgba) {
+          if (rgba.join(',') !== this.rgba().join(',')) {
+            this.set({
+              rgb: [rgba[0], rgba[1], rgba[2]],
+              a: rgba[3] != null ? rgba[3] : 1
+            });
+            this.updateHex(rgba);
+            this.updateHsl(this.rgbToHsl(rgba));
+          }
+          return rgba;
+        } else {
+          return false;
+        }
+      } else {
+        return this.get('rgb').concat(this.get('a'));
+      }
+    },
+    rgbaStr: function() {
+      var rgb;
+      rgb = this.get('rgb');
+      return "rgba(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ", " + (this.get('a')) + ")";
+    },
+    hex: function(hex) {
+      var rgba;
+      if (hex != null) {
+        hex = this.isHex(hex);
+        if (hex) {
+          if (this.hex() !== hex) {
+            this.set({
+              hex: hex
+            });
+            rgba = this.hexToRgb(hex);
+            this.updateRgb(rgba);
+            this.set({
+              a: rgba[3] || 1
+            });
+            this.updateHsl(this.rgbToHsl(rgba));
+          }
+          return hex;
+        } else {
+          return false;
+        }
+      } else {
+        return this.get('hex');
+      }
+    },
+    isHex: function(hex, marker) {
+      var match, _ref;
+      if (marker == null) {
+        marker = true;
+      }
+      match = (_ref = hex.match(/^#?([0-9a-fA-F]{3})([0-9a-fA-F]{3})?$/)) != null ? _ref.slice(1) : void 0;
+      if (match == null) {
+        return false;
+      }
+      color = _.compact(match).join('');
+      if (marker) {
+        return '#' + color;
+      } else {
+        return color;
+      }
+    },
+    isRgb: function(rgb) {
+      var c, match, valid, _ref;
+      if (typeof rgb === 'string') {
+        match = (_ref = rgb.match(/rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,?\s*(0?\.?\d+)?\s*\)$/)) != null ? _ref.slice(1) : void 0;
+        if (match == null) {
+          return false;
+        }
+        rgb = (function() {
+          var _i, _len, _ref1, _results;
+          _ref1 = _.compact(match);
+          _results = [];
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            c = _ref1[_i];
+            _results.push(parseFloat(c));
+          }
+          return _results;
+        })();
+      }
+      if (rgb[3] == null) {
+        rgb[3] = 1;
+      }
+      valid = rgb[0] <= 255 && rgb[1] <= 255 && rgb[2] <= 255 && rgb[3] <= 1;
+      if (valid) {
+        return rgb;
+      } else {
+        return false;
+      }
+    },
+    isHsl: function(hsl) {
+      var c, match, valid, _ref;
+      if (typeof hsl === 'string') {
+        match = (_ref = hsl.match(/hsla?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\%\s*,\s*(\d{1,3})\%\s*,?\s*(0?\.?\d+)?\s*\)$/)) != null ? _ref.slice(1) : void 0;
+        if (match == null) {
+          return false;
+        }
+        hsl = (function() {
+          var _i, _len, _ref1, _results;
+          _ref1 = _.compact(match);
+          _results = [];
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            c = _ref1[_i];
+            _results.push(parseFloat(c));
+          }
+          return _results;
+        })();
+      }
+      if (hsl[3] == null) {
+        hsl[3] = 1;
+      }
+      valid = hsl[0] <= 360 && hsl[1] <= 100 && hsl[2] <= 100 && hsl[3] <= 1;
+      if (valid) {
+        return hsl;
+      } else {
+        return false;
+      }
+    },
+    valid: function(color) {
+      var type;
+      type = this.type(color);
+      if (type === 'hex') {
+        return this.isHex(color);
+      } else if (type === 'rgb') {
+        return this.isRgb(color);
+      } else if (type === 'hsl') {
+        return this.isHsl(color);
+      } else {
+        return false;
+      }
+    },
+    inRange: function(part, val) {
+      var valid;
+      switch (part) {
+        case 'h':
+          valid = val >= 0 && val <= 360;
+          break;
+        case 's':
+        case 'l':
+          valid = val >= 0 && val <= 100;
+          break;
+        case 'a':
+          valid = val >= 0 && val <= 1;
+      }
+      return valid;
+    },
+    type: function(color) {
+      var str, type;
+      str = color.toString();
+      return type = str.indexOf('#') >= 0 || str.length === 3 || str.length === 6 ? 'hex' : str.indexOf('%') ? 'hsl' : 'rgb';
+    },
+    hexToRgb: function(hex) {
+      var c;
+      hex = this.isHex(hex, false);
+      if (!hex) {
+        return false;
+      }
+      if (hex.length !== 6) {
+        hex = ((function() {
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = hex.length; _i < _len; _i++) {
+            c = hex[_i];
+            _results.push("" + c + c);
+          }
+          return _results;
+        })()).join('');
+      }
+      color = hex.match(/#?(.{2})(.{2})(.{2})/).slice(1);
+      return color = ((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = color.length; _i < _len; _i++) {
+          c = color[_i];
+          _results.push(parseInt(c, 16));
+        }
+        return _results;
+      })()).concat([1]);
+    },
+    hexToHsl: function(hex) {
+      if (hex.indexOf('#') >= 0 || hex.length < 6) {
+        hex = this.isHex(hex);
+      }
+      if (!hex) {
+        return false;
+      }
+      return this.rgbToHsl(this.hexToRgb(hex));
+    },
+    rgbToHex: function(rgb) {
+      var c, hex, i;
+      if (typeof rgb === 'string') {
+        rgb = this.isRgb(rgb);
+      }
+      if (rgb) {
+        hex = (function() {
+          var _i, _len, _ref, _results;
+          _ref = rgb.slice(0, 3);
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            c = _ref[_i];
+            _results.push(parseFloat(c).toString(16));
+          }
+          return _results;
+        })();
+        hex = (function() {
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = hex.length; _i < _len; _i++) {
+            c = hex[_i];
+            if (c.length === 1) {
+              _results.push("0" + c);
+            } else {
+              _results.push(c);
+            }
+          }
+          return _results;
+        })();
+        hex = hex.join('');
+        if (_.compact((function() {
+          var _i, _len, _ref, _results;
+          _ref = hex.match(/.{1,2}/g);
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            i = _ref[_i];
+            _results.push(i[0] === i[1]);
+          }
+          return _results;
+        })()).length === 3) {
+          return "#" + hex[0] + hex[2] + hex[4];
+        } else {
+          return "#" + hex;
+        }
+      }
+    },
+    rgbToHsl: function(rgb) {
+      var a, add, b, diff, g, h, hue, l, lum, max, min, r, s, sat;
+      if (typeof rgb === 'string') {
+        rgb = this.isRgb(rgb);
+      }
+      if (!rgb) {
+        return false;
+      }
+      r = parseFloat(rgb[0]) / 255;
+      g = parseFloat(rgb[1]) / 255;
+      b = parseFloat(rgb[2]) / 255;
+      max = Math.max(r, g, b);
+      min = Math.min(r, g, b);
+      diff = max - min;
+      add = max + min;
+      hue = min === max ? 0 : r === max ? ((60 * (g - b) / diff) + 360) % 360 : g === max ? (60 * (b - r) / diff) + 120 : (60 * (r - g) / diff) + 240;
+      lum = 0.5 * add;
+      sat = lum === 0 ? 0 : lum === 1 ? 1 : lum <= 0.5 ? diff / add : diff / (2 - add);
+      h = Math.round(hue);
+      s = Math.round(sat * 100);
+      l = Math.round(lum * 100);
+      a = parseFloat(rgb[3]) || 1;
+      return [h, s, l, a];
+    },
+    hslToRgb: function(hsl) {
+      var a, b, bt, g, gt, hue, lum, p, q, r, rt, sat;
+      if (typeof hsl === 'string') {
+        hsl = this.isHsl(hsl);
+      }
+      if (!hsl) {
+        return false;
+      }
+      hue = parseInt(hsl[0]) / 360;
+      sat = parseInt(hsl[1]) / 100;
+      lum = parseInt(hsl[2]) / 100;
+      q = lum <= .5 ? lum * (1 + sat) : lum + sat - (lum * sat);
+      p = 2 * lum - q;
+      rt = hue + (1 / 3);
+      gt = hue;
+      bt = hue - (1 / 3);
+      r = Math.round(this.hueToRgb(p, q, rt) * 255);
+      g = Math.round(this.hueToRgb(p, q, gt) * 255);
+      b = Math.round(this.hueToRgb(p, q, bt) * 255);
+      a = parseFloat(hsl[3]) || 1;
+      return [r, g, b, a];
+    },
+    hslToHex: function(hsl) {
+      if (typeof hsl === 'string') {
+        hsl = this.isHsl(hsl);
+      }
+      if (!hsl) {
+        return false;
+      }
+      return this.rgbToHex(this.hslToRgb(hsl));
+    },
+    hueToRgb: function(p, q, h) {
+      if (h < 0) {
+        h += 1;
+      }
+      if (h > 1) {
+        h -= 1;
+      }
+      if ((h * 6) < 1) {
+        return p + (q - p) * h * 6;
+      } else if ((h * 2) < 1) {
+        return q;
+      } else if ((h * 3) < 2) {
+        return p + (q - p) * ((2 / 3) - h) * 6;
+      } else {
+        return p;
+      }
+    }
+  });
+
+  module.exports = function(options) {
+    return new color(options);
+  };
+
+}).call(this);
+
+}, "inputs": function(exports, require, module) {
+(function() {
+  var inputs;
+
+  inputs = Backbone.View.extend({
+    initialize: function(options) {
+      this.setElement($(options.el));
+      this.model.on('change:h', this.setHue, this);
+      this.model.on('change:s', this.setSat, this);
+      this.model.on('change:l', this.setLum, this);
+      this.model.on('change:a', this.setAlpha, this);
+      this.model.on('change:a', this.changeRgb, this);
+      this.model.on('change:hex', this.changeHex, this);
+      return this.model.on('change:rgb', this.changeRgb, this);
+    },
+    events: {
+      'keydown .sliders input': 'bumpHsl',
+      'keyup .sliders input': 'editHsl',
+      'keyup .color-inputs input': 'changeColor'
+    },
+    changeColor: function(e) {
+      var el;
+      el = $(e.target);
+      if (this.model[el.attr('id')](el.val())) {
+        return el.removeClass('error');
+      } else {
+        return el.addClass('error');
+      }
+    },
+    bumpHsl: function(e) {
+      var part, shift;
+      if (e.keyCode === 38 || e.keyCode === 40) {
+        part = $(e.target).attr('id');
+        shift = e.shiftKey ? 10 : 1;
+        if (e.keyCode === 40) {
+          shift = -shift;
+        }
+        this.bumpValue(part, shift);
+        return e.preventDefault();
+      }
+    },
+    bumpValue: function(part, shift) {
+      var current, val;
+      current = this.model.get(part);
+      val = part === 'a' ? Math.round(current * 100 + shift) / 100 : current + shift;
+      switch (part) {
+        case 'h':
+          val = this.gate(val, 360);
+          break;
+        case 's':
+        case 'l':
+          val = this.gate(val, 100);
+          break;
+        case 'a':
+          val = this.gate(val, 1);
+      }
+      return this.model[part](val);
+    },
+    gate: function(val, finish) {
+      if (val < 0) {
+        return 0;
+      } else if (val > finish) {
+        return finish;
+      } else {
+        return val;
+      }
+    },
+    editHsl: function(e) {
+      var el, part, val;
+      el = $(e.target);
+      part = el.attr('id');
+      val = parseFloat(el.val());
+      if (this.model.inRange(part, val)) {
+        el.removeClass('error');
+        return this.model[part](val);
+      } else {
+        return el.addClass('error');
+      }
+    },
+    changeHex: function() {
+      return this.update($('#hex'), this.model.get('hex'));
+    },
+    changeRgb: function() {
+      return this.update($('#rgba'), this.model.rgbaStr());
+    },
+    changeHsl: function() {
+      return this.update($('#hsla'), this.model.hslaStr());
+    },
+    setHue: function() {
+      this.update($('#h'), this.model.get('h'));
+      return this.changeHsl();
+    },
+    setSat: function() {
+      this.update($('#s'), this.model.get('s'));
+      return this.changeHsl();
+    },
+    setLum: function() {
+      this.update($('#l'), this.model.get('l'));
+      return this.changeHsl();
+    },
+    setAlpha: function() {
+      this.update($('#a'), this.model.get('a'));
+      return this.changeHsl();
+    },
+    update: function(el, val) {
+      if (el.val() !== ("" + val)) {
+        return el.val("" + val);
+      }
+    }
+  });
+
+  module.exports = function(options) {
+    return new inputs(options);
+  };
+
+}).call(this);
+
+}, "picker": function(exports, require, module) {
+(function() {
+  var picker;
+
+  picker = Backbone.View.extend({
+    initialize: function(options) {
+      return this.setElement($(options.el));
+    },
+    render: function() {
+      var _this = this;
+      this.hueSlider = this.$('#h-slider').dragdealer({
+        slide: false,
+        steps: 361,
+        speed: 100,
+        x: this.model.get('h') / 360,
+        animationCallback: function(x, y) {
+          var hue;
+          hue = Math.round(x * 360);
+          if (_this.model.get('h') !== hue) {
+            return _this.model.h(hue);
+          }
+        }
+      });
+      this.satSlider = this.$('#s-slider').dragdealer({
+        slide: false,
+        steps: 101,
+        speed: 100,
+        x: this.model.get('s') / 100,
+        animationCallback: function(x, y) {
+          var sat;
+          sat = Math.round(x * 100);
+          if (_this.model.get('s') !== sat) {
+            return _this.model.s(sat);
+          }
+        }
+      });
+      this.lumSlider = this.$('#l-slider').dragdealer({
+        slide: false,
+        steps: 101,
+        speed: 100,
+        x: this.model.get('l') / 100,
+        animationCallback: function(x, y) {
+          var lum;
+          lum = Math.round(x * 100);
+          if (_this.model.get('l') !== lum) {
+            return _this.model.l(lum);
+          }
+        }
+      });
+      this.alphaSlider = this.$('#a-slider').dragdealer({
+        slide: false,
+        steps: 101,
+        speed: 100,
+        x: this.model.get('a'),
+        animationCallback: function(x, y) {
+          var alpha;
+          alpha = Math.round(x * 100) / 100;
+          if (_this.model.get('a') !== alpha) {
+            return _this.model.a(alpha);
+          }
+        }
+      });
+      this.updateSliderStyles('all');
+      this.model.on('change:h', this.setHue, this);
+      this.model.on('change:s', this.setSat, this);
+      this.model.on('change:l', this.setLum, this);
+      this.model.on('change:a', this.setAlpha, this);
+      return this;
+    },
+    setHue: function() {
+      this.setSlider(this.hueSlider, this.model.get('h'), 360);
+      return this.updateSliderStyles('h');
+    },
+    setSat: function() {
+      this.setSlider(this.satSlider, this.model.get('s'), 100);
+      return this.updateSliderStyles('s');
+    },
+    setLum: function() {
+      this.setSlider(this.lumSlider, this.model.get('l'), 100);
+      return this.updateSliderStyles('l');
+    },
+    setAlpha: function() {
+      this.setSlider(this.alphaSlider, this.model.get('a') * 100, 100);
+      return this.updateSliderStyles('a');
+    },
+    setSlider: function(slider, value, factor) {
+      if (Math.round(slider.value.current[0] * factor) !== Math.round(value)) {
+        return slider.setValue(value / factor);
+      }
+    },
+    updateSliderStyles: function(part) {
+      var p, parts, _i, _len, _results;
+      parts = _.without(['h', 's', 'l', 'a'], part);
+      _results = [];
+      for (_i = 0, _len = parts.length; _i < _len; _i++) {
+        p = parts[_i];
+        _results.push(this.setSliderBg(p));
+      }
+      return _results;
+    },
+    setSliderBg: function(part) {
+      return $("#" + part + "-slider").attr('style', "background: -webkit-" + (this.gradient(part)) + "; background: -moz-" + (this.gradient(part)));
+    },
+    gradient: function(part) {
+      var colors, multiplier, num, size;
+      switch (part) {
+        case 'h':
+          size = 36;
+          multiplier = 10;
+          break;
+        case 's':
+        case 'l':
+          size = 5;
+          multiplier = 20;
+          break;
+        case 'a':
+          size = 5;
+          multiplier = .2;
+      }
+      colors = (function() {
+        var _i, _results;
+        _results = [];
+        for (num = _i = 0; 0 <= size ? _i <= size : _i >= size; num = 0 <= size ? ++_i : --_i) {
+          _results.push(this.model.hslaStr(this.tweakHsla(part, num * multiplier)));
+        }
+        return _results;
+      }).call(this);
+      return "linear-gradient(left, " + (colors.join(',')) + ");";
+    },
+    tweakHsla: function(part, value) {
+      var color, pos;
+      color = this.model.hsla();
+      switch (part) {
+        case 'h':
+          pos = 0;
+          break;
+        case 's':
+          pos = 1;
+          break;
+        case 'l':
+          pos = 2;
+          break;
+        case 'a':
+          pos = 3;
+      }
+      color.splice(pos, 1, value);
+      return color;
+    }
+  });
+
+  module.exports = function(options) {
+    return new picker(options);
+  };
+
+}).call(this);
+
+}, "site": function(exports, require, module) {
+(function() {
+  var color, inputs, picker, site, tiles;
+
+  color = require('color');
+
+  picker = require('picker');
+
+  inputs = require('inputs');
+
+  tiles = require('tiles');
+
+  site = Backbone.View.extend({
+    initialize: function(options) {
+      this.setElement($('body'));
+      this.tiles = options.tiles;
+      this.model.set({
+        tile: 'foreground'
+      });
+      this.model.on('change:h', this.updateColor, this);
+      this.model.on('change:s', this.updateColor, this);
+      this.model.on('change:l', this.updateColor, this);
+      this.model.on('change:a', this.updateColor, this);
+      this.style = $('<style>');
+      $('head').append(this.style);
+      color = this.urlToColor(window.location.hash) || this.model.randomColor();
+      return this.model.hsla(color);
+    },
+    events: {
+      'click .url': 'selectUrl',
+      'click .show-more': 'toggleWhy'
+    },
+    updateColor: function() {
+      var opt, tile;
+      color = this.model.hsla();
+      tile = this.model.get('tile');
+      opt = {};
+      opt[tile] = color;
+      this.model.set(opt);
+      this.setUrl();
+      if (tile === 'foreground') {
+        return this.setPageStyles();
+      }
+    },
+    selectUrl: function(e) {
+      return e.target.select();
+    },
+    toggleWhy: function() {
+      $('#more').toggleClass('hide');
+      return e.preventDefault();
+    },
+    urlToColor: function(url) {
+      var alpha, background, colors, foreground, hex, rgb, rgba;
+      if (url.length) {
+        colors = (function() {
+          var _i, _len, _ref, _results;
+          _ref = url.split('/');
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            color = _ref[_i];
+            color = color.split(',');
+            hex = color[0];
+            alpha = color[1];
+            rgb = this.model.hexToRgb(hex);
+            _results.push(rgba = alpha != null ? (rgb.splice(-1, 1, parseFloat(alpha)), this.model.rgbToHsl(rgb)) : this.model.rgbToHsl(rgb));
+          }
+          return _results;
+        }).call(this);
+        foreground = colors[0];
+        background = colors[1];
+        if (foreground != null) {
+          this.model.set({
+            foreground: foreground
+          });
+        }
+        if (background != null) {
+          this.model.set({
+            background: background
+          });
+          _.delay(this.tiles.toggleExposed, 500);
+        }
+        return foreground;
+      }
+    },
+    setUrl: function() {
+      var background, hash, host, input, url, width;
+      host = window.location.host;
+      hash = this.getColorUrl(this.model.get('foreground'));
+      background = this.model.get('background');
+      if (background[3] > 0) {
+        hash += "/" + (this.getColorUrl(background));
+      }
+      input = $('.url');
+      url = "" + host + "/" + hash;
+      width = url.length * 7.45;
+      input.css({
+        width: width
+      });
+      return input.val(url);
+    },
+    getColorUrl: function(color) {
+      var frag;
+      frag = this.model.hslToHex(color);
+      if (color[3] !== 1) {
+        frag += "," + color[3];
+      }
+      return frag;
+    },
+    setPageStyles: function() {
+      var headingsAndCode, hsla, linkHover, paragraphs;
+      hsla = this.model.hsla();
+      if (!_.contains(hsla, void 0)) {
+        linkHover = this.model.hslaStr([hsla[0], 100, 70, 1]);
+        paragraphs = this.model.hslaStr([hsla[0], 40, 70, 1]);
+        headingsAndCode = this.model.hslaStr([hsla[0], 40, 70, 1]);
+        $('h1').css('text-shadow', this.getTextShadow(hsla));
+        return this.style.text("body a:hover { color: " + linkHover + " !important }        h1 + p { color: " + paragraphs + " }        body h2, body h3, code { color: " + headingsAndCode + " }");
+      }
+    },
+    getTextShadow: function(hsla) {
+      var colors, l, lum, s,
+        _this = this;
+      lum = hsla[2];
+      s = lum < 35 ? 30 : lum > 80 ? 30 : hsla[1];
+      l = lum < 35 ? 35 : lum > 80 ? 80 : lum;
+      color = [hsla[0], Math.round(s / 2.7), l];
+      colors = [];
+      _(4).times(function(i) {
+        return colors.push(_this.adjustLum(Math.round(-5.5 * (i - 1)), color));
+      });
+      return colors[0] + ' 0px 1px 0px, ' + colors[1] + ' 0px 2px 0px, ' + colors[2] + ' 0px 3px 0px, ' + colors[3] + ' 0px 4px 0px, ' + 'rgba(0, 0, 0, 0.2) 0px 5px 1px, ' + 'rgba(0, 0, 0, 0.3) 0px 0px 10px, ' + 'rgba(0, 0, 0, 0.4) 0px 3px 5px, ' + 'rgba(0, 0, 0, 0.5) 0px 6px 5px, ' + 'rgba(0, 0, 0, 0.6) 0px 10px 10px';
+    },
+    adjustLum: function(l, color) {
+      if (color == null) {
+        color = this.model.hsla();
+      }
+      return this.model.hslaStr([color[0], color[1], color[2] + 1, this.model.get('a')]);
+    }
+  });
+
+  module.exports = function() {
+    color = color();
+    picker({
+      model: color,
+      el: '#picker'
+    }).render();
+    inputs({
+      model: color,
+      el: '#hslpicker'
+    });
+    return new site({
+      model: color,
+      tiles: tiles({
+        model: color,
+        el: '#tiles'
+      })
+    });
+  };
+
+}).call(this);
+
+}, "tiles": function(exports, require, module) {
+(function() {
+  var tiles;
+
+  tiles = Backbone.View.extend({
+    initialize: function(options) {
+      this.model.on('change:foreground', this.updateForeground, this);
+      this.model.on('change:background', this.updateBackground, this);
+      if (!this.model.get('background')) {
+        return this.model.set({
+          background: [360, 100, 100, 0]
+        });
+      }
+    },
+    events: {
+      'click .expose': 'toggleExposed',
+      'click .foreground, .background': 'selectTile',
+      'click .bg': 'setTileBg'
+    },
+    toggleExposed: function() {
+      $('.color-tiles').toggleClass('exposed');
+      $('.slider').css('background-color', $('.color-tiles').is('.exposed') ? 'transparent' : this.model.hslaStr(this.model.get('background')));
+      return $('.foreground').trigger('click');
+    },
+    selectTile: function(e) {
+      var tile;
+      tile = $(e.currentTarget);
+      if (!tile.is('.selected')) {
+        this.model.set({
+          tile: tile.data('name')
+        });
+        this.model.hsla(this.model.get(tile.data('name')));
+        $('.selected').removeClass('selected');
+        return tile.addClass('selected');
+      }
+    },
+    setTileBg: function(e) {
+      var color, tile;
+      tile = $(e.target);
+      if (tile.is('.random')) {
+        color = this.model.randomColor();
+        color[3] = this.model.get('a') || 1;
+        return this.model.hsla(color);
+      } else {
+        return this.model.hsla(tile.data('color'));
+      }
+    },
+    updateForeground: function() {
+      return $('.foreground-color').css({
+        'background-color': this.model.hslaStr(this.model.get('foreground'))
+      });
+    },
+    updateBackground: function() {
+      return $('.background-color').css({
+        'background-color': this.model.hslaStr(this.model.get('background'))
+      });
+    }
+  });
+
+  module.exports = function(options) {
+    return new tiles(options);
+  };
+
+}).call(this);
+
+}
+});

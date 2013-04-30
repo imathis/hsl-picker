@@ -24,6 +24,7 @@ site = Backbone.View.extend
   events:
     'click .url'       : 'selectUrl'
     'click .show-more' : 'toggleWhy'
+    'dang .handle'  : 'setUrl'
 
   updateColor: ->
     color = @model.hsla()
@@ -31,7 +32,6 @@ site = Backbone.View.extend
     opt = {}
     opt[tile] = color
     @model.set opt
-    @setUrl()
     @setPageStyles() if tile is 'foreground'
 
   selectUrl: (e)->
@@ -64,14 +64,13 @@ site = Backbone.View.extend
     hash = @getColorUrl @model.get 'foreground'
     background = @model.get 'background'
     hash += "/#{@getColorUrl background}" if background[3] > 0
-
-    input=$('.url')
     url = "#{host}/#{hash}"
-    update = @throttle ((h)-> window.location.replace(h)), 300
-    update(hash)
-    width = url.length*7.8
-    input.css width: width
-    input.val(url) 
+    unless url is (window.location.host + '/' + window.location.hash)
+      input=$('.url')
+      window.location.replace(hash)
+      width = url.length*7.8
+      input.css width: width
+      input.val(url) 
 
   getColorUrl: (color)->
     frag  = @model.hslToHex color

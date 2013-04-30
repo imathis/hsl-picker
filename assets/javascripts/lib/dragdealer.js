@@ -262,6 +262,8 @@ Dragdealer.prototype =
     {
         this.stopDrag();
         this.stopTap();
+        $(this.handle).trigger('dang');
+        //console.log('dang')
         //this.cancelEvent(e);
     },
     documentResizeHandler: function(e)

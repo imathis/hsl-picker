@@ -1,0 +1,206 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  --picker-track-bg: rgba(0,0,0,0.5);
+  --picker-track-check: rgba(255,255,255,0.2);
+  --picker-track-check-alt: transparent;
+  --picker-track-check-gradient: linear-gradient(45deg,
+      var(--picker-track-check) 25%,
+      var(--picker-track-check-alt) 25%,
+      var(--picker-track-check-alt) 75%,
+      var(--picker-track-check) 75%,
+      var(--picker-track-check)
+    );
+  --picker-track-box-shadow: 
+    rgba(0,0,0,0.3) 0 1px inset,
+    rgba(255,255,255,0.2) 0 1px;
+
+  --picker-slider-box-shadow: 
+    rgba(255,255,255,0.3) 0 1px 1px inset,
+    rgba(0,0,0,0.6) 0 0 0 1px;
+
+  --picker-input-box-shadow: rgba(255,255,255,0.1) 0 1px 0,rgba(0,0,0,0.8) 0 1px 7px 0px inset;
+  --picker-input-bg: rgba(0,0,0,0.3);
+  --picker-input-color: rgba(255,255,255,0.8);
+
+  --picker-input-invalid-bg: rgba(102,0,0,0.3);
+  --picker-input-invalid-box-shadow: rgba(255,127,127,0.1) 0 1px 0, rgba(0,0,0,0.8) 0 1px 7px 0px inset;
+  --picker-input-invalid-color: #ff0f0f;
+
+  --picker-input-copied-bg: rgba(10, 102, 0, 0.3);
+  --picker-input-copied-box-shadow: rgba(140, 255, 127, 0.1) 0 1px 0, rgba(0,0,0,0.8) 0 1px 7px 0px inset;
+  --picker-input-copied-color: #27ff0f;
+
+  --picker-thumb-box-shadow: 
+    0 0 0 3px rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.3) inset,
+    0 0 0 3px rgba(255, 255, 255, 1) inset,
+    0 0 0 4px rgb(0 0 0 / 0.5) inset,
+    0 0 0 1px rgb(0 0 0 / 0.5);
+
+  --picker-thumb-box-shadow-hover: 
+    0 0 0 3px rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.1) inset,
+    0 0 0 3px rgba(255, 255, 255, 1) inset,
+    0 0 0 4px rgb(0 0 0 / 0.5) inset,
+    0 0 0 1px rgb(0 0 0 / 0.5);
+
+  --picker-dynamic-accent: hwb(var(--picker-hue) calc(clamp(0, var(--picker-white), 55) * 1%) calc(clamp(0, var(--picker-wblack), 35) * 1%));
+  --picker-dynamic-accent-footer: hwb(var(--picker-hue) 25% 0%);
+  --picker-dark-stripe: rgba(0,0,0,0.1);
+  --picker-text-shadow-color: rgba(0,0,0,0.5);
+  --picker-text-shadow: var(--picker-text-shadow-color) 0 2px 1px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  font-weight: 500;
+  color: var(--picker-dynamic-accent);
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+html {
+  background-image: linear-gradient(-45deg, 
+    var(--picker-dark-stripe) 25%,
+    rgba(0,0,0,0) 25%,
+    rgba(0,0,0,0) 50%,
+    var(--picker-dark-stripe) 50%,
+    var(--picker-dark-stripe) 75%,
+    rgba(0,0,0,0) 75%,
+    rgba(0,0,0,0)
+    );
+  background-size: 80px 80px; 
+}
+
+body {
+  margin: 0;
+  display: grid;
+  min-width: 220px;
+  min-height: 100vh;
+}
+
+footer {
+  text-align: left;
+  text-shadow: var(--picker-text-shadow);
+}
+.footer-links {
+  display: flex;
+  gap: 10px;
+  margin: 3em auto;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.footer-links * {
+  opacity: 0.8;
+}
+
+.footer-links a {
+  color: var(--picker-dynamic-accent-footer);
+}
+.footer-links a:hover {
+  color: var(--picker-dynamic-accent);
+  opacity: 1;
+  text-decoration: underline;
+}
+.footer-links .divider {
+  opacity: 0.2;
+  font-size: 1.3em;
+}
+
+.footer-links button {
+  appearance: none;
+  border: 0;
+  background: none;
+  font-size: inherit;
+  cursor: help;
+  padding: 0;
+  margin: 0;
+  text-shadow: var(--picker-text-shadow);
+}
+.footer-links button:hover {
+  color: var(--picker-dynamic-accent);
+}
+
+#explainer {
+  max-width: 630px;
+}
+#explainer[data-visible=false] {
+  display: none;
+}
+
+code {
+  font-family: system-mono;
+}
+code, h3 {
+  color: var(--picker-dynamic-accent-footer);
+}
+abbr {
+  opacity: 0.8;
+  cursor: help;
+  border-bottom: 1px dotted;
+}
+abbr:hover {
+  opacity: 1;
+  mix-blend-mode: screen;
+}
+
+@font-face {
+  font-family: system-mono;
+  font-style: normal;
+  font-weight: 400;
+  src: local('.SFNS-Mono'), local('ui-monospace'), local("Cascadia Mono"), local("Segoe UI Mono"), local("Ubuntu Mono"), local("Roboto Mono"), local("Menlo"), local("Monaco"), local("Consolas"), local("monospace");
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #efefef;
+    --picker-track-bg: rgba(0,0,0,0.05);
+    --picker-track-check: rgba(0,0,0,0.2);
+    --picker-track-box-shadow: 
+      rgba(0,0,0,0.3) 0 1px inset,
+      rgba(255,255,255,0.6) 0 1px;
+
+    --picker-slider-box-shadow: 
+      rgba(255,255,255,0.3) 0 1px 1px inset,
+      rgba(0,0,0,0.4) 0 0 0 1px;
+
+    --picker-input-box-shadow: #fff 0 1px 1px, rgba(0,0,0,0.2) 0 1px 5px 0px inset;
+    --picker-input-bg: rgba(0,0,0,0.05);
+    --picker-input-color: rgba(0,0,0,0.8);
+
+    --picker-input-invalid-bg: rgba(214 0 0 / 0.19);
+    --picker-input-invalid-box-shadow: rgba(214 0 0 / 0.1) 0 1px 0, rgba(138 0 0 / 0.8) 0 1px 7px 0px inset;
+    --picker-input-invalid-color: #d60000;
+
+    --picker-input-copied-bg: rgba(21 214 0 / 0.19);
+    --picker-input-copied-box-shadow: rgba(21 214 0 / 0.1) 0 1px 0, rgba(14 138 0 / 0.8) 0 1px 7px 0px inset;
+    --picker-input-copied-color: #11a800;
+
+    --picker-dark-stripe: rgba(0,0,0,0.03);
+    --picker-text-shadow-color: rgba(255,255,255,1);
+    --picker-text-shadow: var(--picker-text-shadow-color) 0 1px 1px;
+    --picker-dynamic-accent: hwb(var(--picker-hue) calc(clamp(0, var(--picker-white), 35) * 1%) calc(clamp(0, var(--picker-wblack), 45) * 1%));
+    --picker-dynamic-accent-footer: hwb(var(--picker-hue) 0% 25%);
+  }
+  a:hover {
+    color: #747bff;
+  }
+}

@@ -101,7 +101,7 @@ footer {
 .footer-links {
   display: flex;
   gap: 10px;
-  margin: 3em auto;
+  margin: 2em auto;
   justify-content: center;
   align-items: center;
   font-size: 0.9em;

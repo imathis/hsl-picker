@@ -156,6 +156,7 @@ abbr {
   opacity: 0.8;
   cursor: help;
   border-bottom: 1px dotted;
+  text-decoration: none;
 }
 abbr:hover {
   opacity: 1;

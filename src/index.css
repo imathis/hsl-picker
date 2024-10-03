@@ -46,13 +46,23 @@
     0 0 0 3px rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.3) inset,
     0 0 0 3px rgba(255, 255, 255, 1) inset,
     0 0 0 4px rgb(0 0 0 / 0.5) inset,
-    0 0 0 1px rgb(0 0 0 / 0.5);
+    0 0 0 1px rgb(0 0 0 / 0.5),
+    0 0 0 1px rgb(0 0 0 / .3);
 
   --picker-thumb-box-shadow-hover: 
     0 0 0 3px rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.1) inset,
     0 0 0 3px rgba(255, 255, 255, 1) inset,
     0 0 0 4px rgb(0 0 0 / 0.5) inset,
     0 0 0 1px rgb(0 0 0 / 0.5);
+
+  --picker-thumb-box-shadow-focus: 
+    0 0 0 3px rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.1) inset,
+    0 0 0 3px rgba(255, 255, 255, 1) inset,
+    0 0 0 4px rgb(0 0 0 / 0.5) inset,
+    0 0 0 1px rgb(0 0 0 / 0.5),
+    0 0 0 1px rgb(0 0 0 / 1),
+    0 0 0 4px hwb(var(--picker-hue) 25% 0%),
+    0 0 0 5px rgb(0 0 0 / .3);
 
   --picker-dynamic-accent: hwb(var(--picker-hue) calc(clamp(0, var(--picker-white), 55) * 1%) calc(clamp(0, var(--picker-wblack), 35) * 1%));
   --picker-dynamic-accent-footer: hwb(var(--picker-hue) 25% 0%);

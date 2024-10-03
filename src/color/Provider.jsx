@@ -6,8 +6,8 @@ import { colorPatterns, randomColor, Color } from './helpers'
 export const ColorProvider = (props) => {
   const color = React.useMemo(() => {
     return colorPatterns.hex.test(window.location.hash)
-      ? Color(window.location.hash).hsl
-      : randomColor()
+      ? window.location.hash
+      : null
   }, [])
   const value = useColorHooks({ color })
 

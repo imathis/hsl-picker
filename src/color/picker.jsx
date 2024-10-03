@@ -191,7 +191,7 @@ export const Picker = () => {
               <ColorSlider name="hue" max={360} step={1} onChange={setSliderInput} model="hsl" />
               <ColorSlider name="saturationl" onChange={setSliderInput} model="hsl" />
               <ColorSlider name="lightness" onChange={setSliderInput} model="hsl" />
-              <ColorSlider name="alpha" step={0.01} max={1} onChange={setSliderInput} model={color.model} />
+              <ColorSlider name="alpha" step={0.01} max={1} onChange={setSliderInput} model="hsl" />
               <CodeInput name="hsl" onChange={onChangeText} pattern={colorPatterns.hsl.source} />
             </div>
           ) : null }
@@ -201,7 +201,7 @@ export const Picker = () => {
               <ColorSlider name="hue" max={360} step={1} onChange={setSliderInput} model="hwb" />
               <ColorSlider name="white" onChange={setSliderInput} model="hwb" />
               <ColorSlider name="wblack" onChange={setSliderInput} model="hwb" />
-              <ColorSlider name="alpha" step={0.01} max={1} onChange={setSliderInput} model={color.model} />
+              <ColorSlider name="alpha" step={0.01} max={1} onChange={setSliderInput} model="hwb" />
               <CodeInput name="hwb" onChange={onChangeText} pattern={colorPatterns.hwb.source} />
             </div>
           ) : null }
@@ -211,7 +211,7 @@ export const Picker = () => {
               <ColorSlider name="red" onChange={setSliderInput} max={255} model="rgb" />
               <ColorSlider name="green" onChange={setSliderInput} max={255} model="rgb" />
               <ColorSlider name="blue" onChange={setSliderInput} max={255} model="rgb" />
-              <ColorSlider name="alpha" step={0.01} max={1} onChange={setSliderInput} model={color.model} />
+              <ColorSlider name="alpha" step={0.01} max={1} onChange={setSliderInput} model="rgb" />
               <CodeInput name="rgb" onChange={onChangeText} pattern={colorPatterns.rgb.source} />
             </div>
           ) : null }

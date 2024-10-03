@@ -199,8 +199,7 @@ const adjustColor = (color, prop, value, model = color.model) => {
   // If we are setting a color from a string all at once rgb, hex, hsla, hwb as a string
   const stringColor = Object.keys(validate).includes(prop)
   if (stringColor && validColor(value)) {
-    const newColor = Color(value, prop)
-    return Color(newColor[color.model])
+    return Color(value, prop)
   }
 
   if (prop === 'model' && Object.keys(validate).includes(value)) {

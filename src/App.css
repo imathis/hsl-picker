@@ -18,6 +18,11 @@ input[type=number] {
   border: none;
   transition: all .2s;
 }
+input[type=text]:focus,
+input[type=number]:focus {
+  outline: 3px solid rgba(59, 153, 252, 0.7);
+  outline-offset: 0px;
+}
 
 input:invalid {
   background: var(--picker-input-invalid-bg);
@@ -227,6 +232,10 @@ input[type=number] {
   -webkit-user-select: none;
   user-select: none;
 }
+.slider-choices input:focus + div {
+  outline: 3px solid rgba(59, 153, 252, 0.7);
+  outline-offset: 0px;
+}
 
 .slider-choices input + div:before {
   content: '';
@@ -275,7 +284,7 @@ input[type=number] {
   width: 100%;
 }
 
-.copy-code {
+button.copy-code {
   position: absolute;
   right: -1px;
   top: 0px;
@@ -286,8 +295,13 @@ input[type=number] {
   border: transparent;
   cursor: pointer;
 }
+button.copy-code:focus {
+  outline: 3px solid rgba(59, 153, 252, 0.7);
+  border-radius: 5px;
+  outline-offset: 0px;
+}
 
-.copy-code svg {
+button.copy-code svg {
   opacity: 0.5;
   fill: currentColor;
   transition: opacity .2s;
@@ -296,22 +310,15 @@ input[type=number] {
   position: relative;
 }
 
-.copy-code:hover svg {
+button.copy-code:hover svg {
   opacity: 1;
 }
 
-.copy-code[data-copied] svg {
+button.copy-code[data-copied] svg {
   fill: var(--picker-input-copied-color);
   opacity: 1;
 }
 
-/* .color-inputs { */
-/*   display: grid; */
-/*   gap: 8px; */
-/*   grid-auto-columns: minmax(150px, 250px); */
-/*   grid-auto-flow: column; */
-/* } */
-/**/
 .slider-track {
   height: 20px;
   background-image: 
@@ -323,7 +330,6 @@ input[type=number] {
   position: relative;
 }
 .slider-track::after {
-  /* content: ""; */
   z-index: -1;
   background: var(--picker-track-bg);
   position: absolute;
@@ -343,6 +349,10 @@ input[type="range"] {
   width: 100%;
   margin: 0;
 }
+input[type=range]:focus {
+  outline: none;
+}
+
 input[type=range][disabled] {
   opacity: 0.5;
 }
@@ -376,6 +386,10 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: 50%;
   cursor: ew-resize;
   box-shadow: var(--picker-thumb-box-shadow);
+}
+input[type=range]:focus::-webkit-slider-thumb {
+  outline: 3px solid rgba(59, 153, 252, 0.7);
+  outline-offset: 0px;
 }
 
 input[type="range"]:hover::-webkit-slider-thumb {

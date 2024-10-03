@@ -20,7 +20,7 @@ input[type=number] {
 }
 input[type=text]:focus,
 input[type=number]:focus {
-  outline: 3px solid rgba(59, 153, 252, 0.7);
+  outline: 3px solid var(--picker-input-focus-ring);
   outline-offset: 0px;
 }
 
@@ -233,7 +233,7 @@ input[type=number] {
   user-select: none;
 }
 .slider-choices input:focus + div {
-  outline: 3px solid rgba(59, 153, 252, 0.7);
+  outline: 3px solid var(--picker-input-focus-ring);
   outline-offset: 0px;
 }
 
@@ -296,7 +296,7 @@ button.copy-code {
   cursor: pointer;
 }
 button.copy-code:focus {
-  outline: 3px solid rgba(59, 153, 252, 0.7);
+  outline: 3px solid var(--picker-input-focus-ring);
   border-radius: 5px;
   outline-offset: 0px;
 }
@@ -388,7 +388,7 @@ input[type="range"]::-webkit-slider-thumb {
   box-shadow: var(--picker-thumb-box-shadow);
 }
 input[type=range]:focus::-webkit-slider-thumb {
-  outline: 3px solid rgba(59, 153, 252, 0.7);
+  outline: 3px solid var(--picker-input-focus-ring);
   outline-offset: 0px;
 }
 

@@ -56,6 +56,7 @@
 
   --picker-dynamic-accent: hwb(var(--picker-hue) calc(clamp(0, var(--picker-white), 55) * 1%) calc(clamp(0, var(--picker-wblack), 35) * 1%));
   --picker-dynamic-accent-footer: hwb(var(--picker-hue) 25% 0%);
+  --picker-input-focus-ring: hwb(var(--picker-hue) 25% 0%);
   --picker-dark-stripe: rgba(0,0,0,0.1);
   --picker-text-shadow-color: rgba(0,0,0,0.5);
   --picker-text-shadow: var(--picker-text-shadow-color) 0 2px 1px;
@@ -138,6 +139,11 @@ footer {
 .footer-links button:hover {
   color: var(--picker-dynamic-accent);
 }
+.footer-links button:focus {
+  outline: 3px solid var(--picker-input-focus-ring);
+  border-radius: 5px;
+  outline-offset: 3px;
+}
 
 #explainer {
   max-width: 630px;
@@ -200,6 +206,7 @@ abbr:hover {
     --picker-text-shadow: var(--picker-text-shadow-color) 0 1px 1px;
     --picker-dynamic-accent: hwb(var(--picker-hue) calc(clamp(0, var(--picker-white), 35) * 1%) calc(clamp(0, var(--picker-wblack), 45) * 1%));
     --picker-dynamic-accent-footer: hwb(var(--picker-hue) 0% 25%);
+    --picker-input-focus-ring: hwb(var(--picker-hue) 0% 25%);
   }
   a:hover {
     color: #747bff;

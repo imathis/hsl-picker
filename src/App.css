@@ -278,23 +278,30 @@ input[type=number] {
 .copy-code {
   position: absolute;
   right: -1px;
-  top: -3px;
+  top: 0px;
   bottom: 0;
   background: transparent;
   padding: 0 10px;
   font-size: 1.6em;
-  opacity: 0.5;
   border: transparent;
-  transition: all .2s;
   cursor: pointer;
 }
 
-.copy-code:hover {
+.copy-code svg {
+  opacity: 0.5;
+  fill: currentColor;
+  transition: opacity .2s;
+  transform: translateZ(0);
+  display: block;
+  position: relative;
+}
+
+.copy-code:hover svg {
   opacity: 1;
 }
 
-.copy-code[data-copied] {
-  color: var(--picker-input-copied-color);
+.copy-code[data-copied] svg {
+  fill: var(--picker-input-copied-color);
   opacity: 1;
 }
 

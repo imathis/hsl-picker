@@ -1,4 +1,5 @@
 import React from 'react'
+import { Color } from './helpers'
 
 const codeTextProps = {
   autoComplete: "off",
@@ -36,12 +37,16 @@ const useCopyText = () => {
 const Input = React.forwardRef(function Input({ onChange: onChangeProp, ...props }, ref) {
   const onChange = ({ target }) => {
     const { name, value } = target
-    if (name === 'hex' && value && !value.startsWith('#')) {
-      target.value = `#${value}`
-      onChange({ target })
+    if (target.checkValidity()) {
+      onChangeProp?.([name, value])
     } else {
-      if (target.checkValidity()) {
-        if (onChangeProp) { onChangeProp([name, value]) }
+      const validColor = Color(value)
+      if (validColor?.[name]) {
+        target.value = validColor[name]
+        onChange({ target })
+      } else if (name === 'hex' && value && !value.startsWith('#')) {
+        target.value = `#${value}`
+        onChange({ target })
       }
     }
   }

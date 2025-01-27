@@ -139,7 +139,6 @@ export const Picker = () => {
   }, [updateText, updateSliders, adjustColor])
 
   const onChangeText = React.useCallback(([name, value]) => {
-    console.log({ name, value })
     const newColor = setColor(value)
     updateText({ newColor, fromInput: name })
     updateSliders({ newColor })

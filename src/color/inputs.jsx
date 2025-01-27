@@ -38,9 +38,11 @@ const Input = React.forwardRef(function Input({ onChange: onChangeProp, ...props
     const { name, value } = target
     if (name === 'hex' && value && !value.startsWith('#')) {
       target.value = `#${value}`
-    }
-    if (target.checkValidity()) {
-      if (onChangeProp) { onChangeProp([name, value]) }
+      onChange({ target })
+    } else {
+      if (target.checkValidity()) {
+        if (onChangeProp) { onChangeProp([name, value]) }
+      }
     }
   }
   return <input

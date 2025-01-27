@@ -4,7 +4,7 @@ import { Color, randomColor, setRoot, colorModels, allColorParts } from './helpe
 
 const updateModelVars = ({ color }) => {
   allColorParts.forEach((part) => {
-    if (color[part]) setRoot(part, color[part])
+    if (color[part] !== undefined) setRoot(part, color[part])
   })
 }
 
@@ -33,7 +33,7 @@ export const useColorHooks = (options = {}) => {
   useUpdateUrl(color)
   const setColor = React.useCallback((c) => {
     let newColor = (typeof c === 'string') ? Color(c) : c
-    
+
     updateModelVars({ color: newColor })
     setColorValue(newColor)
     setRootColor(newColor)

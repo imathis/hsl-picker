@@ -5,7 +5,7 @@ export const colorModels = {
 }
 
 export const allColorParts = Object.values(colorModels).flat().reduce((acc, item) => {
- return acc.indexOf(item) < 0 ? [...acc, item] : acc
+  return acc.indexOf(item) < 0 ? [...acc, item] : acc
 }, [])
 
 const toString = {
@@ -15,7 +15,7 @@ const toString = {
   },
   hsl: ({ hue, saturation, luminosity, alpha }) => {
     const main = `${hue} ${saturation}% ${luminosity}%`
-    return alpha < 1 ? `hsla(${main} / ${alpha})` : `hsl(${main})` 
+    return alpha < 1 ? `hsla(${main} / ${alpha})` : `hsl(${main})`
   },
   rgb: ({ red, green, blue, alpha }) => {
     const main = [red, green, blue].join(' ')
@@ -75,17 +75,17 @@ const colorParts = (color, model = color.slice(0, 3)) => {
     if (model === 'hex' || color.startsWith('#')) return { hex: color }
     const arr = colorArray(color, model)
     return colorModels[model].reduce((acc, part, index) => {
-      return {...acc, [part]: arr[index] }
+      return { ...acc, [part]: arr[index] }
     }, {})
   } catch (e) {
     console.error(e)
     throw new Error(`Unsupported Color Error: Color \`${color}\` is not a supported color format.`)
-  } 
+  }
 }
 
 const rgbaToHex = ({ red, green, blue, alpha }) => {
   const colors = [red, green, blue]
-  if (alpha < 1) colors.push(alpha) 
+  if (alpha < 1) colors.push(alpha)
   return `#${colors.map(
     (n, i) => (i === 3 ? Math.round(parseFloat(n) * 255) : parseFloat(n)).toString(16).padStart(2, '0').replace('NaN', '')
   ).join('')}`
@@ -93,7 +93,7 @@ const rgbaToHex = ({ red, green, blue, alpha }) => {
 
 const toHslwb = ({ red, green, blue, alpha }) => {
   const r = red / 255
-  const g = green /255
+  const g = green / 255
   const b = blue / 255
 
   const max = Math.max(r, g, b)
@@ -110,7 +110,7 @@ const toHslwb = ({ red, green, blue, alpha }) => {
     w = min;
     wb = 1 - max
     s = l > 0.5 ? diff / (2 - max - min) : diff / (max + min)
-    
+
     if (max === r) {
       h = (g - b) / diff + (g < b ? 6 : 0)
     } else if (max === g) {
@@ -163,9 +163,9 @@ const testHxx = (color, model) => {
   if (!arr) return false
   const [hue, sw, lwb, alpha] = arr
   return inbound(hue, { max: 360 })
-      && inbound(sw)
-      && inbound(lwb)
-      && (typeof alpha === 'undefined' || inbound(alpha, { max: 1 }))
+    && inbound(sw)
+    && inbound(lwb)
+    && (typeof alpha === 'undefined' || inbound(alpha, { max: 1 }))
 }
 
 const testRgb = (color, model) => {
@@ -173,15 +173,15 @@ const testRgb = (color, model) => {
   if (!arr) return false
   const [r, g, b, alpha] = arr
   return inbound(r, { max: 255 })
-    && inbound(g, { max: 255 }) 
-    && inbound(b, { max: 255 }) 
+    && inbound(g, { max: 255 })
+    && inbound(b, { max: 255 })
     && (typeof alpha === 'undefined' || inbound(alpha, { max: 1 }))
 }
 
 export const validate = {
   hsl: (str) => testHxx(str, 'hsl'),
   hwb: (str) => testHxx(str, 'hwb'),
-  rgb: (str) => testRgb(str, 'rgb'), 
+  rgb: (str) => testRgb(str, 'rgb'),
   hex: (str) => isColor.hex(str),
 }
 
@@ -211,7 +211,7 @@ export const Color = (
     const rgb = toRgb(color)
     const hslwb = toHslwb(rgb)
     const current = colorParts(color, model === 'hex' ? 'rgb' : model)
-    const colorObj = { 
+    const colorObj = {
       model,
       ...hslwb,
       ...rgb,
@@ -223,8 +223,8 @@ export const Color = (
     return {
       ...colorObj,
       set: (args) => setColorProperty(colorObj, args),
-      toString: (model) => model 
-        ? toString[model](color) 
+      toString: (model) => model
+        ? toString[model](color)
         : colorObj[colorObj.model],
     }
   } catch (e) {
@@ -233,5 +233,5 @@ export const Color = (
 }
 
 export const randomColor = () => {
-  return Color(`hsl(${getRandom(0,360)} 100% 50%)`)
+  return Color(`hsl(${getRandom(0, 360)} 100% 50%)`)
 }

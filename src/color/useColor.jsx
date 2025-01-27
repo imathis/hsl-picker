@@ -4,7 +4,7 @@ import { Color, randomColor, setRoot, colorModels, allColorParts } from './helpe
 
 const updateModelVars = ({ color }) => {
   allColorParts.forEach((part) => {
-    setRoot(part, color[part])
+    if (color[part]) setRoot(part, color[part])
   })
 }
 
@@ -28,34 +28,17 @@ const useUpdateUrl = (color) => {
 
 export const useColorHooks = (options = {}) => {
   const { color: initialColor = null } = options
-  const [model, setModelValue] = React.useState()
   const [color, setColorValue] = React.useState()
 
   useUpdateUrl(color)
-
-  const setModel = React.useCallback((m, c = color) => {
-    if (colorModels[m]) { 
-      setRoot('model', m)
-      setModelValue(m) 
-      const newColor = c.adjust('model', m)
-      setColorValue(newColor)
-      if (color && color.model !== m) updateModelVars({ color: newColor })
-    }
-  }, [color, setColorValue])
-
   const setColor = React.useCallback((c) => {
     let newColor = (typeof c === 'string') ? Color(c) : c
     
-    // Initially there won't be a model, so set it
-    if (!model && colorModels[newColor.model]) {
-      setModel(newColor.model, newColor)
-    }
-
     updateModelVars({ color: newColor })
     setColorValue(newColor)
     setRootColor(newColor)
     return newColor
-  }, [model, setModel])
+  }, [])
 
   React.useEffect(() => {
     if (!color) {
@@ -63,14 +46,12 @@ export const useColorHooks = (options = {}) => {
     }
   }, [color, setColor, initialColor])
 
-  const adjustColor = React.useCallback((...args) => {
-    return setColor(color.adjust(...args))
+  const adjustColor = React.useCallback((args) => {
+    return setColor(color.set(args))
   }, [setColor, color])
 
   return {
-    model,
     colorModels,
-    setModel,
     color,
     setColor,
     adjustColor,

@@ -1,6 +1,6 @@
 export const colorModels = {
-  hsl: ['hue', 'saturationl', 'lightness', 'alpha'],
-  hwb: ['hue', 'white', 'wblack', 'alpha'],
+  hsl: ['hue', 'saturation', 'luminosity', 'alpha'],
+  hwb: ['hue', 'whiteness', 'blackness', 'alpha'],
   rgb: ['red', 'green', 'blue', 'alpha'],
 }
 
@@ -9,12 +9,12 @@ export const allColorParts = Object.values(colorModels).flat().reduce((acc, item
 }, [])
 
 const toString = {
-  hwb: ({ hue, white, wblack, alpha }) => {
-    const main = `${hue} ${white}% ${wblack}%`
+  hwb: ({ hue, whiteness, blackness, alpha }) => {
+    const main = `${hue} ${whiteness}% ${blackness}%`
     return alpha < 1 ? `hwb(${main} / ${alpha})` : `hwb(${main})`
   },
-  hsl: ({ hue, saturationl, lightness, alpha }) => {
-    const main = `${hue} ${saturationl}% ${lightness}%`
+  hsl: ({ hue, saturation, luminosity, alpha }) => {
+    const main = `${hue} ${saturation}% ${luminosity}%`
     return alpha < 1 ? `hsla(${main} / ${alpha})` : `hsl(${main})` 
   },
   rgb: ({ red, green, blue, alpha }) => {
@@ -91,10 +91,10 @@ const rgbaToHex = ({ red, green, blue, alpha }) => {
   ).join('')}`
 }
 
-const toHslwb = ({ red: r, green: g, blue: b, alpha: a }) => {
-  r /= 255
-  g /= 255
-  b /= 255
+const toHslwb = ({ red, green, blue, alpha }) => {
+  const r = red / 255
+  const g = green /255
+  const b = blue / 255
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
@@ -128,7 +128,7 @@ const toHslwb = ({ red: r, green: g, blue: b, alpha: a }) => {
   w = Math.round(w * 1000) / 10
   wb = Math.round(wb * 1000) / 10
 
-  const obj = { hue: h, saturationl: s, lightness: l, white: w, wblack: wb, alpha: a }
+  const obj = { hue: h, saturation: s, luminosity: l, whiteness: w, blackness: wb, alpha }
 
   const hsl = toString.hsl(obj)
   const hwb = toString.hwb(obj)
@@ -195,24 +195,15 @@ export const colorModel = (str) => {
 
 export const validColor = (str) => !!colorModel(str)
 
-const adjustColor = (color, prop, value, model = color.model) => {
-  // If we are setting a color from a string all at once rgb, hex, hsla, hwb as a string
-  const stringColor = Object.keys(validate).includes(prop)
-  if (stringColor && validColor(value)) {
-    return Color(value, prop)
-  }
-
-  if (prop === 'model' && Object.keys(validate).includes(value)) {
-    return Color(color[value], value)
-  }
-
-  // Setting individual attributes of a color
-  return Color(toString[model]({ ...color, [prop]: value }), model)
-}
-
 export const Color = (
   color, m,
 ) => {
+  if (!color) return
+  const setColorProperty = (color, { model = color.model, ...adj }) => {
+    // Setting individual attributes of a color
+    const str = toString[model]({ ...color, ...adj })
+    return Color(str, model)
+  }
   try {
     const model = m || colorModel(color)
     if (!model) throw new Error(`No matching color model found for ${color}`)
@@ -231,8 +222,10 @@ export const Color = (
 
     return {
       ...colorObj,
-      adjust: (...args) => adjustColor(colorObj, ...args),
-      toString: () => colorObj[colorObj.model],
+      set: (args) => setColorProperty(colorObj, args),
+      toString: (model) => model 
+        ? toString[model](color) 
+        : colorObj[colorObj.model],
     }
   } catch (e) {
     console.error(e.message)

@@ -1,7 +1,7 @@
 import React from 'react'
+import { allColorParts, colorPatterns, setRoot } from './helpers'
+import { CodeInput, Input } from './inputs'
 import { useColor } from './useColor'
-import { Input, CodeInput } from './inputs'
-import { setRoot, colorPatterns, allColorParts } from './helpers'
 
 const setValue = (name, value) => {
   Array.prototype.forEach.call(document.querySelectorAll(`[name=${name}]`), (el) => {
@@ -17,7 +17,7 @@ const trackBg = ({
 }) => {
   const grad = []
   const propVal = (prop, i) => typeof prop === 'function' ? prop(i) : prop
-  for (let i=0; i < steps; i += 1) {
+  for (let i = 0; i < steps; i += 1) {
     const vals = props.map((val) => propVal(val, i)).join(' ')
     if (alpha) {
       grad.push(`${type}(${vals} / ${propVal(alpha, i)})`)
@@ -29,32 +29,32 @@ const trackBg = ({
   return `linear-gradient(to right, ${grad.join(', ')})`
 }
 const hslBg = ({
-  hue   = 'var(--picker-hue)',
-  sat   = 'calc(var(--picker-saturationl) * 1%)',
-  lig   = 'calc(var(--picker-lightness) * 1%)',
+  hue = 'var(--picker-hue)',
+  sat = 'calc(var(--picker-saturation) * 1%)',
+  lig = 'calc(var(--picker-luminosity) * 1%)',
   ...props
 }) => trackBg({ type: 'hsl', props: [hue, sat, lig], ...props })
 
 const hwbBg = ({
-  hue    = 'var(--picker-hue)',
-  white  = 'calc(var(--picker-white) * 1%)',
-  wblack = 'calc(var(--picker-wblack) * 1%)',
+  hue = 'var(--picker-hue)',
+  whiteness = 'calc(var(--picker-whiteness) * 1%)',
+  blackness = 'calc(var(--picker-blackness) * 1%)',
   ...props
-}) => trackBg({ type: 'hwb', props: [hue, white, wblack], ...props })
+}) => trackBg({ type: 'hwb', props: [hue, whiteness, blackness], ...props })
 
 const rgbBg = ({
-  red   = 'var(--picker-red)',
+  red = 'var(--picker-red)',
   green = 'var(--picker-green)',
-  blue  = 'var(--picker-blue)',
+  blue = 'var(--picker-blue)',
   steps = 255,
   ...props
 }) => trackBg({ type: 'rgba', props: [red, green, blue], steps, ...props })
 
 const rainbowBg = () => {
-  const hue   = (v) => v * 36
-  const sat   = 'calc(clamp(35, var(--picker-saturationl), 60) * 1%)'
-  const lig   = 'calc(clamp(55, var(--picker-lightness), 70) * 1%)'
-  return trackBg({ 
+  const hue = (v) => v * 36
+  const sat = 'calc(clamp(35, var(--picker-saturation), 60) * 1%)'
+  const lig = 'calc(clamp(55, var(--picker-luminosity), 70) * 1%)'
+  return trackBg({
     type: 'hsl',
     props: [hue, sat, lig],
     steps: 10,
@@ -65,14 +65,14 @@ const rainbowBg = () => {
 const background = {
   hsl: {
     hue: hslBg({ hue: (v) => v, steps: 360 }),
-    saturationl: hslBg({ sat: (s) => s ? '100%' : '0%', steps: 2 }),
-    lightness: hslBg({ lig: (l) => `${l * 50}%`, steps: 3 }),
+    saturation: hslBg({ sat: (s) => s ? '100%' : '0%', steps: 2 }),
+    luminosity: hslBg({ lig: (l) => `${l * 50}%`, steps: 3 }),
     alpha: hslBg({ alpha: (v) => v, steps: 2 }),
   },
   hwb: {
     hue: hwbBg({ hue: (v) => v, steps: 360 }),
-    white: hwbBg({ white: (v) => `${v * 100}%`, steps: 2 }),
-    wblack: hwbBg({ wblack: (v) => `${v * 100}%`, steps: 2 }),
+    whiteness: hwbBg({ whiteness: (v) => `${v * 100}%`, steps: 2 }),
+    blackness: hwbBg({ blackness: (v) => `${v * 100}%`, steps: 2 }),
     alpha: hwbBg({ alpha: (v) => v, steps: 2 }),
   },
   rgb: {
@@ -112,7 +112,7 @@ export const Picker = () => {
       rgb: newColor.rgb,
       hex: newColor.hex,
     }
-    Object.entries(inputs).filter(([k])=> k !== fromInput).forEach(([k, v]) => {
+    Object.entries(inputs).filter(([k]) => k !== fromInput).forEach(([k, v]) => {
       setValue(k, v)
     })
   }, [])
@@ -133,17 +133,17 @@ export const Picker = () => {
     const colorProp = name.replace('Num', '')
     const matchingVal = name.includes('Num') ? colorProp : `${name}Num`
     setValue(matchingVal, value)
-    const newColor = adjustColor(colorProp, value, model)
+    const newColor = adjustColor({ [colorProp]: value, model })
     updateText({ newColor })
     updateSliders({ newColor, fromInput: name })
   }, [updateText, updateSliders, adjustColor])
 
   const onChangeText = React.useCallback(([name, value]) => {
-    const newColor = adjustColor(name, value)
-    setColor(newColor)
+    console.log({ name, value })
+    const newColor = setColor(value)
     updateText({ newColor, fromInput: name })
     updateSliders({ newColor })
-  }, [setColor, adjustColor, updateText, updateSliders])
+  }, [setColor, updateText, updateSliders])
 
   const showSlider = (name) => () => {
     let showFunction
@@ -154,7 +154,7 @@ export const Picker = () => {
       if (!showing) return true
       if ([showHsl, showRgb, showHwb].filter((v) => v).length > 1) {
         return false
-      } 
+      }
       return true
     })
     window.setTimeout(() => {
@@ -186,27 +186,27 @@ export const Picker = () => {
           <CodeInput name="hex" onChange={onChangeText} pattern={colorPatterns.hex.source} />
         </div>
         <div className="color-pickers">
-          { showHsl ? (
+          {showHsl ? (
             <div className="color-picker">
               <ColorSlider name="hue" max={360} step={1} onChange={setSliderInput} model="hsl" />
-              <ColorSlider name="saturationl" onChange={setSliderInput} model="hsl" />
-              <ColorSlider name="lightness" onChange={setSliderInput} model="hsl" />
+              <ColorSlider name="saturation" onChange={setSliderInput} model="hsl" />
+              <ColorSlider name="luminosity" onChange={setSliderInput} model="hsl" />
               <ColorSlider name="alpha" step={0.01} max={1} onChange={setSliderInput} model="hsl" />
               <CodeInput name="hsl" onChange={onChangeText} pattern={colorPatterns.hsl.source} />
             </div>
-          ) : null }
+          ) : null}
 
-          { showHwb ? (
+          {showHwb ? (
             <div className="color-picker">
               <ColorSlider name="hue" max={360} step={1} onChange={setSliderInput} model="hwb" />
-              <ColorSlider name="white" onChange={setSliderInput} model="hwb" />
-              <ColorSlider name="wblack" onChange={setSliderInput} model="hwb" />
+              <ColorSlider name="whiteness" onChange={setSliderInput} model="hwb" />
+              <ColorSlider name="blackness" onChange={setSliderInput} model="hwb" />
               <ColorSlider name="alpha" step={0.01} max={1} onChange={setSliderInput} model="hwb" />
               <CodeInput name="hwb" onChange={onChangeText} pattern={colorPatterns.hwb.source} />
             </div>
-          ) : null }
+          ) : null}
 
-          { showRgb ? (
+          {showRgb ? (
             <div className="color-picker">
               <ColorSlider name="red" onChange={setSliderInput} max={255} model="rgb" />
               <ColorSlider name="green" onChange={setSliderInput} max={255} model="rgb" />
@@ -214,7 +214,7 @@ export const Picker = () => {
               <ColorSlider name="alpha" step={0.01} max={1} onChange={setSliderInput} model="rgb" />
               <CodeInput name="rgb" onChange={onChangeText} pattern={colorPatterns.rgb.source} />
             </div>
-          ) : null }
+          ) : null}
         </div>
       </div>
     </div>

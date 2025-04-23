@@ -8,18 +8,18 @@ input {
   max-width: 100%;
 }
 
-input[type=text],
-input[type=number] {
+input[type="text"],
+input[type="number"] {
   color: var(--picker-input-color);
   box-shadow: var(--picker-input-box-shadow);
   background-color: var(--picker-input-bg);
   text-shadow: var(--picker-text-shadow);
   border-radius: 5px;
   border: none;
-  transition: all .2s;
+  transition: all 0.2s;
 }
-input[type=text]:focus,
-input[type=number]:focus {
+input[type="text"]:focus,
+input[type="number"]:focus {
   outline: 3px solid var(--picker-input-focus-ring);
   outline-offset: 0px;
 }
@@ -35,25 +35,25 @@ input[data-copied] {
   color: var(--picker-input-copied-color);
 }
 
-input[type=text] {
+input[type="text"] {
   text-align: center;
   padding: 8px 0.6em;
   font-size: 1em;
 }
 
-input[type=number] {
+input[type="number"] {
   text-align: right;
   padding: 3px 4px;
   font-size: 0.9em;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-input[type=number] {
+input[type="number"] {
   display: none;
 }
 
@@ -88,10 +88,10 @@ input[type=number] {
   font-size: 3.2em;
   line-height: 0.8em;
   margin: -5px 0 5px;
-  font-family: 'Raleway', serif;
+  font-family: "Raleway", serif;
   font-weight: 800;
   line-height: 1em;
-  text-shadow: 
+  text-shadow:
     var(--picker-dynamic-accent) 0px 1px 0px,
     var(--picker-dynamic-accent) 0px 2px 0px,
     var(--picker-dynamic-accent) 0px 3px 0px,
@@ -101,7 +101,7 @@ input[type=number] {
     rgba(0, 0, 0, 0.3) 0px 0px 10px,
     rgba(0, 0, 0, 0.4) 0px 3px 5px,
     rgba(0, 0, 0, 0.5) 0px 6px 5px;
-    /* rgba(0, 0, 0, 0.6) 0px 10px 10px; */
+  /* rgba(0, 0, 0, 0.6) 0px 10px 10px; */
 }
 .preamble {
   font-size: 1.25em;
@@ -117,18 +117,18 @@ input[type=number] {
   box-shadow: var(--picker-text-shadow-color) 0 1px 1px;
   position: relative;
   top: -0.3em;
-  margin: 0 .5em;
+  margin: 0 0.5em;
 }
 
 .credit {
-  font-size: .7em;
-  color: rgba(255,255,255, 0.3);
+  font-size: 0.7em;
+  color: rgba(255, 255, 255, 0.3);
   font-style: normal;
   display: block;
   margin: 0;
   text-transform: uppercase;
   font-weight: normal;
-  letter-spacing: .4em;
+  letter-spacing: 0.4em;
   background: var(--picker-dynamic-accent);
   background-clip: text;
   -webkit-background-clip: text;
@@ -144,15 +144,15 @@ input[type=number] {
 }
 
 .credit a {
-  color: rgba(255,255,255, 0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 @media (prefers-color-scheme: light) {
   .credit {
-    color: rgba(0,0,0, 0.3);
+    color: rgba(0, 0, 0, 0.3);
   }
   .credit a {
-    color: rgba(0,0,0, 0.4);
+    color: rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -172,7 +172,7 @@ input[type=number] {
     font-size: 3.8em;
   }
 
-  input[name=hex] {
+  input[name="hex"] {
     text-align: left;
   }
   .main {
@@ -186,7 +186,7 @@ input[type=number] {
     grid-auto-flow: column;
     align-items: center;
   }
-  input[type=number] {
+  input[type="number"] {
     display: initial;
   }
 }
@@ -194,7 +194,7 @@ input[type=number] {
 @media screen and (min-width: 740px) {
   .preamble:before,
   .preamble:after {
-    content: '';
+    content: "";
   }
 }
 
@@ -209,7 +209,7 @@ input[type=number] {
   cursor: pointer;
 }
 
-.slider-choices input[type='checkbox'] {
+.slider-choices input[type="checkbox"] {
   appearance: none;
   border: 0;
   padding: 0;
@@ -238,17 +238,16 @@ input[type=number] {
 }
 
 .slider-choices input + div:before {
-  content: '';
+  content: "";
   position: absolute;
   width: 9px;
   height: 9px;
   border-radius: 50%;
   left: 9px;
   top: 8px;
-  box-shadow: 
-    0 0 0 2px var(--picker-dynamic-accent);
+  box-shadow: 0 0 0 2px var(--picker-dynamic-accent);
   opacity: 0.6;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
 
 @media (prefers-color-scheme: light) {
@@ -304,7 +303,7 @@ button.copy-code:focus {
 button.copy-code svg {
   opacity: 0.5;
   fill: currentColor;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
   transform: translateZ(0);
   display: block;
   position: relative;
@@ -321,11 +320,12 @@ button.copy-code[data-copied] svg {
 
 .slider-track {
   height: 20px;
-  background-image: 
-    var(--picker-track-check-gradient),
-    var(--picker-track-check-gradient);
+  background-image:
+    var(--picker-track-check-gradient), var(--picker-track-check-gradient);
   background-size: 20px 20px;
-  background-position: 0px 0px, 10px 10px;
+  background-position:
+    0px 0px,
+    10px 10px;
   border-radius: 15px;
   position: relative;
 }
@@ -343,29 +343,32 @@ button.copy-code[data-copied] svg {
 
 input[type="range"] {
   -webkit-appearance: none;
+  appearance: none;
   box-shadow: var(--picker-slider-box-shadow);
   height: 20px;
   border-radius: 15px;
   width: 100%;
   margin: 0;
 }
-input[type=range]:focus {
+input[type="range"]:focus {
   outline: none;
 }
 
-input[type=range][disabled] {
+input[type="range"][disabled] {
   opacity: 0.5;
 }
 
-input[type=range]::-webkit-slider-runnable-track  {
+input[type="range"]::-webkit-slider-runnable-track {
   -webkit-appearance: none;
+  appearance: none;
   box-shadow: none;
   border: none;
   background: transparent;
 }
 
-input[type=range]::-moz-range-track {
+input[type="range"]::-moz-range-track {
   -webkit-appearance: none;
+  appearance: none;
   box-shadow: none;
   border: none;
   background: transparent;
@@ -373,6 +376,7 @@ input[type=range]::-moz-range-track {
 
 input[type="range"]::-ms-track {
   -webkit-appearance: none;
+  appearance: none;
   box-shadow: none;
   border: none;
   background: transparent;
@@ -385,7 +389,7 @@ input[type="range"]::-webkit-slider-thumb {
   width: 25px;
   border-radius: 50%;
   cursor: ew-resize;
-  transition: box-shadow .2s;
+  transition: box-shadow 0.2s;
   box-shadow: var(--picker-thumb-box-shadow);
 }
 
@@ -393,7 +397,7 @@ input[type="range"]:hover::-webkit-slider-thumb {
   box-shadow: var(--picker-thumb-box-shadow-hover);
 }
 
-input[type=range]:focus::-webkit-slider-thumb {
+input[type="range"]:focus::-webkit-slider-thumb {
   box-shadow: var(--picker-thumb-box-shadow-focus);
 }
 
@@ -414,4 +418,3 @@ input[type="range"]::-ms-thumb {
   cursor: ew-resize;
   box-shadow: var(--picker-thumb-box-shadow);
 }
-

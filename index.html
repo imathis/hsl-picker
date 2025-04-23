@@ -1,98 +1,131 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="An excellent HSL, HWB, and RGB color picker, written in React on Vite and fully open source."
+    />
+    <meta property="og:site_name" content="HSL Color Picker" />
+    <meta property="og:title" content="HSL Color Picker" />
+    <meta property="og:url" content="https://hslpicker.com" />
+    <meta property="og:image" content="https://hslpicker.com/hslpicker.png" />
+    <meta
+      property="og:description"
+      content="An excellent color picker for the web, using HSL, HWB, and RGB color modes. It's open source and written in React on Vite."
+    />
+    <title>HSL Color Picker</title>
+    <script type="application/javascript">
+      function toggleExplainer(event) {
+        const explainer = document.querySelector("#explainer");
+        explainer.dataset.visible =
+          explainer.dataset.visible == "false" ? true : false;
+      }
+    </script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
-  <link rel="shortcut icon" type="image/png" href="/favicon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;800&display=swap" rel="stylesheet">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="description" content="An excellent HSL, HWB, and RGB color picker, written in React on Vite and fully open source." />
-  <meta property="og:site_name" content="HSL Color Picker" />
-  <meta property="og:title" content="HSL Color Picker" />
-  <meta property="og:url" content="https://hslpicker.com" />
-  <meta property="og:image" content="https://hslpicker.com/hslpicker.png" />
-  <meta property="og:description" content="An excellent color picker for the web, using HSL, HWB, and RGB color modes. It's open source and written in React on Vite." />
-  <title>HSL Color Picker</title>
-  <script type="application/javascript">
-    function toggleExplainer(event) {
-      const explainer = document.querySelector('#explainer')
-      explainer.dataset.visible = explainer.dataset.visible == 'false' ? true : false
-    }
-  </script>
-</head>
-
-<body>
-  <div id="app">
-    <header class="banner">
-      <div class="preamble">A Most Excellent</div>
-      <h1>HSL Color Picker</h1>
-      <div class="credit">Created for your enjoyment by <a rel="noreferrer" href="https://x.com/imathis"
-          target="_blank">Brandon&nbsp;Mathis</a></div>
-    </header>
-    <div>
-      <div id="root" />
-      <script type="module" src="/src/main.jsx"></script>
+  <body>
+    <div id="app">
+      <header class="banner">
+        <div class="preamble">A Most Excellent</div>
+        <h1>HSL Color Picker</h1>
+        <div class="credit">
+          Created for your enjoyment by
+          <a rel="noreferrer" href="https://x.com/imathis" target="_blank"
+            >Brandon&nbsp;Mathis</a
+          >
+        </div>
+      </header>
+      <div>
+        <div id="root" />
+        <script type="module" src="/src/main.tsx"></script>
+      </div>
+      <footer>
+        <div class="footer-links">
+          <span>
+            <a href="https://github.com/imathis/hsl-picker">Source</a>
+            &copy; 2025
+            <a rel="noreferrer" href="https://x.com/imathis">Brandon Mathis</a>
+          </span>
+          <span class="divider">|</span>
+          <button onclick="toggleExplainer()">HSL vs HWB?</button>
+        </div>
+        <div id="explainer" data-visible="false">
+          <h3>HSL &amp; HWB: Hue</h3>
+          <p>
+            In both <abbr title="Hue, Saturation, Luminosity">HSL</abbr> and
+            <abbr title="Hue, Whiteness, Blackness">HWB</abbr>
+            we can describe and manipulate colors in a very natural way. The hue
+            property ranges from 0 to 360 letting us select our base color. For
+            example, red shows up at 0, yellow at 50, and orange naturally
+            resides between them at 25 degrees.
+          </p>
+          <p>
+            With the HSL model, a pure red is at <code>hsl(0 100% 50%)</code>.
+            In HWB however, a pure red is <code>hwb(0 0 0)</code>. Read on to
+            learn the differences beteen these two models.
+          </p>
+          <h3>HSL: Saturation &amp; Luminosity</h3>
+          <p>
+            Saturation is a percentage that describes the amount of hue in our
+            color. Starting with our pure red at
+            <code>hsl(0 100% 50%)</code>, as we reduce the saturation our color
+            will become more and more gray. At 0% saturation the hue will not be
+            evident in the color at all, leaving us with a grayscale spectrum.
+            At 100% we will have the full brilliance of the hue availabe to our
+            color mix.
+          </p>
+          <p>
+            Luminosity is a percentage which allows us to tweak the amount of
+            white or black added to our color mix. Again, given our pure red
+            <code>hsl(0 100% 50%)</code>, our luminosity is at 50%. As we reduce
+            the luminosity our color darkens until it becomes black at 0%. As
+            you would expect, when we increase the luminosity our red becomes
+            pink and eventually white at 100% luminosity.
+          </p>
+          <h3>HWB: Whiteness &amp; Blackness</h3>
+          <p>
+            Whiteness, as you‘d expect, ligthens a color as you increase it from
+            0% to 100%. And as it would follow Blackness adds black to your
+            color. A color with 0% blackness and 100% whiteness will always be
+            white. As you increase the blackness, the color will become more
+            gray. Let‘s look at our pure red again. In HWB it is
+            <code>hwb(0, 0, 0)</code>. If we want to make it more pink, we need
+            to add whiteness. If we want to desaturate it a bit we can add some
+            blackness too, which will make it appear more of a smokey pink.
+          </p>
+          <h3>Which to use?</h3>
+          <p>
+            HSL came first to the web, rescuing us from the misery of picking
+            colors in HEX (#c0ff33 anyone?) or RGB. HSL was instantly a better
+            choice and lead me to create this website to help people understand
+            how HSL worked. However, if you‘ve spent much time using graphics
+            applications you may be familiar with HWB‘s cousin
+            <abbr title="Hue, Saturation, Brightness">HSB</abbr>. If that is
+            what you‘re used to, HWB will feel very familiar to you. With
+            excellent browser support you will be fine with either choice.
+          </p>
+          <h3>WAIT A MINUTE, Eight Character Hex Colors???</h3>
+          <p>
+            Yea pretty neat huh? It turns out hex colors support alpha. You can
+            even have four character hex colors. Just like <code>#F3A</code> is
+            shorthand for <code>#FF33AA</code> so the color
+            <code>#F3A0</code> is a transparent pink which expands to
+            <code>#FF33AA00</code>.
+          </p>
+        </div>
+      </footer>
     </div>
-    <footer>
-      <div class="footer-links">
-        <span>
-          <a href="https://github.com/imathis/hsl-picker">Source</a>
-          &copy; 2024 <a rel='noreferrer' href="https://x.com/imathis">Brandon Mathis</a>
-        </span>
-        <span class="divider">|</span>
-        <Button onclick="toggleExplainer()">HSL vs HWB?</Button>
-      </div>
-      <div id="explainer" data-visible='false'>
-        <h3>HSL &amp; HWB: Hue</h3>
-        <p>
-          In both <abbr title="Hue, Saturation, Luminosity">HSL</abbr> and <abbr title="Hue, Whiteness, Blackness">HWB</abbr> 
-          we can describe and manipulate colors in a very natural way. The hue property ranges from 0 to 360 letting us select
-          our base color. For example, red shows up at 0, yellow at 50, and orange naturally resides between them at 25 degrees.
-        </p>
-        <p>
-          With the HSL model, a pure red is at <code>hsl(0 100% 50%)</code>. In HWB however, a pure red is <code>hwb(0 0 0)</code>.
-          Read on to learn the differences beteen these two models.
-        </p>
-        <h3>HSL: Saturation &amp; Luminosity</h3>
-        <p>
-          Saturation is a percentage that describes the amount of hue in our color. Starting with our pure red at
-          <code>hsl(0 100% 50%)</code>, as we reduce the saturation our color will become more and more gray.
-          At 0% saturation the hue will not be evident in the color at all, leaving us with a grayscale spectrum. At
-          100% we will have the full brilliance of the hue availabe to our color mix.
-        </p>
-        <p>
-          Luminosity is a percentage which allows us to tweak the amount of white or black added to our color mix.
-          Again, given our pure red <code>hsl(0 100% 50%)</code>, our luminosity is at 50%. As we reduce the luminosity
-          our color darkens until it becomes black at 0%.
-          As you would expect, when we increase the luminosity our red becomes pink and eventually white at 100%
-          luminosity.
-        </p>
-        <h3>HWB: Whiteness &amp; Blackness</h3>
-        <p>
-          Whiteness, as you‘d expect, ligthens a color as you increase it from 0% to 100%. And as it would follow
-          Blackness adds black to your color. A color with 0% blackness and 100% whiteness will always be white. As you
-          increase the blackness, the color will become more gray.
-          Let‘s look at our pure red again. In HWB it is <code>hwb(0, 0, 0)</code>. If we want to make it more pink, we
-          need to add whiteness. If we want to desaturate it a bit we can add some blackness too, which will make it
-          appear more of a smokey pink.
-        </p>
-        <h3>Which to use?</h3>
-        <p>
-          HSL came first to the web, rescuing us from the misery of picking colors in HEX (#c0ff33 anyone?) or RGB. HSL
-          was instantly a better choice and lead me to create this website to help people understand how HSL worked.
-          However, if you‘ve spent much time using graphics applications you may be familiar with HWB‘s cousin <abbr
-            title="Hue, Saturation, Brightness">HSB</abbr>. If that is what you‘re used to, HWB will feel very familiar
-          to you. With excellent browser support you will be fine with either choice.
-        </p>
-        <h3>WAIT A MINUTE, Eight Character Hex Colors???</h3>
-        <p>Yea pretty neat huh? It turns out hex colors support alpha. You can even have four character hex colors. Just
-          like <code>#F3A</code> is shorthand for <code>#FF33AA</code> so the color <code>#F3A0</code> is a transparent
-          pink which expands to <code>#FF33AA00</code>.
-      </div>
-    </footer>
-  </div>
-</body>
-
+  </body>
 </html>

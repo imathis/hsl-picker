@@ -1,10 +1,11 @@
 # HSL Color Picker
+https://hslpicker.com
 
-HSL picker is a fun side project that I use all the time to help pick colors or nudge a color to be just right. In version 2 I've added HWB color picking and four and eight digit HEX colors. It's now a modern React app built on the incredible [Vite](https://vitejs.dev) environment and it's way faster and more responsive.
+HSL picker is a fun side project that I use all the time to help pick colors or nudge a color to be just right. In version 2 I've added HWB color picking and four and eight digit HEX colors. It's now a modern Typescript/React app built on the incredible [Vite](https://vitejs.dev) environment and it's way faster and more responsive.
 
 ## License
 
-Copyright (c) 2011-2024 Brandon Mathis
+Copyright (c) 2011-2025 Brandon Mathis
 
 MIT License
 

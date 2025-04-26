@@ -12,6 +12,24 @@ export interface ColorContextType {
 }
 
 export const useColor = (): ColorContextType => {
-  const { color, setColor, adjustColor, colorModels } = useColorStore();
-  return { color, setColor, adjustColor, colorModels };
+  const colorModels = useColorStore((state) => state.colorModels);
+  const setColor = useColorStore((state) => state.setColor);
+  const adjustColor = useColorStore((state) => state.adjustColor);
+  const getColorObject = useColorStore((state) => state.getColorObject);
+
+  return {
+    colorModels,
+    color: getColorObject(),
+    setColor: (c: string | ColorObject) => {
+      setColor(c);
+      return getColorObject();
+    },
+    adjustColor: (args: {
+      [key: string]: string;
+      model: keyof ColorModel | "hex";
+    }) => {
+      adjustColor(args);
+      return getColorObject();
+    },
+  };
 };

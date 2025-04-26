@@ -10,7 +10,7 @@ import {
 import { colorModel, colorParts } from "./colorParsing";
 
 // Utility to format color objects as strings
-const toString = {
+export const toString = {
   hwb: ({ hue, whiteness, blackness, alpha }: HWBColor): string => {
     const main = `${hue} ${whiteness}% ${blackness}%`;
     return alpha !== undefined && alpha < 1

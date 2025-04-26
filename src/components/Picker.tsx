@@ -6,6 +6,7 @@ import { setRoot } from "../utils/cssUtils";
 import { background, rainbowBg } from "../utils/gradientUtils";
 import { CodeInput, Input } from "./Inputs";
 import { ColorModelPicker } from "./ColorModelPicker";
+import { useColorStore, ColorState } from "../utils/colorStore";
 
 const setValue = (name: string, value: string): void => {
   const elements = document.querySelectorAll<HTMLInputElement>(
@@ -34,6 +35,11 @@ const ColorSlider: React.FC<ColorSliderProps> = ({
   onChange,
   ...props
 }) => {
+  // Subscribe to only the specific color property needed for this slider
+  const currentValue = useColorStore(
+    (state) => state[name as keyof ColorState],
+  );
+
   const handleChange = ([name, value]: [string, string]) => {
     onChange(name, value, model);
   };
@@ -48,6 +54,7 @@ const ColorSlider: React.FC<ColorSliderProps> = ({
           min={0}
           max={100}
           step={1}
+          value={String(currentValue)} // Ensure the input reflects the current value
           onChange={handleChange}
           {...props}
           style={{ background: background[model][name], ...props.style }}
@@ -60,6 +67,7 @@ const ColorSlider: React.FC<ColorSliderProps> = ({
         min={0}
         max={100}
         step={0.1}
+        value={String(currentValue)} // Ensure the input reflects the current value
         onChange={handleChange}
         {...props}
       />

@@ -11,6 +11,7 @@ import { updateModelVars, setRootColor } from "../utils/cssUtils";
 import { randomColor } from "../utils/randomColor";
 import { colorPatterns, colorModels } from "../utils/colorParsing";
 import { createColorObject, toString } from "../utils/colorConversion";
+import { updateUrl } from "./urlUpdate";
 
 export interface ColorState {
   hue: number;
@@ -36,7 +37,7 @@ export const useColorStore = create<ColorState>((set, get) => {
   const updateCssAndUrl = (color: ColorObject) => {
     updateModelVars({ color });
     setRootColor(color);
-    window.location.hash = color.hex;
+    updateUrl(color.hex);
   };
 
   const createColorObjectFromState = (): ColorObject => {

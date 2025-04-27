@@ -66,10 +66,10 @@ const ColorSlider: React.FC<ColorSliderProps> = ({
         name={`${name}Num`}
         min={0}
         max={100}
-        step={0.1}
         value={String(currentValue)} // Ensure the input reflects the current value
         onChange={handleChange}
         {...props}
+        step={0.001}
       />
     </div>
   );
@@ -164,8 +164,6 @@ export const Picker: React.FC = () => {
       <ColorModelPicker
         visibleModels={visibleModels}
         setVisibleModels={setVisibleModels}
-        color={color}
-        updateInputs={updateInputs}
       />
       <div className="main">
         <div className="color-swatch-wrapper">

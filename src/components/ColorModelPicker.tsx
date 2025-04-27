@@ -6,15 +6,11 @@ interface ColorModelPickerProps {
   setVisibleModels: React.Dispatch<
     React.SetStateAction<Record<keyof ColorModel, boolean>>
   >;
-  color: ColorObject | null;
-  updateInputs: (newColor: ColorObject, fromInput?: string) => void;
 }
 
 export const ColorModelPicker: React.FC<ColorModelPickerProps> = ({
   visibleModels,
   setVisibleModels,
-  color,
-  updateInputs,
 }) => {
   const toggleModel = (model: keyof ColorModel) => {
     setVisibleModels((prev) => {
@@ -24,13 +20,6 @@ export const ColorModelPicker: React.FC<ColorModelPickerProps> = ({
       }
       return newState;
     });
-
-    // Update sliders and text inputs after toggling visibility
-    if (color) {
-      window.setTimeout(() => {
-        updateInputs(color);
-      }, 0);
-    }
   };
 
   return (

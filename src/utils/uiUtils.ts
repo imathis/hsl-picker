@@ -20,7 +20,7 @@ export const getRoot = (prop: string): string =>
  * Updates CSS custom properties with the current color values.
  * @param color - The color object containing properties to set.
  */
-export const updateModelVars = ({ color }: { color: ColorObject }): void => {
+const updateModelVars = (color: ColorObject): void => {
   // Iterate over color properties, excluding functions (like set and toString)
   Object.keys(color).forEach((part) => {
     if (color[part] !== undefined && typeof color[part] !== "function") {
@@ -29,10 +29,29 @@ export const updateModelVars = ({ color }: { color: ColorObject }): void => {
   });
 };
 
+// Debounce utility function
+function debounce<T extends (...args: any[]) => void>(
+  func: T,
+  wait: number,
+): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  return function (...args: Parameters<T>) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
+// Debounced URL update function
+export const updateUrl = debounce((colorHex: string) => {
+  window.history.replaceState({}, "", colorHex);
+}, 100); // 100ms delay
+
 /**
- * Sets the root CSS color variable to the current color's RGB value.
- * @param color - The color object to set.
+ * Updates CSS variables, root color, and URL with the current color.
+ * @param color - The ColorObject to apply.
  */
-export const setRootColor = (color: ColorObject): void => {
+export const updateUiColor = (color: ColorObject) => {
+  updateModelVars(color);
   setRoot("color", color.rgb);
+  updateUrl(color.hex);
 };

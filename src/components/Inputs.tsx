@@ -29,15 +29,21 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
       onChange([name, value]);
     } else {
       // If input is invalid, try to fix it
-      const validColor = createColorObject(value);
-      if (validColor?.[name]) {
-        // If the color object has a valid value for this field, use it
-        event.target.value = validColor[name];
-        onChange([name, event.target.value]);
-      } else if (name === "hex" && value && !value.startsWith("#")) {
-        // For hex inputs, automatically add "#" prefix if missing
-        event.target.value = `#${value}`;
-        onChange([name, event.target.value]);
+      try {
+        const validColor = createColorObject(value);
+        if (validColor?.[name]) {
+          // If the color object has a valid value for this field, use it
+          event.target.value = validColor[name];
+          onChange([name, event.target.value]);
+        }
+      } catch (e) {
+        if (name === "hex" && value && !value.startsWith("#")) {
+          // For hex inputs, automatically add "#" prefix if missing
+          event.target.value = `#${value}`;
+          onChange([name, event.target.value]);
+        } else {
+          console.error(`Invalid color: ${value}`);
+        }
       }
     }
   };

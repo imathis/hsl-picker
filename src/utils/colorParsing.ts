@@ -126,7 +126,7 @@ const inbound = (
  * @param model - The color model ("hsl" or "hwb").
  * @returns True if the color string is valid, false otherwise.
  */
-const testHxx = (color: string, model: keyof ColorModel): boolean => {
+const testHex = (color: string, model: keyof ColorModel): boolean => {
   const arr = colorArray(color, model);
   if (!arr) return false;
   const [hue, sw, lwb, alpha] = arr;
@@ -162,8 +162,8 @@ const testRgb = (color: string, model: keyof ColorModel): boolean => {
 export const validate: {
   [key in keyof ColorModel | "hex"]: (str: string) => boolean;
 } = {
-  hsl: (str: string) => testHxx(str, "hsl"),
-  hwb: (str: string) => testHxx(str, "hwb"),
+  hsl: (str: string) => testHex(str, "hsl"),
+  hwb: (str: string) => testHex(str, "hwb"),
   rgb: (str: string) => testRgb(str, "rgb"),
   hex: (str: string) => !!isColor.hex(str),
 };

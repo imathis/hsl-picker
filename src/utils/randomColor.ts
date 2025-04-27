@@ -1,5 +1,3 @@
-import { createColorObject } from "./colorConversion";
-
 /**
  * Generates a random number or string within a range.
  * @param min - Minimum value.
@@ -21,9 +19,3 @@ const getRandom = (
  * @returns A random HSL color string.
  */
 export const randomHsl = () => `hsl(${getRandom(0, 360)} 100% 50%)`;
-
-/**
- * Generates a random ColorObject.
- * @returns A random ColorObject.
- */
-export const randomColor = () => createColorObject(randomHsl());

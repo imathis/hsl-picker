@@ -1,12 +1,11 @@
-import React from "react";
-import { useColor } from "../hooks";
-import { ColorModel, ColorObject } from "../types";
+import React, { useEffect } from "react";
+import { useColorStore } from "../utils/colorStore";
+import { ColorModel } from "../types";
 import { allColorParts, colorPatterns } from "../utils/colorParsing";
-import { setRoot } from "../utils/cssUtils";
+import { setRoot } from "../utils"; // Corrected import path
 import { background, rainbowBg } from "../utils/gradientUtils";
 import { CodeInput, Input } from "./Inputs";
 import { ColorModelPicker } from "./ColorModelPicker";
-import { useColorStore, ColorState } from "../utils/colorStore";
 
 const setValue = (name: string, value: string): void => {
   const elements = document.querySelectorAll<HTMLInputElement>(
@@ -37,7 +36,7 @@ const ColorSlider: React.FC<ColorSliderProps> = ({
 }) => {
   // Subscribe to only the specific color property needed for this slider
   const currentValue = useColorStore(
-    (state) => state[name as keyof ColorState],
+    (state) => state[name as keyof typeof state],
   );
 
   const handleChange = ([name, value]: [string, string]) => {
@@ -109,13 +108,18 @@ const colorModelConfig: Record<
 };
 
 export const Picker: React.FC = () => {
-  const { color, adjustColor, setColor } = useColor();
-  const swatch = React.useRef<HTMLDivElement>(null);
+  const setColor = useColorStore((state) => state.setColor);
+  const adjustColor = useColorStore((state) => state.adjustColor);
   const [visibleModels, setVisibleModels] = React.useState<
     Record<keyof ColorModel, boolean>
   >({ hsl: true, hwb: false, rgb: false });
 
-  const updateInputs = (newColor: ColorObject, fromInput?: string) => {
+  const swatch = React.useRef<HTMLDivElement>(null);
+
+  const updateInputs = (
+    newColor: ReturnType<typeof useColorStore.getState>["colorObject"],
+    fromInput?: string,
+  ) => {
     const inputs = {
       hsl: newColor.hsl,
       hwb: newColor.hwb,
@@ -150,14 +154,23 @@ export const Picker: React.FC = () => {
     if (newColor) updateInputs(newColor, name);
   };
 
+  // Subscribe to colorObject changes outside the render cycle
   React.useEffect(() => {
-    if (color) {
-      updateInputs(color);
-      setRoot("rainbow", rainbowBg());
-    }
-  }, [color]);
+    // Initial update on mount
+    const initialColor = useColorStore.getState().colorObject;
+    updateInputs(initialColor);
+    setRoot("rainbow", rainbowBg());
 
-  if (!color) return null;
+    // Subscribe to state changes
+    const unsubscribe = useColorStore.subscribe((state) => {
+      const newColor = state.colorObject;
+      updateInputs(newColor);
+      setRoot("rainbow", rainbowBg());
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div>
@@ -176,10 +189,10 @@ export const Picker: React.FC = () => {
         </div>
         <div className="color-pickers">
           {Object.entries(visibleModels).map(
-            ([model, isVisible]) =>
+            ([modelKey, isVisible]) =>
               isVisible && (
-                <div key={model} className="color-picker">
-                  {colorModelConfig[model as keyof ColorModel].sliders.map(
+                <div key={modelKey} className="color-picker">
+                  {colorModelConfig[modelKey as keyof ColorModel].sliders.map(
                     ({ name, max, step }) => (
                       <ColorSlider
                         key={name}
@@ -187,15 +200,16 @@ export const Picker: React.FC = () => {
                         max={max}
                         step={step}
                         onChange={handleSliderChange}
-                        model={model as keyof ColorModel}
+                        model={modelKey as keyof ColorModel}
                       />
                     ),
                   )}
                   <CodeInput
-                    name={model}
+                    name={modelKey}
                     onChange={([name, value]) => handleTextChange(name, value)}
                     pattern={
-                      colorModelConfig[model as keyof ColorModel].pattern.source
+                      colorModelConfig[modelKey as keyof ColorModel].pattern
+                        .source
                     }
                   />
                 </div>

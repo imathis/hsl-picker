@@ -1,5 +1,18 @@
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    avenir next,
+    avenir,
+    segoe ui,
+    helvetica neue,
+    helvetica,
+    Cantarell,
+    Ubuntu,
+    roboto,
+    noto,
+    arial,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -12,63 +25,76 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  --picker-track-bg: rgba(0,0,0,0.5);
-  --picker-track-check: rgba(255,255,255,0.2);
+  --picker-track-bg: rgba(0, 0, 0, 0.5);
+  --picker-track-check: rgba(255, 255, 255, 0.2);
   --picker-track-check-alt: transparent;
-  --picker-track-check-gradient: linear-gradient(45deg,
-      var(--picker-track-check) 25%,
-      var(--picker-track-check-alt) 25%,
-      var(--picker-track-check-alt) 75%,
-      var(--picker-track-check) 75%,
-      var(--picker-track-check)
-    );
-  --picker-track-box-shadow: 
-    rgba(0,0,0,0.3) 0 1px inset,
-    rgba(255,255,255,0.2) 0 1px;
+  --picker-track-check-gradient: linear-gradient(
+    45deg,
+    var(--picker-track-check) 25%,
+    var(--picker-track-check-alt) 25%,
+    var(--picker-track-check-alt) 75%,
+    var(--picker-track-check) 75%,
+    var(--picker-track-check)
+  );
+  --picker-track-box-shadow:
+    rgba(0, 0, 0, 0.3) 0 1px inset, rgba(255, 255, 255, 0.2) 0 1px;
 
-  --picker-slider-box-shadow: 
-    rgba(255,255,255,0.3) 0 1px 1px inset,
-    rgba(0,0,0,0.6) 0 0 0 1px;
+  --picker-slider-box-shadow:
+    rgba(255, 255, 255, 0.3) 0 1px 1px inset, rgba(0, 0, 0, 0.6) 0 0 0 1px;
 
-  --picker-input-box-shadow: rgba(255,255,255,0.1) 0 1px 0,rgba(0,0,0,0.8) 0 1px 7px 0px inset;
-  --picker-input-bg: rgba(0,0,0,0.3);
-  --picker-input-color: rgba(255,255,255,0.8);
+  --picker-input-box-shadow:
+    rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+  --picker-input-bg: rgba(0, 0, 0, 0.3);
+  --picker-input-color: rgba(255, 255, 255, 0.8);
 
-  --picker-input-invalid-bg: rgba(102,0,0,0.3);
-  --picker-input-invalid-box-shadow: rgba(255,127,127,0.1) 0 1px 0, rgba(0,0,0,0.8) 0 1px 7px 0px inset;
+  --picker-input-invalid-bg: rgba(102, 0, 0, 0.3);
+  --picker-input-invalid-box-shadow:
+    rgba(255, 127, 127, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
   --picker-input-invalid-color: #ff0f0f;
 
   --picker-input-copied-bg: rgba(10, 102, 0, 0.3);
-  --picker-input-copied-box-shadow: rgba(140, 255, 127, 0.1) 0 1px 0, rgba(0,0,0,0.8) 0 1px 7px 0px inset;
+  --picker-input-copied-box-shadow:
+    rgba(140, 255, 127, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
   --picker-input-copied-color: #27ff0f;
 
-  --picker-thumb-box-shadow: 
-    0 0 0 3px rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.3) inset,
-    0 0 0 3px rgba(255, 255, 255, 1) inset,
-    0 0 0 4px rgb(0 0 0 / 0.5) inset,
-    0 0 0 1px rgb(0 0 0 / 0.5),
-    0 0 0 1px rgb(0 0 0 / .3);
+  --picker-thumb-box-shadow:
+    0 0 0 3px
+      rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.3)
+      inset,
+    0 0 0 3px rgba(255, 255, 255, 1) inset, 0 0 0 4px rgb(0 0 0 / 0.5) inset,
+    0 0 0 1px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(0 0 0 / 0.3);
 
-  --picker-thumb-box-shadow-hover: 
-    0 0 0 3px rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.1) inset,
-    0 0 0 3px rgba(255, 255, 255, 1) inset,
-    0 0 0 4px rgb(0 0 0 / 0.5) inset,
+  --picker-thumb-box-shadow-hover:
+    0 0 0 3px
+      rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.1)
+      inset,
+    0 0 0 3px rgba(255, 255, 255, 1) inset, 0 0 0 4px rgb(0 0 0 / 0.5) inset,
     0 0 0 1px rgb(0 0 0 / 0.5);
 
-  --picker-thumb-box-shadow-focus: 
-    0 0 0 3px rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.1) inset,
-    0 0 0 3px rgba(255, 255, 255, 1) inset,
-    0 0 0 4px rgb(0 0 0 / 0.5) inset,
-    0 0 0 1px rgb(0 0 0 / 0.5),
-    0 0 0 1px rgb(0 0 0 / 1),
-    0 0 0 4px hwb(var(--picker-hue) 25% 0%),
-    0 0 0 5px rgb(0 0 0 / .3);
+  --picker-thumb-box-shadow-focus:
+    0 0 0 3px
+      rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.1)
+      inset,
+    0 0 0 3px rgba(255, 255, 255, 1) inset, 0 0 0 4px rgb(0 0 0 / 0.5) inset,
+    0 0 0 1px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(0 0 0 / 1),
+    0 0 0 4px hwb(var(--picker-hue) 25% 0%), 0 0 0 5px rgb(0 0 0 / 0.3);
 
-  --picker-dynamic-accent: hwb(var(--picker-hue) calc(clamp(0, var(--picker-whiteness), 55) * 1%) calc(clamp(0, var(--picker-blackness), 35) * 1%));
+  --picker-dynamic-accent: hwb(
+    var(--picker-hue) calc(clamp(0, var(--picker-whiteness), 55) * 1%)
+      calc(clamp(0, var(--picker-blackness), 15) * 1%)
+  );
+  --picker-dynamic-accent-lightened: color-mix(
+    in oklab,
+    #666 30%,
+    hwb(
+      var(--picker-hue) calc(clamp(0, var(--picker-whiteness), 55) * 1%)
+        calc(clamp(0, var(--picker-blackness), 50) * 1%)
+    )
+  );
   --picker-dynamic-accent-footer: hwb(var(--picker-hue) 25% 0%);
   --picker-input-focus-ring: hwb(var(--picker-hue) 25% 0%);
-  --picker-dark-stripe: rgba(0,0,0,0.1);
-  --picker-text-shadow-color: rgba(0,0,0,0.5);
+  --picker-dark-stripe: rgba(0, 0, 0, 0.1);
+  --picker-text-shadow-color: rgba(0, 0, 0, 0.5);
   --picker-text-shadow: var(--picker-text-shadow-color) 0 2px 1px;
 }
 
@@ -86,16 +112,17 @@ a:hover {
 }
 
 html {
-  background-image: linear-gradient(-45deg, 
+  background-image: linear-gradient(
+    -45deg,
     var(--picker-dark-stripe) 25%,
-    rgba(0,0,0,0) 25%,
-    rgba(0,0,0,0) 50%,
+    rgba(0, 0, 0, 0) 25%,
+    rgba(0, 0, 0, 0) 50%,
     var(--picker-dark-stripe) 50%,
     var(--picker-dark-stripe) 75%,
-    rgba(0,0,0,0) 75%,
-    rgba(0,0,0,0)
-    );
-  background-size: 80px 80px; 
+    rgba(0, 0, 0, 0) 75%,
+    rgba(0, 0, 0, 0)
+  );
+  background-size: 80px 80px;
 }
 
 body {
@@ -158,14 +185,15 @@ footer {
 #explainer {
   max-width: 630px;
 }
-#explainer[data-visible=false] {
+#explainer[data-visible="false"] {
   display: none;
 }
 
 code {
   font-family: system-mono;
 }
-code, h3 {
+code,
+h3 {
   color: var(--picker-dynamic-accent-footer);
 }
 abbr {
@@ -183,38 +211,47 @@ abbr:hover {
   font-family: system-mono;
   font-style: normal;
   font-weight: 400;
-  src: local('.SFNS-Mono'), local('ui-monospace'), local("Cascadia Mono"), local("Segoe UI Mono"), local("Ubuntu Mono"), local("Roboto Mono"), local("Menlo"), local("Monaco"), local("Consolas"), local("monospace");
+  src:
+    local(".SFNS-Mono"), local("ui-monospace"), local("Cascadia Mono"),
+    local("Segoe UI Mono"), local("Ubuntu Mono"), local("Roboto Mono"),
+    local("Menlo"), local("Monaco"), local("Consolas"), local("monospace");
 }
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #efefef;
-    --picker-track-bg: rgba(0,0,0,0.05);
-    --picker-track-check: rgba(0,0,0,0.2);
-    --picker-track-box-shadow: 
-      rgba(0,0,0,0.3) 0 1px inset,
-      rgba(255,255,255,0.6) 0 1px;
+    --picker-track-bg: rgba(0, 0, 0, 0.05);
+    --picker-track-check: rgba(0, 0, 0, 0.2);
+    --picker-track-box-shadow:
+      rgba(0, 0, 0, 0.3) 0 1px inset, rgba(255, 255, 255, 0.6) 0 1px;
 
-    --picker-slider-box-shadow: 
-      rgba(255,255,255,0.3) 0 1px 1px inset,
-      rgba(0,0,0,0.4) 0 0 0 1px;
+    --picker-slider-box-shadow:
+      rgba(255, 255, 255, 0.3) 0 1px 1px inset, rgba(0, 0, 0, 0.4) 0 0 0 1px;
 
-    --picker-input-box-shadow: #fff 0 1px 1px, rgba(0,0,0,0.2) 0 1px 5px 0px inset;
-    --picker-input-bg: rgba(0,0,0,0.05);
-    --picker-input-color: rgba(0,0,0,0.8);
+    --picker-input-box-shadow:
+      #fff 0 1px 1px, rgba(0, 0, 0, 0.2) 0 1px 5px 0px inset;
+    --picker-input-bg: rgba(0, 0, 0, 0.05);
+    --picker-input-color: rgba(0, 0, 0, 0.8);
 
     --picker-input-invalid-bg: rgba(214 0 0 / 0.19);
-    --picker-input-invalid-box-shadow: rgba(214 0 0 / 0.1) 0 1px 0, rgba(138 0 0 / 0.8) 0 1px 7px 0px inset;
+    --picker-input-invalid-box-shadow:
+      rgba(214 0 0 / 0.1) 0 1px 0, rgba(138 0 0 / 0.8) 0 1px 7px 0px inset;
     --picker-input-invalid-color: #d60000;
 
     --picker-input-copied-bg: rgba(21 214 0 / 0.19);
-    --picker-input-copied-box-shadow: rgba(21 214 0 / 0.1) 0 1px 0, rgba(14 138 0 / 0.8) 0 1px 7px 0px inset;
+    --picker-input-copied-box-shadow:
+      rgba(21 214 0 / 0.1) 0 1px 0, rgba(14 138 0 / 0.8) 0 1px 7px 0px inset;
     --picker-input-copied-color: #11a800;
 
-    --picker-dark-stripe: rgba(0,0,0,0.03);
-    --picker-text-shadow-color: rgba(255,255,255,1);
+    --picker-dark-stripe: rgba(0, 0, 0, 0.03);
+    --picker-text-shadow-color: rgba(255, 255, 255, 1);
     --picker-text-shadow: var(--picker-text-shadow-color) 0 1px 1px;
-    --picker-dynamic-accent: hwb(var(--picker-hue) calc(clamp(0, var(--picker-whiteness), 35) * 1%) calc(clamp(0, var(--picker-blackness), 45) * 1%));
+    --picker-dynamic-accent: hwb(
+      var(--picker-hue) calc(clamp(0, var(--picker-whiteness), 35) * 1%)
+        calc(clamp(0, var(--picker-blackness), 45) * 1%)
+    );
+    /* Mixed color: blend with white, control percentage */
+    --white-mix-percentage: 50%;
     --picker-dynamic-accent-footer: hwb(var(--picker-hue) 0% 25%);
     --picker-input-focus-ring: hwb(var(--picker-hue) 0% 25%);
   }

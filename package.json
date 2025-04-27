@@ -24,5 +24,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
     "vite": "^4.3.9"
+  },
+  "resolutions": {
+    "esbuild": "0.25.3"
   }
 }

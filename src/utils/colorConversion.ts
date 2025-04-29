@@ -1,3 +1,6 @@
+import { Colord, colord, extend } from "colord";
+import hwbPlugin from "colord/plugins/hwb";
+import namesPlugin from "colord/plugins/names";
 import {
   ColorModel,
   ColorObject,
@@ -7,7 +10,15 @@ import {
   HWBColor,
   RGBColor,
 } from "../types";
-import { colorModel, colorParts } from "./colorParsing";
+import {
+  colorModel,
+  colorParts,
+  normalizeHwbValues,
+  parseHwbString,
+} from "./colorParsing";
+
+// Extend colord with HWB plugin
+extend([hwbPlugin, namesPlugin]);
 
 // Utility to format color objects as strings
 export const toString = {
@@ -38,7 +49,7 @@ export const toString = {
  * @param green - Green component (0-255).
  * @param blue - Blue component (0-255).
  * @param alpha - Alpha component (0-1, optional).
- * @returns A hex color string (e.g., "#FF0000").
+ * @returns A hex color string (e.g., '#FF0000').
  */
 export const rgbaToHex = ({ red, green, blue, alpha }: RGBColor): string => {
   const colors = [red, green, blue];
@@ -61,86 +72,60 @@ export const rgbaToHex = ({ red, green, blue, alpha }: RGBColor): string => {
  * @param red - Red component (0-255).
  * @param green - Green component (0-255).
  * @param blue - Blue component (0-255).
- * @param alpha - Alpha component (0-1, optional).
+ * @param alpha - Alpha component (0-1, optional)/ .
  * @returns An object with HSL and HWB components and strings.
  */
-export const toHslwb = ({
-  red,
-  green,
-  blue,
-  alpha,
-}: RGBColor): {
-  hue: number;
-  saturation: number;
-  luminosity: number;
-  whiteness: number;
-  blackness: number;
-  alpha: number;
-  hsl: string;
-  hwb: string;
-} => {
-  const r = red / 255;
-  const g = green / 255;
-  const b = blue / 255;
+export const toHslwb = (rgb: RGBColor) => {
+  // Create a colord instance from the RGB object
+  const colordColor = colord({
+    r: rgb.red,
+    g: rgb.green,
+    b: rgb.blue,
+    a: rgb.alpha ?? 1,
+  });
 
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const diff = max - min;
-  let h: number, w: number, wb: number, s: number;
-  let l = (max + min) / 2;
+  // Convert to HSL
+  let { h: hue, s: saturation, l: luminosity, a: alpha } = colordColor.toHsl();
 
-  if (max === min) {
-    h = s = 0; // achromatic
-    w = max;
-    wb = 1 - max;
-  } else {
-    w = min;
-    wb = 1 - max;
-    s = l > 0.5 ? diff / (2 - max - min) : diff / (max + min);
+  // Convert to HWB
+  let { w: whiteness, b: blackness } = colordColor.toHwb();
 
-    if (max === r) {
-      h = (g - b) / diff + (g < b ? 6 : 0);
-    } else if (max === g) {
-      h = (b - r) / diff + 2;
-    } else {
-      h = (r - g) / diff + 4;
-    }
-
-    h /= 6;
+  // Stabilize hue for achromatic colors (saturation close to 0)
+  if (saturation < 0.01) {
+    // Threshold for considering a color achromatic
+    hue = 0;
+    saturation = 0;
   }
 
-  h = Math.round(h * 360);
-  s = Math.round(s * 1000) / 10;
-  l = Math.round(l * 1000) / 10;
-  w = Math.round(w * 1000) / 10;
-  wb = Math.round(wb * 1000) / 10;
-
-  const obj: HSLColor & HWBColor = {
-    hue: h,
-    saturation: s,
-    luminosity: l,
-    whiteness: w,
-    blackness: wb,
-    alpha: alpha ?? 1,
+  // Create HSL and HWB color objects for string formatting
+  const hslColor: HSLColor = {
+    hue,
+    saturation,
+    luminosity,
+    ...(alpha !== 1 && { alpha }),
   };
 
-  const hsl = toString.hsl(obj as HSLColor);
-  const hwb = toString.hwb(obj as HWBColor);
+  const hwbColor: HWBColor = {
+    hue,
+    whiteness,
+    blackness,
+    ...(alpha !== 1 && { alpha }),
+  };
 
   return {
-    hue: h,
-    saturation: s,
-    luminosity: l,
-    whiteness: w,
-    blackness: wb,
-    alpha: alpha ?? 1,
-    hsl,
-    hwb,
+    hue,
+    saturation,
+    luminosity,
+    whiteness,
+    blackness,
+    alpha,
+    hsl: toString.hsl(hslColor),
+    hwb: toString.hwb(hwbColor),
   };
 };
 
 /**
- * Converts a color string to RGB representation.
+ * Converts a color string to RGB representation using colord.
  * @param str - The color string to convert.
  * @returns An object with RGB components and hex string.
  */
@@ -155,28 +140,42 @@ export const toRgb = (
   hex: string;
 } => {
   try {
-    // Use the browser's style parsing to normalize the color
-    const el = document.createElement("div");
-    el.style.color = str;
-    const { color } = window.getComputedStyle(document.body.appendChild(el));
-    const rgba = colorParts(color, "rgb") as RGBColor;
-    document.body.removeChild(el);
+    // Normalize HWB colors before passing to colord
+    let normalizedStr = str;
+    if (str.match(/^hwb\(/i)) {
+      const hwbValues = parseHwbString(str);
+      if (!hwbValues) {
+        throw new Error(`Invalid HWB color: ${str}`);
+      }
+      const [hue, whiteness, blackness, alpha] = hwbValues;
+      const [normalizedWhiteness, normalizedBlackness] = normalizeHwbValues(
+        whiteness,
+        blackness,
+      );
+      normalizedStr =
+        alpha === 1
+          ? `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}%)`
+          : `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}% / ${alpha})`;
+    }
 
-    const rgb = toString.rgb(rgba);
-    const hex = rgbaToHex(rgba);
+    const color: Colord = colord(normalizedStr);
+    if (!color.isValid()) {
+      throw new Error(`Invalid color: ${normalizedStr}`);
+    }
+    const { r: red, g: green, b: blue, a: alpha } = color.toRgb();
+    const rgb = toString.rgb({ red, green, blue, alpha });
+    const hex = rgbaToHex({ red, green, blue, alpha });
 
     return {
-      red: rgba.red,
-      green: rgba.green,
-      blue: rgba.blue,
-      alpha: rgba.alpha ?? 1,
+      red,
+      green,
+      blue,
+      alpha,
       rgb,
       hex,
     };
   } catch (e) {
-    throw new Error(
-      `Invalid Color Error: Browser does not recognize \`${str}\` as a valid color.`,
-    );
+    throw new Error(`Invalid Color Error: \`${str}\` is not a valid color.`);
   }
 };
 
@@ -200,7 +199,6 @@ export const createColorObject = (
     model === "hex" ? "rgb" : model;
   const currentParts = colorParts(color, resolvedModel);
 
-  // Build the ColorObject by combining parsed components
   const current: Partial<ColorObject> = currentParts;
   if ("hex" in currentParts) {
     current.hex = currentParts.hex;

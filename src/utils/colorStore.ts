@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from "zustand/react";
 import { ColorModel, ColorObject } from "../types";
 import { createColorObject } from "../utils/colorConversion";
 import { colorModels, colorPatterns } from "../utils/colorParsing";

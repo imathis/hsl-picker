@@ -1,17 +1,21 @@
 import React from "react";
 import { ColorModel, ColorObject } from "../types";
+import { useColorStore } from "../utils/colorStore";
 
 interface ColorModelPickerProps {
   visibleModels: Record<keyof ColorModel, boolean>;
   setVisibleModels: React.Dispatch<
     React.SetStateAction<Record<keyof ColorModel, boolean>>
   >;
+  updateInputs: (newColor: ColorObject, fromInput?: string) => void;
 }
 
 export const ColorModelPicker: React.FC<ColorModelPickerProps> = ({
   visibleModels,
   setVisibleModels,
+  updateInputs,
 }) => {
+  const color = useColorStore((state) => state.colorObject);
   const toggleModel = (model: keyof ColorModel) => {
     setVisibleModels((prev) => {
       const newState = { ...prev, [model]: !prev[model] };
@@ -20,6 +24,13 @@ export const ColorModelPicker: React.FC<ColorModelPickerProps> = ({
       }
       return newState;
     });
+
+    // Update sliders and text inputs after toggling visibility
+    if (color) {
+      window.setTimeout(() => {
+        updateInputs(color);
+      }, 0);
+    }
   };
 
   return (

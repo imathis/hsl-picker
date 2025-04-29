@@ -1,4 +1,10 @@
+import { Colord, colord, extend } from "colord";
+import hwbPlugin from "colord/plugins/hwb";
+import namesPlugin from "colord/plugins/names";
 import { ColorModel, ColorParts } from "../types";
+
+// Extend colord with HWB and names plugins (already used in colorConversion.ts)
+extend([hwbPlugin, namesPlugin]);
 
 /**
  * Defines the components of each color model.
@@ -23,7 +29,7 @@ export const allColorParts: string[] = Object.values(colorModels)
  * @param type - The color model type ("hex", "hsl", "hwb", "rgb").
  * @returns A RegExp to match the color format.
  */
-const ColorTest = (type: keyof ColorModel | "hex"): RegExp => {
+const colorPattern = (type: keyof ColorModel | "hex"): RegExp => {
   if (type === "hex") {
     // Matches 3, 4, 6, and 8 character hex codes (4, 8 have alpha channels)
     return new RegExp(
@@ -49,26 +55,105 @@ const ColorTest = (type: keyof ColorModel | "hex"): RegExp => {
  * Regular expressions for validating color strings in different models.
  */
 export const colorPatterns: { [key in keyof ColorModel | "hex"]: RegExp } = {
-  hsl: ColorTest("hsl"),
-  hwb: ColorTest("hwb"),
-  rgb: ColorTest("rgb"),
-  hex: ColorTest("hex"),
+  hsl: colorPattern("hsl"),
+  hwb: colorPattern("hwb"),
+  rgb: colorPattern("rgb"),
+  hex: colorPattern("hex"),
 };
 
 /**
- * Tests if a string matches a color format.
+ * Parses an HSL string directly to preserve raw input values for a color picker.
+ * @param color - The HSL color string to parse (e.g., "hsl(150, 100%, 0%)").
+ * @returns An array of numbers [hue, saturation, luminosity, alpha], or null if invalid.
  */
-const isColor: {
-  [key in keyof ColorModel | "hex"]: (str: string) => string[] | null;
-} = {
-  hsl: (str: string) => str.match(ColorTest("hsl"))?.slice(1) || null,
-  hwb: (str: string) => str.match(ColorTest("hwb"))?.slice(1) || null,
-  rgb: (str: string) => str.match(ColorTest("rgb"))?.slice(1) || null,
-  hex: (str: string) => str.match(ColorTest("hex"))?.slice(1) || null,
+const parseHslString = (color: string): number[] | null => {
+  const hslPattern = colorPattern("hsl");
+  const match = color.match(hslPattern);
+  if (!match) {
+    return null;
+  }
+  const [, hue, saturation, luminosity, alpha] = match;
+  return [
+    Number.parseFloat(hue),
+    Number.parseFloat(saturation),
+    Number.parseFloat(luminosity),
+    alpha !== undefined ? Number.parseFloat(alpha) : 1,
+  ];
 };
 
 /**
- * Parses a color string into an array of numbers.
+ * Parses an HWB string directly to preserve raw input values for a color picker.
+ * @param color - The HWB color string to parse (e.g., "hwb(150, 0%, 100%)").
+ * @returns An array of numbers [hue, whiteness, blackness, alpha], or null if invalid.
+ */
+export const parseHwbString = (color: string): number[] | null => {
+  const hwbPattern = colorPattern("hwb");
+  const match = color.match(hwbPattern);
+  if (!match) {
+    return null;
+  }
+  const [, hue, whiteness, blackness, alpha] = match;
+  return [
+    Number.parseFloat(hue),
+    Number.parseFloat(whiteness),
+    Number.parseFloat(blackness),
+    alpha !== undefined ? Number.parseFloat(alpha) : 1,
+  ];
+};
+
+/**
+ * Normalizes HWB values to ensure whiteness + blackness does not exceed 100%.
+ * @param whiteness - The whiteness percentage.
+ * @param blackness - The blackness percentage.
+ * @returns A normalized [whiteness, blackness] pair.
+ */
+export const normalizeHwbValues = (
+  whiteness: number,
+  blackness: number,
+): [number, number] => {
+  const total = whiteness + blackness;
+  if (total <= 100) {
+    return [whiteness, blackness];
+  }
+  // Normalize by scaling whiteness and blackness proportionally
+  const normalizedWhiteness = (whiteness / total) * 100;
+  const normalizedBlackness = (blackness / total) * 100;
+  return [normalizedWhiteness, normalizedBlackness];
+};
+
+/**
+ * Determines the color model of a string using colord.
+ * @param str - The color string to identify.
+ * @returns The color model ("hsl", "hwb", "rgb", or "hex").
+ * @throws Error if no matching model is found.
+ */
+export const colorModel = (str: string): keyof ColorModel | "hex" => {
+  const color: Colord = colord(str);
+  if (!color.isValid()) {
+    throw new Error(
+      `Color Error: No matching color model could be found for ${str}`,
+    );
+  }
+
+  if (/^#[0-9a-f]{3,8}$/i.test(str)) {
+    return "hex";
+  }
+  if (str.match(/^rgba?\(/i)) {
+    return "rgb";
+  }
+  if (str.match(/^hsla?\(/i)) {
+    return "hsl";
+  }
+  if (str.match(/^hwb\(/i)) {
+    return "hwb";
+  }
+
+  // Default to rgb for named colors and other formats colord supports
+  return "rgb";
+};
+
+/**
+ * Parses a color string into an array of numbers using colord, with special handling for HSL and HWB to preserve raw input.
  * @param color - The color string to parse.
  * @param model - The color model to parse against.
  * @returns An array of numbers representing the color components, or null if invalid.
@@ -77,12 +162,45 @@ export const colorArray = (
   color: string,
   model: keyof ColorModel = color.slice(0, 3) as keyof ColorModel,
 ): number[] | null => {
-  const is = isColor[model](color);
-  return is?.map((n) => (n === undefined ? 1 : Number.parseFloat(n))) || null;
+  const colordColor: Colord = colord(color);
+  if (!colordColor.isValid()) {
+    return null;
+  }
+
+  // Special handling for HSL to preserve raw input values for color picker
+  if (model === "hsl" && color.match(/^hsla?\(/i)) {
+    return parseHslString(color);
+  }
+
+  // Special handling for HWB to preserve raw input values for color picker
+  if (model === "hwb" && color.match(/^hwb\(/i)) {
+    const rawValues = parseHwbString(color);
+    if (!rawValues) {
+      return null;
+    }
+    return rawValues;
+  }
+
+  switch (model) {
+    case "rgb": {
+      const { r, g, b, a } = colordColor.toRgb();
+      return [r, g, b, a];
+    }
+    case "hsl": {
+      const { h, s, l, a } = colordColor.toHsl();
+      return [h, s, l, a];
+    }
+    case "hwb": {
+      const { h, w, b, a } = colordColor.toHwb();
+      return [h, w, b, a];
+    }
+    default:
+      return null;
+  }
 };
 
 /**
- * Extracts color components from a color string.
+ * Extracts color components from a color string using colord.
  * @param color - The color string to parse.
  * @param model - The color model to parse against.
  * @returns A ColorParts object with the parsed components.
@@ -91,104 +209,60 @@ export const colorParts = (
   color: string,
   model: keyof ColorModel | "hex" = color.slice(0, 3) as keyof ColorModel,
 ): ColorParts => {
-  try {
-    if (model === "hex" || color.startsWith("#")) return { hex: color };
-    const arr = colorArray(color, model);
-    if (!arr) throw new Error("Invalid color format");
-    return colorModels[model].reduce((acc, part, index) => {
-      return { ...acc, [part]: arr[index] };
-    }, {} as ColorParts);
-  } catch (e) {
-    console.error(e);
+  if (model === "hex" || color.startsWith("#")) {
+    return { hex: colord(color).toHex() };
+  }
+
+  const arr = colorArray(color, model);
+  if (!arr) {
     throw new Error(
       `Unsupported Color Error: Color \`${color}\` is not a supported color format.`,
     );
   }
-};
 
-/**
- * Checks if a number is within a specified range.
- * @param num - The number to check.
- * @param opts - Options specifying the range (default: 0-100).
- * @returns True if the number is within the range, false otherwise.
- */
-const inbound = (
-  num: number,
-  opts: { min?: number; max?: number } = {},
-): boolean => {
-  const { min = 0, max = 100 } = opts;
-  return min <= num && num <= max;
-};
-
-/**
- * Validates an HSL or HWB color string.
- * @param color - The color string to validate.
- * @param model - The color model ("hsl" or "hwb").
- * @returns True if the color string is valid, false otherwise.
- */
-const testHex = (color: string, model: keyof ColorModel): boolean => {
-  const arr = colorArray(color, model);
-  if (!arr) return false;
-  const [hue, sw, lwb, alpha] = arr;
-  return (
-    inbound(hue, { max: 360 }) &&
-    inbound(sw) &&
-    inbound(lwb) &&
-    (alpha === undefined || inbound(alpha, { max: 1 }))
-  );
-};
-
-/**
- * Validates an RGB color string.
- * @param color - The color string to validate.
- * @param model - The color model ("rgb").
- * @returns True if the color string is valid, false otherwise.
- */
-const testRgb = (color: string, model: keyof ColorModel): boolean => {
-  const arr = colorArray(color, model);
-  if (!arr) return false;
-  const [r, g, b, alpha] = arr;
-  return (
-    inbound(r, { max: 255 }) &&
-    inbound(g, { max: 255 }) &&
-    inbound(b, { max: 255 }) &&
-    (alpha === undefined || inbound(alpha, { max: 1 }))
-  );
-};
-
-/**
- * Validation functions for each color model.
- */
-export const validate: {
-  [key in keyof ColorModel | "hex"]: (str: string) => boolean;
-} = {
-  hsl: (str: string) => testHex(str, "hsl"),
-  hwb: (str: string) => testHex(str, "hwb"),
-  rgb: (str: string) => testRgb(str, "rgb"),
-  hex: (str: string) => !!isColor.hex(str),
-};
-
-/**
- * Determines the color model of a string.
- * @param str - The color string to identify.
- * @returns The color model ("hsl", "hwb", "rgb", or "hex").
- * @throws Error if no matching model is found.
- */
-export const colorModel = (str: string): keyof ColorModel | "hex" => {
-  const model = Object.keys(isColor).find((type) =>
-    isColor[type as keyof typeof isColor](str),
-  ) as keyof ColorModel | "hex";
-  if (!model) {
-    throw new Error(
-      `Color Error: No matching color model could be found for ${str}`,
+  // For HWB, normalize whiteness and blackness before converting to other formats
+  let normalizedColor = color;
+  if (model === "hwb" && color.match(/^hwb\(/i)) {
+    const [hue, whiteness, blackness, alpha] = arr;
+    const [normalizedWhiteness, normalizedBlackness] = normalizeHwbValues(
+      whiteness,
+      blackness,
     );
+    normalizedColor =
+      alpha === 1
+        ? `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}%)`
+        : `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}% / ${alpha})`;
   }
-  return model;
+
+  // Use the normalized color for conversion, but return the raw components
+  const colordColor = colord(normalizedColor);
+  return colorModels[model].reduce((acc, part, index) => {
+    return { ...acc, [part]: arr[index] };
+  }, {} as ColorParts);
 };
 
 /**
- * Checks if a string is a valid color.
+ * Checks if a string is a valid color using colord.
  * @param str - The color string to validate.
  * @returns True if the string is a valid color, false otherwise.
  */
-export const validColor = (str: string): boolean => !!colorModel(str);
+export const validColor = (str: string): boolean => {
+  // For HWB, normalize before validation
+  if (str.match(/^hwb\(/i)) {
+    const rawValues = parseHwbString(str);
+    if (!rawValues) {
+      return false;
+    }
+    const [hue, whiteness, blackness, alpha] = rawValues;
+    const [normalizedWhiteness, normalizedBlackness] = normalizeHwbValues(
+      whiteness,
+      blackness,
+    );
+    const normalizedStr =
+      alpha === 1
+        ? `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}%)`
+        : `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}% / ${alpha})`;
+    return colord(normalizedStr).isValid();
+  }
+  return colord(str).isValid();
+};

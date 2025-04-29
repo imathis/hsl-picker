@@ -176,6 +176,7 @@ export const Picker: React.FC = () => {
     <div>
       <ColorModelPicker
         visibleModels={visibleModels}
+        updateInputs={updateInputs}
         setVisibleModels={setVisibleModels}
       />
       <div className="main">

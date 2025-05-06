@@ -1,7 +1,8 @@
 # HSL Color Picker
 https://hslpicker.com
 
-<img width="829" alt="image" src="https://github.com/user-attachments/assets/b4c43b07-e2ec-4ece-8721-5c14df06324e" />
+
+https://github.com/user-attachments/assets/52dda786-91c7-4426-86dd-055c2680f9e2
 
 
 HSL picker is a fun side project that I use all the time to help pick colors or nudge a color to be just right. In version 2 I've added HWB color picking and four and eight digit HEX colors. It's now a modern Typescript/React app built on the incredible [Vite](https://vitejs.dev) environment and it's way faster and more responsive.

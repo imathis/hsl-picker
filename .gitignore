@@ -23,6 +23,7 @@ dist
 dist-ssr
 *.local
 *.tsbuildinfo
+.deploy-config
 
 # Editor directories and files
 .vscode/*

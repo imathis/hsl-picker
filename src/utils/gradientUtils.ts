@@ -194,8 +194,8 @@ const backgroundConfig: BackgroundConfig = {
       steps: 2,
     },
     luminosity: {
-      lig: (l: number) => formatPercentage((l / 3) * 50),
-      steps: 3,
+      lig: (l: number) => formatPercentage((l / 2) * 100),
+      steps: 2,
     },
     alpha: { alpha: (v: number) => v, steps: 1 },
   },

@@ -9,6 +9,8 @@ export interface ColorState {
   hue: number;
   saturation: number;
   luminosity: number;
+  hsvSaturation: number;
+  value: number;
   whiteness: number;
   blackness: number;
   red: number;
@@ -35,6 +37,8 @@ export const useColorStore = create<ColorState>((set, get) => {
     hue: 0,
     saturation: 0,
     luminosity: 0,
+    hsvSaturation: 0,
+    value: 0,
     whiteness: 0,
     blackness: 0,
     red: 0,
@@ -52,6 +56,8 @@ export const useColorStore = create<ColorState>((set, get) => {
         hue: newColor.hue,
         saturation: newColor.saturation,
         luminosity: newColor.luminosity,
+        hsvSaturation: newColor.hsvSaturation,
+        value: newColor.value,
         whiteness: newColor.whiteness,
         blackness: newColor.blackness,
         red: newColor.red,
@@ -75,6 +81,8 @@ export const useColorStore = create<ColorState>((set, get) => {
         hue: newColor.hue,
         saturation: newColor.saturation,
         luminosity: newColor.luminosity,
+        hsvSaturation: newColor.hsvSaturation,
+        value: newColor.value,
         whiteness: newColor.whiteness,
         blackness: newColor.blackness,
         red: newColor.red,
@@ -102,4 +110,11 @@ const initializeColor = () => {
   useColorStore.getState().setColor(initialColor);
 };
 
-initializeColor();
+// Initialize after DOM is ready
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeColor);
+  } else {
+    initializeColor();
+  }
+}

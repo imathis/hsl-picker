@@ -201,7 +201,7 @@ input[type="number"] {
 .slider-choices {
   display: grid;
   gap: 8px;
-  grid-template-columns: repeat(3, min-content);
+  grid-template-columns: repeat(4, min-content);
   place-content: center;
   margin: 0 auto 20px;
 }

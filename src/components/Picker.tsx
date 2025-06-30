@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { useColorStore } from "../utils/colorStore";
+import React from "react";
 import { ColorModel } from "../types";
+import { setRoot, updateHsvGradients } from "../utils"; // Corrected import path
 import { allColorParts, colorPatterns } from "../utils/colorParsing";
-import { setRoot } from "../utils"; // Corrected import path
+import { useColorStore } from "../utils/colorStore";
 import { background, rainbowBg } from "../utils/gradientUtils";
-import { CodeInput, Input } from "./Inputs";
 import { ColorModelPicker } from "./ColorModelPicker";
+import { CodeInput, Input } from "./Inputs";
 
 const setValue = (name: string, value: string): void => {
   const elements = document.querySelectorAll<HTMLInputElement>(
@@ -87,6 +87,15 @@ const colorModelConfig: Record<
     ],
     pattern: colorPatterns.hsl,
   },
+  hsv: {
+    sliders: [
+      { name: "hue", max: 360, step: 1 },
+      { name: "hsvSaturation", step: 0.1 },
+      { name: "value", step: 0.1 },
+      { name: "alpha", max: 1, step: 0.01 },
+    ],
+    pattern: colorPatterns.hsv,
+  },
   hwb: {
     sliders: [
       { name: "hue", max: 360, step: 1 },
@@ -112,7 +121,7 @@ export const Picker: React.FC = () => {
   const adjustColor = useColorStore((state) => state.adjustColor);
   const [visibleModels, setVisibleModels] = React.useState<
     Record<keyof ColorModel, boolean>
-  >({ hsl: true, hwb: false, rgb: false });
+  >({ hsl: true, hwb: false, hsv: false, rgb: false });
 
   const swatch = React.useRef<HTMLDivElement>(null);
 
@@ -122,6 +131,7 @@ export const Picker: React.FC = () => {
   ) => {
     const inputs = {
       hsl: newColor.hsl,
+      hsv: newColor.hsv,
       hwb: newColor.hwb,
       rgb: newColor.rgb,
       hex: newColor.hex,
@@ -160,12 +170,14 @@ export const Picker: React.FC = () => {
     const initialColor = useColorStore.getState().colorObject;
     updateInputs(initialColor);
     setRoot("rainbow", rainbowBg());
+    updateHsvGradients(initialColor); // Initialize HSV gradients
 
     // Subscribe to state changes
     const unsubscribe = useColorStore.subscribe((state) => {
       const newColor = state.colorObject;
       updateInputs(newColor);
       setRoot("rainbow", rainbowBg());
+      updateHsvGradients(newColor); // Update HSV gradients
     });
 
     // Cleanup subscription on unmount

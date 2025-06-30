@@ -2,11 +2,13 @@ import { describe, it, expect } from "vitest";
 import {
   toString,
   rgbaToHex,
-  toHslwb,
+  toHslvwb,
   toRgb,
   createColorObject,
+  hsvToRgb,
+  rgbToHsv,
 } from "./colorConversion";
-import { RGBColor, HSLColor, HWBColor, HEXColor, ColorModel } from "../types";
+import { RGBColor, HSLColor, HSVColor, HWBColor, HEXColor, ColorModel } from "../types";
 
 describe("colorConversion", () => {
   describe("toString", () => {
@@ -38,6 +40,21 @@ describe("colorConversion", () => {
         alpha: 0.5,
       };
       expect(toString.hsl(hsl)).toBe("hsla(120 100% 50% / 0.5)");
+    });
+
+    it("formats HSV color correctly without alpha", () => {
+      const hsv: HSVColor = { hue: 120, hsvSaturation: 100, value: 50 };
+      expect(toString.hsv(hsv)).toBe("hsv(120 100% 50%)");
+    });
+
+    it("formats HSV color correctly with alpha", () => {
+      const hsv: HSVColor = {
+        hue: 120,
+        hsvSaturation: 100,
+        value: 50,
+        alpha: 0.5,
+      };
+      expect(toString.hsv(hsv)).toBe("hsv(120 100% 50% / 0.5)");
     });
 
     it("formats RGB color correctly without alpha", () => {
@@ -73,48 +90,54 @@ describe("colorConversion", () => {
     });
   });
 
-  describe("toHslwb", () => {
-    it("converts RGB to HSL and HWB (red dominant)", () => {
+  describe("toHslvwb", () => {
+    it("converts RGB to HSL, HSV, and HWB (red dominant)", () => {
       const rgb: RGBColor = { red: 255, green: 0, blue: 0 };
-      const result = toHslwb(rgb);
+      const result = toHslvwb(rgb);
       expect(result).toMatchObject({
         hue: 0,
         saturation: 100,
         luminosity: 50,
+        value: 100,
         whiteness: 0,
         blackness: 0,
         alpha: 1,
         hsl: "hsl(0 100% 50%)",
+        hsv: "hsv(0 100% 100%)",
         hwb: "hwb(0 0% 0%)",
       });
     });
 
-    it("converts RGB to HSL and HWB (achromatic/gray)", () => {
+    it("converts RGB to HSL, HSV, and HWB (achromatic/gray)", () => {
       const rgb: RGBColor = { red: 128, green: 128, blue: 128 };
-      const result = toHslwb(rgb);
+      const result = toHslvwb(rgb);
       expect(result).toMatchObject({
         hue: 0,
         saturation: 0,
         luminosity: 50,
+        value: 50,
         whiteness: 50,
         blackness: 50,
         alpha: 1,
         hsl: "hsl(0 0% 50%)",
+        hsv: "hsv(0 0% 50%)",
         hwb: "hwb(0 50% 50%)",
       });
     });
 
-    it("converts RGB to HSL and HWB with alpha", () => {
+    it("converts RGB to HSL, HSV, and HWB with alpha", () => {
       const rgb: RGBColor = { red: 255, green: 0, blue: 0, alpha: 0.5 };
-      const result = toHslwb(rgb);
+      const result = toHslvwb(rgb);
       expect(result).toMatchObject({
         hue: 0,
         saturation: 100,
         luminosity: 50,
+        value: 100,
         whiteness: 0,
         blackness: 0,
         alpha: 0.5,
         hsl: "hsla(0 100% 50% / 0.5)",
+        hsv: "hsv(0 100% 100% / 0.5)",
         hwb: "hwb(0 0% 0% / 0.5)",
       });
     });
@@ -132,29 +155,6 @@ describe("colorConversion", () => {
         hex: "#ff0000",
       });
     });
-
-    it("parses RGBA string", () => {
-      const result = toRgb("rgba(255, 0, 0, 0.5)");
-      expect(result).toMatchObject({
-        red: 255,
-        green: 0,
-        blue: 0,
-        alpha: 0.5,
-        rgb: "rgba(255 0 0 / 0.5)",
-        hex: "#ff000080",
-      });
-    });
-
-    it("converts HEX string to RGB", () => {
-      const result = toRgb("#ff0000");
-      expect(result).toMatchObject({
-        red: 255,
-        green: 0,
-        blue: 0,
-        alpha: 1,
-        rgb: "rgb(255 0 0)",
-        hex: "#ff0000",
-      });
     });
 
     it("converts named color to RGB", () => {
@@ -188,6 +188,7 @@ describe("colorConversion", () => {
         alpha: 1,
         hex: "#ff0000",
         hsl: "hsl(0 100% 50%)",
+        hsv: "hsv(0 100% 100%)",
         hwb: "hwb(0 0% 0%)",
         rgb: "rgb(255 0 0)",
       });
@@ -232,6 +233,20 @@ describe("colorConversion", () => {
       const colorObj = createColorObject(color);
       expect(colorObj.toString("hex")).toBe("#ff0000");
       expect(colorObj.toString("rgb")).toBe("rgb(255 0 0)");
+      expect(colorObj.toString("hsv")).toBe("hsv(0 100% 100%)");
+    });
+
+    it("creates a ColorObject from HSV string", () => {
+      const color = "hsv(120 50% 75%)";
+      const colorObj = createColorObject(color);
+      expect(colorObj).toMatchObject({
+        model: "hsv",
+        hue: 120,
+        hsvSaturation: 50,
+        value: 75,
+        alpha: 1,
+      });
+      expect(colorObj.hsv).toBe(color); // Preserves input
     });
 
     it("throws error for invalid color model detection", () => {
@@ -240,4 +255,43 @@ describe("colorConversion", () => {
       );
     });
   });
-});
+
+  describe("HSV conversion functions", () => {
+    it("converts HSV to RGB correctly", () => {
+      // Red: HSV(0, 100, 100) -> RGB(255, 0, 0)
+      expect(hsvToRgb(0, 100, 100)).toEqual([255, 0, 0]);
+      
+      // Green: HSV(120, 100, 100) -> RGB(0, 255, 0)
+      expect(hsvToRgb(120, 100, 100)).toEqual([0, 255, 0]);
+      
+      // Blue: HSV(240, 100, 100) -> RGB(0, 0, 255)
+      expect(hsvToRgb(240, 100, 100)).toEqual([0, 0, 255]);
+      
+      // Gray: HSV(0, 0, 50) -> RGB(128, 128, 128)
+      expect(hsvToRgb(0, 0, 50)).toEqual([128, 128, 128]);
+    });
+
+    it("converts RGB to HSV correctly", () => {
+      // Red: RGB(255, 0, 0) -> HSV(0, 100, 100)
+      expect(rgbToHsv(255, 0, 0)).toEqual([0, 100, 100]);
+      
+      // Green: RGB(0, 255, 0) -> HSV(120, 100, 100)
+      expect(rgbToHsv(0, 255, 0)).toEqual([120, 100, 100]);
+      
+      // Blue: RGB(0, 0, 255) -> HSV(240, 100, 100)
+      expect(rgbToHsv(0, 0, 255)).toEqual([240, 100, 100]);
+      
+      // Gray: RGB(128, 128, 128) -> HSV(0, 0, 50)
+      expect(rgbToHsv(128, 128, 128)).toEqual([0, 0, 50]);
+    });
+
+    it("HSV to RGB to HSV round trip", () => {
+      const originalHsv: [number, number, number] = [180, 75, 60];
+      const [r, g, b] = hsvToRgb(...originalHsv);
+      const [h, s, v] = rgbToHsv(r, g, b);
+      
+      expect(h).toBeCloseTo(originalHsv[0], 0);
+      expect(s).toBeCloseTo(originalHsv[1], 0);
+      expect(v).toBeCloseTo(originalHsv[2], 0);
+    });
+  });

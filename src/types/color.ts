@@ -3,11 +3,12 @@
  */
 
 /**
- * Interface defining the structure of color models (HSL, HWB, RGB).
+ * Interface defining the structure of color models (HSL, HSV, HWB, RGB).
  */
 export interface ColorModel {
   hsl: string[];
   hwb: string[];
+  hsv: string[];
   rgb: string[];
 }
 
@@ -18,6 +19,16 @@ export interface HSLColor {
   hue: number;
   saturation: number;
   luminosity: number;
+  alpha?: number;
+}
+
+/**
+ * Interface for HSV color components.
+ */
+export interface HSVColor {
+  hue: number;
+  hsvSaturation: number;
+  value: number;
   alpha?: number;
 }
 
@@ -49,9 +60,9 @@ export interface HEXColor {
 }
 
 /**
- * Union type for color parts (HSL, HWB, RGB, or HEX).
+ * Union type for color parts (HSL, HSV, HWB, RGB, or HEX).
  */
-export type ColorParts = HSLColor | HWBColor | RGBColor | HEXColor;
+export type ColorParts = HSLColor | HSVColor | HWBColor | RGBColor | HEXColor;
 
 /**
  * Interface for a comprehensive color object.
@@ -62,6 +73,8 @@ export interface ColorObject {
   hue: number;
   saturation: number;
   luminosity: number;
+  hsvSaturation: number;
+  value: number;
   whiteness: number;
   blackness: number;
   red: number;
@@ -70,6 +83,7 @@ export interface ColorObject {
   alpha: number;
   hex: string;
   hsl: string;
+  hsv: string;
   hwb: string;
   rgb: string;
   [key: string]: any; // Allow dynamic model key

@@ -61,22 +61,24 @@
             >
           </span>
           <span class="divider">|</span>
-          <button onclick="toggleExplainer()">HSL vs HWB?</button>
+          <button onclick="toggleExplainer()">HSL vs HWB vs HSV?</button>
         </div>
         <div id="explainer" data-visible="false">
-          <h3>HSL &amp; HWB: Hue</h3>
+          <h3>HSL, HWB &amp; HSV: Hue</h3>
           <p>
-            In both <abbr title="Hue, Saturation, Luminosity">HSL</abbr> and
-            <abbr title="Hue, Whiteness, Blackness">HWB</abbr>
+            In <abbr title="Hue, Saturation, Luminosity">HSL</abbr>,
+            <abbr title="Hue, Whiteness, Blackness">HWB</abbr>, and
+            <abbr title="Hue, Saturation, Value">HSV</abbr>
             we can describe and manipulate colors in a very natural way. The hue
             property ranges from 0 to 360 letting us select our base color. For
-            example, red shows up at 0, yellow at 50, and orange naturally
-            resides between them at 25 degrees.
+            example, red shows up at 0, yellow at 60, and orange naturally
+            resides between them at 30 degrees.
           </p>
           <p>
             With the HSL model, a pure red is at <code>hsl(0 100% 50%)</code>.
-            In HWB however, a pure red is <code>hwb(0 0 0)</code>. Read on to
-            learn the differences beteen these two models.
+            In HWB however, a pure red is <code>hwb(0 0% 0%)</code>, and in HSV
+            it's <code>hsv(0 100% 100%)</code>. Read on to
+            learn the differences between these three models.
           </p>
           <h3>HSL: Saturation &amp; Luminosity</h3>
           <p>
@@ -85,7 +87,7 @@
             <code>hsl(0 100% 50%)</code>, as we reduce the saturation our color
             will become more and more gray. At 0% saturation the hue will not be
             evident in the color at all, leaving us with a grayscale spectrum.
-            At 100% we will have the full brilliance of the hue availabe to our
+            At 100% we will have the full brilliance of the hue available to our
             color mix.
           </p>
           <p>
@@ -98,25 +100,44 @@
           </p>
           <h3>HWB: Whiteness &amp; Blackness</h3>
           <p>
-            Whiteness, as you‘d expect, ligthens a color as you increase it from
+            Whiteness, as you'd expect, lightens a color as you increase it from
             0% to 100%. And as it would follow Blackness adds black to your
             color. A color with 0% blackness and 100% whiteness will always be
             white. As you increase the blackness, the color will become more
-            gray. Let‘s look at our pure red again. In HWB it is
-            <code>hwb(0, 0, 0)</code>. If we want to make it more pink, we need
+            gray. Let's look at our pure red again. In HWB it is
+            <code>hwb(0 0% 0%)</code>. If we want to make it more pink, we need
             to add whiteness. If we want to desaturate it a bit we can add some
             blackness too, which will make it appear more of a smokey pink.
+          </p>
+          <h3>HSV: Saturation &amp; Value</h3>
+          <p>
+            <abbr title="Hue, Saturation, Value">HSV</abbr> (also called HSB for 
+            Brightness) shares the same hue wheel as HSL and HWB. However, saturation 
+            and value work differently. In HSV, our pure red is 
+            <code>hsv(0 100% 100%)</code>. Saturation controls color intensity just 
+            like in HSL, but value controls brightness from black (0%) to the pure 
+            hue (100%). Unlike HSL's luminosity, HSV's value never adds white to 
+            your color—it only controls how bright or dark it appears.
+          </p>
+          <p>
+            Where HWB lets you independently add whiteness and blackness to a pure hue, 
+            HSV takes a different approach. You can desaturate toward gray (like HSL) 
+            or darken toward black with value, but there's no direct way to lighten 
+            toward white. This makes HSV particularly intuitive for artists familiar 
+            with traditional color mixing, where you start with a pure pigment and 
+            either dilute it or darken it.
           </p>
           <h3>Which to use?</h3>
           <p>
             HSL came first to the web, rescuing us from the misery of picking
             colors in HEX (#c0ff33 anyone?) or RGB. HSL was instantly a better
             choice and lead me to create this website to help people understand
-            how HSL worked. However, if you‘ve spent much time using graphics
-            applications you may be familiar with HWB‘s cousin
-            <abbr title="Hue, Saturation, Brightness">HSB</abbr>. If that is
-            what you‘re used to, HWB will feel very familiar to you. With
-            excellent browser support you will be fine with either choice.
+            how HSL worked. However, if you've spent much time using graphics
+            applications you may be familiar with HSV (also called HSB). While
+            HSV isn't supported in CSS, HWB's approach of independently controlling
+            whiteness and blackness makes it a natural choice for those comfortable
+            with HSV workflows. With excellent browser support you will be fine
+            with either HSL or HWB.
           </p>
           <h3>WAIT A MINUTE, Eight Character Hex Colors???</h3>
           <p>

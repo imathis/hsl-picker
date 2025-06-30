@@ -7,6 +7,49 @@
  *  a new color is chosen, the browser handles recalculating the actual rendered gradients.
  *
  */
+import { hsvToRgb } from "./colorConversion";
+
+/**
+ * Generates an HSV-specific gradient by computing RGB values for each stop.
+ * @param currentH - Current hue value (0-360)
+ * @param currentS - Current HSV saturation value (0-100)
+ * @param currentV - Current HSV value (0-100)
+ * @param component - Which HSV component to vary ('hue', 'saturation', 'value')
+ * @param steps - Number of gradient steps
+ * @returns A CSS linear-gradient string with RGB colors
+ */
+export const generateHsvGradient = (
+  currentH: number,
+  currentS: number, 
+  currentV: number,
+  component: 'hue' | 'saturation' | 'value',
+  steps: number = 10
+): string => {
+  const gradientStops: string[] = [];
+  
+  for (let i = 0; i <= steps; i++) {
+    let h = currentH;
+    let s = currentS;
+    let v = currentV;
+    
+    switch (component) {
+      case 'hue':
+        h = (i / steps) * 360;
+        break;
+      case 'saturation':
+        s = (i / steps) * 100;
+        break;
+      case 'value':
+        v = (i / steps) * 100;
+        break;
+    }
+    
+    const [r, g, b] = hsvToRgb(h, s, v);
+    gradientStops.push(`rgb(${r} ${g} ${b})`);
+  }
+  
+  return `linear-gradient(to right, ${gradientStops.join(', ')})`;
+};
 /**
  * Props for the trackBg function, which generates a linear gradient background.
  */
@@ -95,6 +138,39 @@ export const hslBg = ({
   trackBg({ type: "hsl", props: [hue, sat, lig], steps, alpha });
 
 /**
+ * Generates an HSV gradient background using HSL approximation.
+ * Since browsers don't support HSV, we use HSL as a close approximation.
+ * @param hue - Hue value or function (default: CSS variable).
+ * @param sat - Saturation value or function (default: CSS variable).
+ * @param val - Value value or function (default: CSS variable).
+ * @param steps - Number of gradient steps.
+ * @param alpha - Alpha value or function (or false to disable).
+ * @returns A CSS linear-gradient string using HSL approximation.
+ */
+export const hsvBg = ({
+  hue = "var(--picker-hue)",
+  sat = "calc(var(--picker-saturation) * 1%)",
+  val = "calc(var(--picker-luminosity) * 1%)",
+  steps = 2,
+  alpha,
+}: HsvBgProps): string => {
+  // For HSV gradients, we use HSL as an approximation
+  // This provides a reasonable visual representation for the sliders
+  return trackBg({ type: "hsl", props: [hue, sat, val], steps, alpha });
+};
+
+/**
+ * Props for generating an HSV gradient background.
+ */
+interface HsvBgProps {
+  hue?: string | ((v: number) => string | number);
+  sat?: string | ((v: number) => string | number);
+  val?: string | ((v: number) => string | number);
+  steps?: number;
+  alpha?: string | ((v: number) => string | number) | false;
+}
+
+/**
  * Props for generating an HWB gradient background.
  */
 interface HwbBgProps {
@@ -179,6 +255,7 @@ export interface BackgroundModel {
  */
 type BackgroundConfig = {
   hsl: Record<string, Partial<HslBgProps>>;
+  hsv: Record<string, Partial<HsvBgProps>>;
   hwb: Record<string, Partial<HwbBgProps>>;
   rgb: Record<string, Partial<RgbBgProps>>;
 };
@@ -194,9 +271,15 @@ const backgroundConfig: BackgroundConfig = {
       steps: 2,
     },
     luminosity: {
-      lig: (l: number) => formatPercentage((l / 2) * 100),
-      steps: 2,
+      lig: (l: number) => formatPercentage((l / 3) * 50),
+      steps: 3,
     },
+    alpha: { alpha: (v: number) => v, steps: 1 },
+  },
+  hsv: {
+    hue: "var(--picker-hsv-hue-gradient)",
+    hsvSaturation: "var(--picker-hsv-saturation-gradient)",
+    value: "var(--picker-hsv-value-gradient)",
     alpha: { alpha: (v: number) => v, steps: 1 },
   },
   hwb: {
@@ -228,7 +311,11 @@ export const background: BackgroundModel = Object.fromEntries(
     Object.fromEntries(
       Object.entries(props).map(([key, config]) => [
         key,
-        (model === "hsl" ? hslBg : model === "hwb" ? hwbBg : rgbBg)(config),
+        // For HSV, use the CSS variable directly if it's a string
+        typeof config === "string" ? config :
+        (model === "hsl" ? hslBg : 
+         model === "hsv" ? hsvBg : 
+         model === "hwb" ? hwbBg : rgbBg)(config),
       ]),
     ),
   ]),

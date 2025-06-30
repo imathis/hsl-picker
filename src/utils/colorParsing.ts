@@ -11,6 +11,7 @@ extend([hwbPlugin, namesPlugin]);
  */
 export const colorModels: ColorModel = {
   hsl: ["hue", "saturation", "luminosity", "alpha"],
+  hsv: ["hue", "hsvSaturation", "value", "alpha"],
   hwb: ["hue", "whiteness", "blackness", "alpha"],
   rgb: ["red", "green", "blue", "alpha"],
 };
@@ -44,6 +45,7 @@ const colorPattern = (type: keyof ColorModel | "hex"): RegExp => {
   const main = {
     rgb: [num, num, num],
     hsl: [num, percent, percent],
+    hsv: [num, percent, percent],
     hwb: [num, percent, percent],
   }[type];
   return new RegExp(
@@ -56,6 +58,7 @@ const colorPattern = (type: keyof ColorModel | "hex"): RegExp => {
  */
 export const colorPatterns: { [key in keyof ColorModel | "hex"]: RegExp } = {
   hsl: colorPattern("hsl"),
+  hsv: colorPattern("hsv"),
   hwb: colorPattern("hwb"),
   rgb: colorPattern("rgb"),
   hex: colorPattern("hex"),
@@ -77,6 +80,26 @@ const parseHslString = (color: string): number[] | null => {
     Number.parseFloat(hue),
     Number.parseFloat(saturation),
     Number.parseFloat(luminosity),
+    alpha !== undefined ? Number.parseFloat(alpha) : 1,
+  ];
+};
+
+/**
+ * Parses an HSV string directly to preserve raw input values for a color picker.
+ * @param color - The HSV color string to parse (e.g., "hsv(150, 100%, 50%)").
+ * @returns An array of numbers [hue, saturation, value, alpha], or null if invalid.
+ */
+export const parseHsvString = (color: string): number[] | null => {
+  const hsvPattern = colorPattern("hsv");
+  const match = color.match(hsvPattern);
+  if (!match) {
+    return null;
+  }
+  const [, hue, saturation, value, alpha] = match;
+  return [
+    Number.parseFloat(hue),
+    Number.parseFloat(saturation),
+    Number.parseFloat(value),
     alpha !== undefined ? Number.parseFloat(alpha) : 1,
   ];
 };
@@ -128,6 +151,14 @@ export const normalizeHwbValues = (
  * @throws Error if no matching model is found.
  */
 export const colorModel = (str: string): keyof ColorModel | "hex" => {
+  // Check HSV first since colord doesn't support it
+  if (str.match(/^hsv\(/i)) {
+    const hsvValues = parseHsvString(str);
+    if (hsvValues) {
+      return "hsv";
+    }
+  }
+
   const color: Colord = colord(str);
   if (!color.isValid()) {
     throw new Error(
@@ -162,6 +193,12 @@ export const colorArray = (
   color: string,
   model: keyof ColorModel = color.slice(0, 3) as keyof ColorModel,
 ): number[] | null => {
+  // Special handling for HSV to preserve raw input values for color picker
+  if (model === "hsv" && color.match(/^hsv\(/i)) {
+    return parseHsvString(color);
+  }
+
+  // For non-HSV colors, validate with colord
   const colordColor: Colord = colord(color);
   if (!colordColor.isValid()) {
     return null;
@@ -170,6 +207,25 @@ export const colorArray = (
   // Special handling for HSL to preserve raw input values for color picker
   if (model === "hsl" && color.match(/^hsla?\(/i)) {
     return parseHslString(color);
+  }
+
+  // Special handling for HSL to preserve raw input values for color picker
+  if (model === "hsl" && color.match(/^hsla?\(/i)) {
+    return parseHslString(color);
+  }
+
+  // Special handling for HSV to preserve raw input values for color picker
+  if (model === "hsv" && color.match(/^hsv\(/i)) {
+    return parseHsvString(color);
+  }
+
+  // Special handling for HWB to preserve raw input values for color picker
+  if (model === "hwb" && color.match(/^hwb\(/i)) {
+    const rawValues = parseHwbString(color);
+    if (!rawValues) {
+      return null;
+    }
+    return rawValues;
   }
 
   // Special handling for HWB to preserve raw input values for color picker
@@ -189,6 +245,10 @@ export const colorArray = (
     case "hsl": {
       const { h, s, l, a } = colordColor.toHsl();
       return [h, s, l, a];
+    }
+    case "hsv": {
+      // HSV is handled manually since colord doesn't parse HSV strings
+      return parseHsvString(color) || [0, 0, 0, 1];
     }
     case "hwb": {
       const { h, w, b, a } = colordColor.toHwb();
@@ -234,6 +294,13 @@ export const colorParts = (
         : `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}% / ${alpha})`;
   }
 
+  // For HSV, we don't need colord validation since we handle it manually
+  if (model === "hsv") {
+    return colorModels[model].reduce((acc, part, index) => {
+      return { ...acc, [part]: arr[index] };
+    }, {} as ColorParts);
+  }
+
   // Use the normalized color for conversion, but return the raw components
   const colordColor = colord(normalizedColor);
   return colorModels[model].reduce((acc, part, index) => {
@@ -247,6 +314,12 @@ export const colorParts = (
  * @returns True if the string is a valid color, false otherwise.
  */
 export const validColor = (str: string): boolean => {
+  // For HSV, validate manually since colord doesn't support it
+  if (str.match(/^hsv\(/i)) {
+    const hsvValues = parseHsvString(str);
+    return hsvValues !== null;
+  }
+  
   // For HWB, normalize before validation
   if (str.match(/^hwb\(/i)) {
     const rawValues = parseHwbString(str);

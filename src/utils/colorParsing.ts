@@ -1,10 +1,16 @@
-import { Colord, colord, extend } from "colord";
-import hwbPlugin from "colord/plugins/hwb";
-import namesPlugin from "colord/plugins/names";
+import { parse, rgb, hsl, hwb } from "culori";
 import { ColorModel, ColorParts } from "../types";
 
-// Extend colord with HWB and names plugins (already used in colorConversion.ts)
-extend([hwbPlugin, namesPlugin]);
+/**
+ * Rounds a number to a specified number of decimal places.
+ * @param value - The number to round.
+ * @param decimals - The number of decimal places (default: 1).
+ * @returns The rounded number.
+ */
+const roundTo = (value: number, decimals: number = 1): number => {
+  const factor = Math.pow(10, decimals);
+  return Math.round(value * factor) / factor;
+};
 
 /**
  * Defines the components of each color model.
@@ -145,13 +151,13 @@ export const normalizeHwbValues = (
 };
 
 /**
- * Determines the color model of a string using colord.
+ * Determines the color model of a string using culori.
  * @param str - The color string to identify.
  * @returns The color model ("hsl", "hwb", "rgb", or "hex").
  * @throws Error if no matching model is found.
  */
 export const colorModel = (str: string): keyof ColorModel | "hex" => {
-  // Check HSV first since colord doesn't support it
+  // Check HSV first since we handle it manually
   if (str.match(/^hsv\(/i)) {
     const hsvValues = parseHsvString(str);
     if (hsvValues) {
@@ -159,8 +165,8 @@ export const colorModel = (str: string): keyof ColorModel | "hex" => {
     }
   }
 
-  const color: Colord = colord(str);
-  if (!color.isValid()) {
+  const color = parse(str.toLowerCase());
+  if (!color) {
     throw new Error(
       `Color Error: No matching color model could be found for ${str}`,
     );
@@ -179,12 +185,12 @@ export const colorModel = (str: string): keyof ColorModel | "hex" => {
     return "hwb";
   }
 
-  // Default to rgb for named colors and other formats colord supports
+  // Default to rgb for named colors and other formats culori supports
   return "rgb";
 };
 
 /**
- * Parses a color string into an array of numbers using colord, with special handling for HSL and HWB to preserve raw input.
+ * Parses a color string into an array of numbers using culori, with special handling for HSL and HWB to preserve raw input.
  * @param color - The color string to parse.
  * @param model - The color model to parse against.
  * @returns An array of numbers representing the color components, or null if invalid.
@@ -198,34 +204,15 @@ export const colorArray = (
     return parseHsvString(color);
   }
 
-  // For non-HSV colors, validate with colord
-  const colordColor: Colord = colord(color);
-  if (!colordColor.isValid()) {
+  // For non-HSV colors, validate with culori
+  const culoriColor = parse(color.toLowerCase());
+  if (!culoriColor) {
     return null;
   }
 
   // Special handling for HSL to preserve raw input values for color picker
   if (model === "hsl" && color.match(/^hsla?\(/i)) {
     return parseHslString(color);
-  }
-
-  // Special handling for HSL to preserve raw input values for color picker
-  if (model === "hsl" && color.match(/^hsla?\(/i)) {
-    return parseHslString(color);
-  }
-
-  // Special handling for HSV to preserve raw input values for color picker
-  if (model === "hsv" && color.match(/^hsv\(/i)) {
-    return parseHsvString(color);
-  }
-
-  // Special handling for HWB to preserve raw input values for color picker
-  if (model === "hwb" && color.match(/^hwb\(/i)) {
-    const rawValues = parseHwbString(color);
-    if (!rawValues) {
-      return null;
-    }
-    return rawValues;
   }
 
   // Special handling for HWB to preserve raw input values for color picker
@@ -239,20 +226,23 @@ export const colorArray = (
 
   switch (model) {
     case "rgb": {
-      const { r, g, b, a } = colordColor.toRgb();
-      return [r, g, b, a];
+      const rgbColor = rgb(culoriColor);
+      if (!rgbColor) return null;
+      return [roundTo(rgbColor.r * 255, 0), roundTo(rgbColor.g * 255, 0), roundTo(rgbColor.b * 255, 0), rgbColor.alpha ?? 1];
     }
     case "hsl": {
-      const { h, s, l, a } = colordColor.toHsl();
-      return [h, s, l, a];
+      const hslColor = hsl(culoriColor);
+      if (!hslColor) return null;
+      return [roundTo(hslColor.h ?? 0, 0), roundTo(hslColor.s * 100, 1), roundTo(hslColor.l * 100, 1), hslColor.alpha ?? 1];
     }
     case "hsv": {
-      // HSV is handled manually since colord doesn't parse HSV strings
+      // HSV is handled manually since culori doesn't parse HSV strings directly
       return parseHsvString(color) || [0, 0, 0, 1];
     }
     case "hwb": {
-      const { h, w, b, a } = colordColor.toHwb();
-      return [h, w, b, a];
+      const hwbColor = hwb(culoriColor);
+      if (!hwbColor) return null;
+      return [roundTo(hwbColor.h ?? 0, 0), roundTo(hwbColor.w * 100, 1), roundTo(hwbColor.b * 100, 1), hwbColor.alpha ?? 1];
     }
     default:
       return null;
@@ -260,7 +250,7 @@ export const colorArray = (
 };
 
 /**
- * Extracts color components from a color string using colord.
+ * Extracts color components from a color string using culori.
  * @param color - The color string to parse.
  * @param model - The color model to parse against.
  * @returns A ColorParts object with the parsed components.
@@ -270,7 +260,13 @@ export const colorParts = (
   model: keyof ColorModel | "hex" = color.slice(0, 3) as keyof ColorModel,
 ): ColorParts => {
   if (model === "hex" || color.startsWith("#")) {
-    return { hex: colord(color).toHex() };
+    const parsed = parse(color.toLowerCase());
+    if (!parsed) {
+      throw new Error(
+        `Unsupported Color Error: Color \`${color}\` is not a supported color format.`,
+      );
+    }
+    return { hex: rgb(parsed)?.hex ?? color };
   }
 
   const arr = colorArray(color, model);
@@ -294,7 +290,7 @@ export const colorParts = (
         : `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}% / ${alpha})`;
   }
 
-  // For HSV, we don't need colord validation since we handle it manually
+  // For HSV, we don't need culori validation since we handle it manually
   if (model === "hsv") {
     return colorModels[model].reduce((acc, part, index) => {
       return { ...acc, [part]: arr[index] };
@@ -302,19 +298,24 @@ export const colorParts = (
   }
 
   // Use the normalized color for conversion, but return the raw components
-  const colordColor = colord(normalizedColor);
+  const culoriColor = parse(normalizedColor.toLowerCase());
+  if (!culoriColor) {
+    throw new Error(
+      `Unsupported Color Error: Color \`${color}\` is not a supported color format.`,
+    );
+  }
   return colorModels[model].reduce((acc, part, index) => {
     return { ...acc, [part]: arr[index] };
   }, {} as ColorParts);
 };
 
 /**
- * Checks if a string is a valid color using colord.
+ * Checks if a string is a valid color using culori.
  * @param str - The color string to validate.
  * @returns True if the string is a valid color, false otherwise.
  */
 export const validColor = (str: string): boolean => {
-  // For HSV, validate manually since colord doesn't support it
+  // For HSV, validate manually since culori doesn't support it directly
   if (str.match(/^hsv\(/i)) {
     const hsvValues = parseHsvString(str);
     return hsvValues !== null;
@@ -335,7 +336,7 @@ export const validColor = (str: string): boolean => {
       alpha === 1
         ? `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}%)`
         : `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}% / ${alpha})`;
-    return colord(normalizedStr).isValid();
+    return parse(normalizedStr.toLowerCase()) !== undefined;
   }
-  return colord(str).isValid();
+  return parse(str.toLowerCase()) !== undefined;
 };

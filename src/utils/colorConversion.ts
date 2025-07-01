@@ -1,6 +1,15 @@
-import { Colord, colord, extend } from "colord";
-import hwbPlugin from "colord/plugins/hwb";
-import namesPlugin from "colord/plugins/names";
+import { parse, rgb, hsl, hwb } from "culori";
+
+/**
+ * Rounds a number to a specified number of decimal places.
+ * @param value - The number to round.
+ * @param decimals - The number of decimal places (default: 1).
+ * @returns The rounded number.
+ */
+const roundTo = (value: number, decimals: number = 1): number => {
+  const factor = Math.pow(10, decimals);
+  return Math.round(value * factor) / factor;
+};
 import {
   ColorModel,
   ColorObject,
@@ -19,8 +28,6 @@ import {
   parseHsvString,
 } from "./colorParsing";
 
-// Extend colord with HWB plugin
-extend([hwbPlugin, namesPlugin]);
 
 /**
  * Converts HSV to RGB.
@@ -99,27 +106,27 @@ export const rgbToHsv = (r: number, g: number, b: number): [number, number, numb
 // Utility to format color objects as strings
 export const toString = {
   hsl: ({ hue, saturation, luminosity, alpha }: HSLColor): string => {
-    const main = `${hue} ${saturation}% ${luminosity}%`;
+    const main = `${roundTo(hue, 0)} ${roundTo(saturation, 1)}% ${roundTo(luminosity, 1)}%`;
     return alpha !== undefined && alpha < 1
-      ? `hsla(${main} / ${alpha})`
+      ? `hsla(${main} / ${roundTo(alpha, 2)})`
       : `hsl(${main})`;
   },
   hsv: ({ hue, hsvSaturation, value, alpha }: HSVColor): string => {
-    const main = `${hue} ${hsvSaturation}% ${value}%`;
+    const main = `${roundTo(hue, 0)} ${roundTo(hsvSaturation, 1)}% ${roundTo(value, 1)}%`;
     return alpha !== undefined && alpha < 1
-      ? `hsv(${main} / ${alpha})`
+      ? `hsv(${main} / ${roundTo(alpha, 2)})`
       : `hsv(${main})`;
   },
   hwb: ({ hue, whiteness, blackness, alpha }: HWBColor): string => {
-    const main = `${hue} ${whiteness}% ${blackness}%`;
+    const main = `${roundTo(hue, 0)} ${roundTo(whiteness, 1)}% ${roundTo(blackness, 1)}%`;
     return alpha !== undefined && alpha < 1
-      ? `hwb(${main} / ${alpha})`
+      ? `hwb(${main} / ${roundTo(alpha, 2)})`
       : `hwb(${main})`;
   },
   rgb: ({ red, green, blue, alpha }: RGBColor): string => {
-    const main = [red, green, blue].join(" ");
+    const main = [roundTo(red, 0), roundTo(green, 0), roundTo(blue, 0)].join(" ");
     return alpha !== undefined && alpha < 1
-      ? `rgba(${main} / ${alpha})`
+      ? `rgba(${main} / ${roundTo(alpha, 2)})`
       : `rgb(${main})`;
   },
   hex: ({ hex }: HEXColor): string => hex,
@@ -158,22 +165,30 @@ export const rgbaToHex = ({ red, green, blue, alpha }: RGBColor): string => {
  * @returns An object with HSL, HSV, and HWB components and strings.
  */
 export const toHslvwb = (rgb: RGBColor) => {
-  // Create a colord instance from the RGB object
-  const colordColor = colord({
-    r: rgb.red,
-    g: rgb.green,
-    b: rgb.blue,
-    a: rgb.alpha ?? 1,
-  });
+  // Create a culori RGB color object
+  const culoriRgb = {
+    mode: 'rgb' as const,
+    r: rgb.red / 255,
+    g: rgb.green / 255,
+    b: rgb.blue / 255,
+    alpha: rgb.alpha ?? 1,
+  };
 
   // Convert to HSL
-  let { h: hue, s: saturation, l: luminosity, a: alpha } = colordColor.toHsl();
+  const culoriHsl = hsl(culoriRgb);
+  let hue = roundTo(culoriHsl?.h ?? 0, 0);
+  let saturation = roundTo((culoriHsl?.s ?? 0) * 100, 1);
+  let luminosity = roundTo((culoriHsl?.l ?? 0) * 100, 1);
+  let alpha = culoriHsl?.alpha ?? 1;
 
   // Convert to HSV using manual conversion
-  let [hsvHue, hsvSaturation, value] = rgbToHsv(rgb.red, rgb.green, rgb.blue);
+  let [hsvHueRaw, hsvSaturation, value] = rgbToHsv(rgb.red, rgb.green, rgb.blue);
+  let hsvHue = roundTo(hsvHueRaw, 0);
 
   // Convert to HWB
-  let { w: whiteness, b: blackness } = colordColor.toHwb();
+  const culoriHwb = hwb(culoriRgb);
+  let whiteness = roundTo((culoriHwb?.w ?? 0) * 100, 1);
+  let blackness = roundTo((culoriHwb?.b ?? 0) * 100, 1);
 
   // Stabilize hue for achromatic colors (saturation close to 0)
   if (saturation < 0.01) {
@@ -249,10 +264,10 @@ export const toRgb = (
       [red, green, blue] = hsvToRgb(h, s, v);
       alpha = a;
     } else {
-      // Handle other color formats with colord
+      // Handle other color formats with culori
       let normalizedStr = str;
       
-      // Normalize HWB colors before passing to colord
+      // Normalize HWB colors before passing to culori
       if (str.match(/^hwb\(/i)) {
         const hwbValues = parseHwbString(str);
         if (!hwbValues) {
@@ -269,27 +284,30 @@ export const toRgb = (
             : `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}% / ${alphaVal})`;
       }
 
-      const color: Colord = colord(normalizedStr);
-      if (!color.isValid()) {
+      const color = parse(normalizedStr.toLowerCase());
+      if (!color) {
         throw new Error(`Invalid color: ${normalizedStr}`);
       }
-      const rgbColor = color.toRgb();
-      red = rgbColor.r;
-      green = rgbColor.g;
-      blue = rgbColor.b;
-      alpha = rgbColor.a;
+      const rgbColor = rgb(color);
+      if (!rgbColor) {
+        throw new Error(`Failed to convert to RGB: ${normalizedStr}`);
+      }
+      red = Math.round(rgbColor.r * 255);
+      green = Math.round(rgbColor.g * 255);
+      blue = Math.round(rgbColor.b * 255);
+      alpha = rgbColor.alpha ?? 1;
     }
 
-    const rgb = toString.rgb({ red, green, blue, alpha });
-    const hex = rgbaToHex({ red, green, blue, alpha });
+    const rgbString = toString.rgb({ red, green, blue, alpha });
+    const hexString = rgbaToHex({ red, green, blue, alpha });
 
     return {
       red,
       green,
       blue,
       alpha,
-      rgb,
-      hex,
+      rgb: rgbString,
+      hex: hexString,
     };
   } catch (e) {
     throw new Error(`Invalid Color Error: \`${str}\` is not a valid color.`);

@@ -5,8 +5,6 @@ import {
   toHslvwb,
   toRgb,
   createColorObject,
-  hsvToRgb,
-  rgbToHsv,
 } from "./colorConversion";
 import { RGBColor, HSLColor, HSVColor, HWBColor, HEXColor, ColorModel } from "../types";
 
@@ -114,14 +112,14 @@ describe("colorConversion", () => {
       expect(result.hue).toBe(0);
       expect(result.saturation).toBe(0);
       expect(result.alpha).toBe(1);
-      expect(result.value).toBe(50);
+      expect(result.value).toBeCloseTo(50, 0);
       expect(result.hsvSaturation).toBe(0);
       // Allow some precision difference for culori vs manual calculations
       expect(result.luminosity).toBeCloseTo(50, 0);
       expect(result.whiteness).toBeCloseTo(50, 0);
       expect(result.blackness).toBeCloseTo(50, 0);
       expect(result.hsl).toMatch(/^hsl\(0 0% 50/);
-      expect(result.hsv).toBe("hsv(0 0% 50%)");
+      expect(result.hsv).toMatch(/^hsv\(0 0% 50/);
       expect(result.hwb).toMatch(/^hwb\(0 50/);
     });
 
@@ -257,41 +255,53 @@ describe("colorConversion", () => {
   });
 
   describe("HSV conversion functions", () => {
-    it("converts HSV to RGB correctly", () => {
-      // Red: HSV(0, 100, 100) -> RGB(255, 0, 0)
-      expect(hsvToRgb(0, 100, 100)).toEqual([255, 0, 0]);
+    it("converts HSV to RGB correctly using culori", () => {
+      // Test HSV conversions through createColorObject which now uses culori
+      const redHsv = createColorObject("hsv(0 100% 100%)");
+      expect(redHsv.red).toBe(255);
+      expect(redHsv.green).toBe(0);
+      expect(redHsv.blue).toBe(0);
       
-      // Green: HSV(120, 100, 100) -> RGB(0, 255, 0)
-      expect(hsvToRgb(120, 100, 100)).toEqual([0, 255, 0]);
+      const greenHsv = createColorObject("hsv(120 100% 100%)");
+      expect(greenHsv.red).toBe(0);
+      expect(greenHsv.green).toBe(255);
+      expect(greenHsv.blue).toBe(0);
       
-      // Blue: HSV(240, 100, 100) -> RGB(0, 0, 255)
-      expect(hsvToRgb(240, 100, 100)).toEqual([0, 0, 255]);
+      const blueHsv = createColorObject("hsv(240 100% 100%)");
+      expect(blueHsv.red).toBe(0);
+      expect(blueHsv.green).toBe(0);
+      expect(blueHsv.blue).toBe(255);
       
-      // Gray: HSV(0, 0, 50) -> RGB(128, 128, 128)
-      expect(hsvToRgb(0, 0, 50)).toEqual([128, 128, 128]);
+      const grayHsv = createColorObject("hsv(0 0% 50%)");
+      expect(grayHsv.red).toBe(128);
+      expect(grayHsv.green).toBe(128);
+      expect(grayHsv.blue).toBe(128);
     });
 
-    it("converts RGB to HSV correctly", () => {
-      // Red: RGB(255, 0, 0) -> HSV(0, 100, 100)
-      expect(rgbToHsv(255, 0, 0)).toEqual([0, 100, 100]);
+    it("converts RGB to HSV correctly using culori", () => {
+      // Test RGB to HSV conversions through toHslvwb
+      const redResult = toHslvwb({ red: 255, green: 0, blue: 0 });
+      expect(redResult.hsvSaturation).toBe(100);
+      expect(redResult.value).toBe(100);
       
-      // Green: RGB(0, 255, 0) -> HSV(120, 100, 100)
-      expect(rgbToHsv(0, 255, 0)).toEqual([120, 100, 100]);
+      const greenResult = toHslvwb({ red: 0, green: 255, blue: 0 });
+      expect(greenResult.hue).toBe(120);
+      expect(greenResult.hsvSaturation).toBe(100);
+      expect(greenResult.value).toBe(100);
       
-      // Blue: RGB(0, 0, 255) -> HSV(240, 100, 100)
-      expect(rgbToHsv(0, 0, 255)).toEqual([240, 100, 100]);
-      
-      // Gray: RGB(128, 128, 128) -> HSV(0, 0, 50)
-      expect(rgbToHsv(128, 128, 128)).toEqual([0, 0, 50]);
+      const grayResult = toHslvwb({ red: 128, green: 128, blue: 128 });
+      expect(grayResult.hue).toBe(0);
+      expect(grayResult.hsvSaturation).toBe(0);
+      expect(grayResult.value).toBeCloseTo(50, 0);
     });
 
-    it("HSV to RGB to HSV round trip", () => {
-      const originalHsv: [number, number, number] = [180, 75, 60];
-      const [r, g, b] = hsvToRgb(...originalHsv);
-      const [h, s, v] = rgbToHsv(r, g, b);
+    it("HSV round trip conversion", () => {
+      // Test round trip: HSV string -> RGB -> HSV values
+      const originalHsv = "hsv(180 75% 60%)";
+      const colorObj = createColorObject(originalHsv);
       
-      expect(h).toBeCloseTo(originalHsv[0], 0);
-      expect(s).toBeCloseTo(originalHsv[1], 0);
-      expect(v).toBeCloseTo(originalHsv[2], 0);
+      expect(colorObj.hue).toBe(180);
+      expect(colorObj.hsvSaturation).toBeCloseTo(75, 0);
+      expect(colorObj.value).toBeCloseTo(60, 0);
     });
   });

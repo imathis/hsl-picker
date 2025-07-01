@@ -1,4 +1,4 @@
-import { parse, rgb, hsl, hwb } from "culori";
+import { parse, rgb, hsl, hwb, hsv } from "culori";
 
 /**
  * Rounds a number to a specified number of decimal places.
@@ -29,79 +29,6 @@ import {
 } from "./colorParsing";
 
 
-/**
- * Converts HSV to RGB.
- * @param h - Hue (0-360)
- * @param s - Saturation (0-100)
- * @param v - Value (0-100)
- * @returns RGB values (0-255)
- */
-export const hsvToRgb = (h: number, s: number, v: number): [number, number, number] => {
-  const hNorm = h / 360;
-  const sNorm = s / 100;
-  const vNorm = v / 100;
-
-  const c = vNorm * sNorm;
-  const x = c * (1 - Math.abs(((hNorm * 6) % 2) - 1));
-  const m = vNorm - c;
-
-  let r = 0, g = 0, b = 0;
-
-  if (hNorm >= 0 && hNorm < 1/6) {
-    r = c; g = x; b = 0;
-  } else if (hNorm >= 1/6 && hNorm < 2/6) {
-    r = x; g = c; b = 0;
-  } else if (hNorm >= 2/6 && hNorm < 3/6) {
-    r = 0; g = c; b = x;
-  } else if (hNorm >= 3/6 && hNorm < 4/6) {
-    r = 0; g = x; b = c;
-  } else if (hNorm >= 4/6 && hNorm < 5/6) {
-    r = x; g = 0; b = c;
-  } else {
-    r = c; g = 0; b = x;
-  }
-
-  return [
-    Math.round((r + m) * 255),
-    Math.round((g + m) * 255),
-    Math.round((b + m) * 255)
-  ];
-};
-
-/**
- * Converts RGB to HSV.
- * @param r - Red (0-255)
- * @param g - Green (0-255)
- * @param b - Blue (0-255)
- * @returns HSV values [h: 0-360, s: 0-100, v: 0-100]
- */
-export const rgbToHsv = (r: number, g: number, b: number): [number, number, number] => {
-  const rNorm = r / 255;
-  const gNorm = g / 255;
-  const bNorm = b / 255;
-
-  const max = Math.max(rNorm, gNorm, bNorm);
-  const min = Math.min(rNorm, gNorm, bNorm);
-  const delta = max - min;
-
-  let h = 0;
-  if (delta !== 0) {
-    if (max === rNorm) {
-      h = ((gNorm - bNorm) / delta) % 6;
-    } else if (max === gNorm) {
-      h = (bNorm - rNorm) / delta + 2;
-    } else {
-      h = (rNorm - gNorm) / delta + 4;
-    }
-  }
-  h = Math.round(h * 60);
-  if (h < 0) h += 360;
-
-  const s = max === 0 ? 0 : Math.round((delta / max) * 100);
-  const v = Math.round(max * 100);
-
-  return [h, s, v];
-};
 
 // Utility to format color objects as strings
 export const toString = {
@@ -181,9 +108,11 @@ export const toHslvwb = (rgb: RGBColor) => {
   let luminosity = roundTo((culoriHsl?.l ?? 0) * 100, 1);
   let alpha = culoriHsl?.alpha ?? 1;
 
-  // Convert to HSV using manual conversion
-  let [hsvHueRaw, hsvSaturation, value] = rgbToHsv(rgb.red, rgb.green, rgb.blue);
-  let hsvHue = roundTo(hsvHueRaw, 0);
+  // Convert to HSV using culori
+  const culoriHsv = hsv(culoriRgb);
+  let hsvHue = roundTo(culoriHsv?.h ?? 0, 0);
+  let hsvSaturation = roundTo((culoriHsv?.s ?? 0) * 100, 1);
+  let value = roundTo((culoriHsv?.v ?? 0) * 100, 1);
 
   // Convert to HWB
   const culoriHwb = hwb(culoriRgb);
@@ -261,7 +190,14 @@ export const toRgb = (
         throw new Error(`Invalid HSV color: ${str}`);
       }
       const [h, s, v, a] = hsvValues;
-      [red, green, blue] = hsvToRgb(h, s, v);
+      const hsvColor = { mode: 'hsv' as const, h, s: s / 100, v: v / 100, alpha: a };
+      const rgbColor = rgb(hsvColor);
+      if (!rgbColor) {
+        throw new Error(`Failed to convert HSV to RGB: ${str}`);
+      }
+      red = Math.round(rgbColor.r * 255);
+      green = Math.round(rgbColor.g * 255);
+      blue = Math.round(rgbColor.b * 255);
       alpha = a;
     } else {
       // Handle other color formats with culori

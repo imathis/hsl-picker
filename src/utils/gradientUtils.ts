@@ -7,7 +7,7 @@
  *  a new color is chosen, the browser handles recalculating the actual rendered gradients.
  *
  */
-import { hsvToRgb } from "./colorConversion";
+import { rgb, hsv } from "culori";
 
 /**
  * Generates an HSV-specific gradient by computing RGB values for each stop.
@@ -44,8 +44,14 @@ export const generateHsvGradient = (
         break;
     }
     
-    const [r, g, b] = hsvToRgb(h, s, v);
-    gradientStops.push(`rgb(${r} ${g} ${b})`);
+    const hsvColor = { mode: 'hsv' as const, h, s: s / 100, v: v / 100 };
+    const rgbColor = rgb(hsvColor);
+    if (rgbColor) {
+      const r = Math.round(rgbColor.r * 255);
+      const g = Math.round(rgbColor.g * 255);
+      const b = Math.round(rgbColor.b * 255);
+      gradientStops.push(`rgb(${r} ${g} ${b})`);
+    }
   }
   
   return `linear-gradient(to right, ${gradientStops.join(', ')})`;

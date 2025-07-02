@@ -1,4 +1,4 @@
-import { parse, rgb, hsl, hwb } from "culori";
+import { parse, rgb, hsl, hwb, oklch } from "culori";
 import { ColorModel, ColorParts } from "../types";
 
 /**
@@ -17,8 +17,9 @@ const roundTo = (value: number, decimals: number = 1): number => {
  */
 export const colorModels: ColorModel = {
   hsl: ["hue", "saturation", "luminosity", "alpha"],
-  hsv: ["hue", "hsvSaturation", "value", "alpha"],
+  oklch: ["oklchLightness", "oklchChroma", "oklchHue", "alpha"],
   hwb: ["hue", "whiteness", "blackness", "alpha"],
+  hsv: ["hue", "hsvSaturation", "value", "alpha"],
   rgb: ["red", "green", "blue", "alpha"],
 };
 
@@ -33,7 +34,7 @@ export const allColorParts: string[] = Object.values(colorModels)
 
 /**
  * Creates a regular expression to match a color string format.
- * @param type - The color model type ("hex", "hsl", "hwb", "rgb").
+ * @param type - The color model type ("hex", "hsl", "hwb", "rgb", "oklch").
  * @returns A RegExp to match the color format.
  */
 const colorPattern = (type: keyof ColorModel | "hex"): RegExp => {
@@ -53,6 +54,7 @@ const colorPattern = (type: keyof ColorModel | "hex"): RegExp => {
     hsl: [num, percent, percent],
     hsv: [num, percent, percent],
     hwb: [num, percent, percent],
+    oklch: ["([\\d.]+%?)", num, num], // lightness (% or decimal), chroma, hue
   }[type];
   return new RegExp(
     `^${type}a?\\(${main.join(sep)}(?:${alphsep}(${alph}))?\\)$`,
@@ -67,6 +69,7 @@ export const colorPatterns: { [key in keyof ColorModel | "hex"]: RegExp } = {
   hsv: colorPattern("hsv"),
   hwb: colorPattern("hwb"),
   rgb: colorPattern("rgb"),
+  oklch: colorPattern("oklch"),
   hex: colorPattern("hex"),
 };
 
@@ -131,6 +134,39 @@ export const parseHwbString = (color: string): number[] | null => {
 };
 
 /**
+ * Parses an OKLCH string directly to preserve raw input values for a color picker.
+ * Accepts both percentage format (oklch(50% 0.2 180)) and decimal format (oklch(0.5 0.2 180)).
+ * @param color - The OKLCH color string to parse.
+ * @returns An array of numbers [lightness, chroma, hue, alpha], or null if invalid.
+ */
+export const parseOklchString = (color: string): number[] | null => {
+  const oklchPattern = colorPattern("oklch");
+  const match = color.match(oklchPattern);
+  if (!match) {
+    return null;
+  }
+  const [, lightnessStr, chroma, hue, alpha] = match;
+  
+  // Handle both percentage and decimal formats for lightness
+  let lightness = Number.parseFloat(lightnessStr);
+  
+  // If the lightness string contains '%', remove it and convert to 0-1 scale
+  if (lightnessStr.includes('%')) {
+    // Percentage format, convert to 0-1 scale
+    lightness = lightness / 100;
+  } else {
+    // Decimal format (0-1), use as-is
+  }
+  
+  return [
+    lightness, // lightness as 0-1 scale internally
+    Number.parseFloat(chroma),
+    Number.parseFloat(hue),
+    alpha !== undefined ? Number.parseFloat(alpha) : 1,
+  ];
+};
+
+/**
  * Normalizes HWB values to ensure whiteness + blackness does not exceed 100%.
  * @param whiteness - The whiteness percentage.
  * @param blackness - The blackness percentage.
@@ -153,7 +189,7 @@ export const normalizeHwbValues = (
 /**
  * Determines the color model of a string using culori.
  * @param str - The color string to identify.
- * @returns The color model ("hsl", "hwb", "rgb", or "hex").
+ * @returns The color model ("hsl", "hwb", "rgb", "oklch", or "hex").
  * @throws Error if no matching model is found.
  */
 export const colorModel = (str: string): keyof ColorModel | "hex" => {
@@ -162,6 +198,14 @@ export const colorModel = (str: string): keyof ColorModel | "hex" => {
     const hsvValues = parseHsvString(str);
     if (hsvValues) {
       return "hsv";
+    }
+  }
+
+  // Check OKLCH
+  if (str.match(/^oklch\(/i)) {
+    const oklchValues = parseOklchString(str);
+    if (oklchValues) {
+      return "oklch";
     }
   }
 
@@ -190,21 +234,36 @@ export const colorModel = (str: string): keyof ColorModel | "hex" => {
 };
 
 /**
- * Parses a color string into an array of numbers using culori, with special handling for HSL and HWB to preserve raw input.
+ * Parses a color string into an array of numbers using culori, with special handling for HSL, HWB, HSV, and OKLCH to preserve raw input.
  * @param color - The color string to parse.
  * @param model - The color model to parse against.
  * @returns An array of numbers representing the color components, or null if invalid.
  */
 export const colorArray = (
   color: string,
-  model: keyof ColorModel = color.slice(0, 3) as keyof ColorModel,
+  model?: keyof ColorModel,
 ): number[] | null => {
+  // Auto-detect model if not provided
+  if (!model) {
+    if (color.match(/^oklch\(/i)) {
+      model = "oklch";
+    } else if (color.match(/^hsv\(/i)) {
+      model = "hsv";
+    } else {
+      model = color.slice(0, 3) as keyof ColorModel;
+    }
+  }
   // Special handling for HSV to preserve raw input values for color picker
   if (model === "hsv" && color.match(/^hsv\(/i)) {
     return parseHsvString(color);
   }
 
-  // For non-HSV colors, validate with culori
+  // Special handling for OKLCH to preserve raw input values for color picker
+  if (model === "oklch" && color.match(/^oklch\(/i)) {
+    return parseOklchString(color);
+  }
+
+  // For non-HSV/OKLCH colors, validate with culori
   const culoriColor = parse(color.toLowerCase());
   if (!culoriColor) {
     return null;
@@ -228,12 +287,22 @@ export const colorArray = (
     case "rgb": {
       const rgbColor = rgb(culoriColor);
       if (!rgbColor) return null;
-      return [roundTo(rgbColor.r * 255, 0), roundTo(rgbColor.g * 255, 0), roundTo(rgbColor.b * 255, 0), rgbColor.alpha ?? 1];
+      return [
+        roundTo(rgbColor.r * 255, 0),
+        roundTo(rgbColor.g * 255, 0),
+        roundTo(rgbColor.b * 255, 0),
+        rgbColor.alpha ?? 1,
+      ];
     }
     case "hsl": {
       const hslColor = hsl(culoriColor);
       if (!hslColor) return null;
-      return [roundTo(hslColor.h ?? 0, 0), roundTo(hslColor.s * 100, 1), roundTo(hslColor.l * 100, 1), hslColor.alpha ?? 1];
+      return [
+        roundTo(hslColor.h ?? 0, 0),
+        roundTo(hslColor.s * 100, 1),
+        roundTo(hslColor.l * 100, 1),
+        hslColor.alpha ?? 1,
+      ];
     }
     case "hsv": {
       // HSV is handled manually since culori doesn't parse HSV strings directly
@@ -242,7 +311,22 @@ export const colorArray = (
     case "hwb": {
       const hwbColor = hwb(culoriColor);
       if (!hwbColor) return null;
-      return [roundTo(hwbColor.h ?? 0, 0), roundTo(hwbColor.w * 100, 1), roundTo(hwbColor.b * 100, 1), hwbColor.alpha ?? 1];
+      return [
+        roundTo(hwbColor.h ?? 0, 0),
+        roundTo(hwbColor.w * 100, 1),
+        roundTo(hwbColor.b * 100, 1),
+        hwbColor.alpha ?? 1,
+      ];
+    }
+    case "oklch": {
+      const oklchColor = oklch(culoriColor);
+      if (!oklchColor) return null;
+      return [
+        roundTo((oklchColor.l ?? 0) * 100, 1),
+        roundTo(oklchColor.c ?? 0, 3),
+        roundTo(oklchColor.h ?? 0, 0),
+        oklchColor.alpha ?? 1,
+      ];
     }
     default:
       return null;
@@ -257,8 +341,20 @@ export const colorArray = (
  */
 export const colorParts = (
   color: string,
-  model: keyof ColorModel | "hex" = color.slice(0, 3) as keyof ColorModel,
+  model?: keyof ColorModel | "hex",
 ): ColorParts => {
+  // Auto-detect model if not provided
+  if (!model) {
+    if (color.startsWith("#")) {
+      model = "hex";
+    } else if (color.match(/^oklch\(/i)) {
+      model = "oklch";
+    } else if (color.match(/^hsv\(/i)) {
+      model = "hsv";
+    } else {
+      model = color.slice(0, 3) as keyof ColorModel;
+    }
+  }
   if (model === "hex" || color.startsWith("#")) {
     const parsed = parse(color.toLowerCase());
     if (!parsed) {
@@ -290,8 +386,8 @@ export const colorParts = (
         : `hwb(${hue} ${normalizedWhiteness}% ${normalizedBlackness}% / ${alpha})`;
   }
 
-  // For HSV, we don't need culori validation since we handle it manually
-  if (model === "hsv") {
+  // For HSV and OKLCH, we don't need culori validation since we handle them manually
+  if (model === "hsv" || model === "oklch") {
     return colorModels[model].reduce((acc, part, index) => {
       return { ...acc, [part]: arr[index] };
     }, {} as ColorParts);
@@ -320,7 +416,13 @@ export const validColor = (str: string): boolean => {
     const hsvValues = parseHsvString(str);
     return hsvValues !== null;
   }
-  
+
+  // For OKLCH, validate manually
+  if (str.match(/^oklch\(/i)) {
+    const oklchValues = parseOklchString(str);
+    return oklchValues !== null;
+  }
+
   // For HWB, normalize before validation
   if (str.match(/^hwb\(/i)) {
     const rawValues = parseHwbString(str);

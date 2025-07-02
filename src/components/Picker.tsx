@@ -1,210 +1,55 @@
 import React from "react";
 import { ColorModel } from "../types";
-import { setRoot, updateHsvGradients } from "../utils"; // Corrected import path
-import { allColorParts, colorPatterns } from "../utils/colorParsing";
-import { useColorStore } from "../utils/colorStore";
-import { background, rainbowBg } from "../utils/gradientUtils";
+import { colorModelConfig } from "../config/colorModelConfig";
+import { useColorSync } from "../hooks/useColorSync";
+import { useGradientEffects } from "../hooks/useGradientEffects";
 import { ColorModelPicker } from "./ColorModelPicker";
-import { CodeInput, Input } from "./Inputs";
+import { ColorSlider } from "./ColorSlider";
+import { ColorSwatch } from "./ColorSwatch";
+import { CodeInput } from "./Inputs";
 
-const setValue = (name: string, value: string): void => {
-  const elements = document.querySelectorAll<HTMLInputElement>(
-    `[name=${name}]`,
-  );
-  elements.forEach((el) => (el.value = value));
-};
-
-interface ColorSliderProps {
-  name: string;
-  model: keyof ColorModel | "hex";
-  onChange: (
-    name: string,
-    value: string,
-    model: keyof ColorModel | "hex",
-  ) => void;
-  max?: number | string;
-  step?: number | string;
-  min?: number | string;
-  style?: React.CSSProperties;
-}
-
-const ColorSlider: React.FC<ColorSliderProps> = ({
-  name,
-  model,
-  onChange,
-  ...props
-}) => {
-  // Subscribe to only the specific color property needed for this slider
-  const currentValue = useColorStore(
-    (state) => state[name as keyof typeof state],
-  );
-
-  const handleChange = ([name, value]: [string, string]) => {
-    onChange(name, value, model);
-  };
-
-  return (
-    <div className="color-slider">
-      <div className="slider-track">
-        <Input
-          type="range"
-          data-model={model}
-          name={name}
-          min={0}
-          max={100}
-          step={1}
-          value={String(currentValue)} // Ensure the input reflects the current value
-          onChange={handleChange}
-          {...props}
-          style={{ background: background[model][name], ...props.style }}
-        />
-      </div>
-      <Input
-        type="number"
-        data-model={model}
-        name={`${name}Num`}
-        min={0}
-        max={100}
-        value={String(currentValue)} // Ensure the input reflects the current value
-        onChange={handleChange}
-        {...props}
-        step={0.001}
-      />
-    </div>
-  );
-};
-
-const colorModelConfig: Record<
-  keyof ColorModel,
-  { sliders: { name: string; max?: number; step?: number }[]; pattern: RegExp }
-> = {
-  hsl: {
-    sliders: [
-      { name: "hue", max: 360, step: 1 },
-      { name: "saturation", step: 0.1 },
-      { name: "luminosity", step: 0.1 },
-      { name: "alpha", max: 1, step: 0.01 },
-    ],
-    pattern: colorPatterns.hsl,
-  },
-  hsv: {
-    sliders: [
-      { name: "hue", max: 360, step: 1 },
-      { name: "hsvSaturation", step: 0.1 },
-      { name: "value", step: 0.1 },
-      { name: "alpha", max: 1, step: 0.01 },
-    ],
-    pattern: colorPatterns.hsv,
-  },
-  hwb: {
-    sliders: [
-      { name: "hue", max: 360, step: 1 },
-      { name: "whiteness", step: 0.1 },
-      { name: "blackness", step: 0.1 },
-      { name: "alpha", max: 1, step: 0.01 },
-    ],
-    pattern: colorPatterns.hwb,
-  },
-  rgb: {
-    sliders: [
-      { name: "red", max: 255 },
-      { name: "green", max: 255 },
-      { name: "blue", max: 255 },
-      { name: "alpha", max: 1, step: 0.01 },
-    ],
-    pattern: colorPatterns.rgb,
-  },
-};
+/**
+ * Main color picker component that orchestrates the color selection interface.
+ *
+ * Features:
+ * - Multiple color model support (HSL, HSV, HWB, RGB, OKLCH)
+ * - Real-time gradient updates
+ * - Synchronized input controls
+ * - Color swatch display with hex input
+ */
 
 export const Picker: React.FC = () => {
-  const setColor = useColorStore((state) => state.setColor);
-  const adjustColor = useColorStore((state) => state.adjustColor);
+  // State for controlling which color models are visible
   const [visibleModels, setVisibleModels] = React.useState<
     Record<keyof ColorModel, boolean>
-  >({ hsl: true, hwb: false, hsv: false, rgb: false });
+  >({ hsl: true, hwb: false, oklch: false, hsv: false, rgb: false });
 
-  const swatch = React.useRef<HTMLDivElement>(null);
+  // Custom hooks to handle complex logic
+  const { updateInputs, handleSliderChange, handleTextChange } = useColorSync();
 
-  const updateInputs = (
-    newColor: ReturnType<typeof useColorStore.getState>["colorObject"],
-    fromInput?: string,
-  ) => {
-    const inputs = {
-      hsl: newColor.hsl,
-      hsv: newColor.hsv,
-      hwb: newColor.hwb,
-      rgb: newColor.rgb,
-      hex: newColor.hex,
-    };
-    Object.entries(inputs)
-      .filter(([k]) => k !== fromInput)
-      .forEach(([k, v]) => setValue(k, v));
-
-    allColorParts.forEach((prop) => {
-      setValue(prop, String(newColor[prop]));
-      if (`${prop}Num` !== fromInput)
-        setValue(`${prop}Num`, String(newColor[prop]));
-    });
-  };
-
-  const handleSliderChange = (
-    name: string,
-    value: string,
-    model: keyof ColorModel | "hex",
-  ) => {
-    const colorProp = name.replace("Num", "");
-    const matchingVal = name.includes("Num") ? colorProp : `${colorProp}Num`;
-    setValue(matchingVal, value);
-    const newColor = adjustColor({ [colorProp]: value, model });
-    if (newColor) updateInputs(newColor, name);
-  };
-
-  const handleTextChange = (name: string, value: string) => {
-    const newColor = setColor(value);
-    if (newColor) updateInputs(newColor, name);
-  };
-
-  // Subscribe to colorObject changes outside the render cycle
-  React.useEffect(() => {
-    // Initial update on mount
-    const initialColor = useColorStore.getState().colorObject;
-    updateInputs(initialColor);
-    setRoot("rainbow", rainbowBg());
-    updateHsvGradients(initialColor); // Initialize HSV gradients
-
-    // Subscribe to state changes
-    const unsubscribe = useColorStore.subscribe((state) => {
-      const newColor = state.colorObject;
-      updateInputs(newColor);
-      setRoot("rainbow", rainbowBg());
-      updateHsvGradients(newColor); // Update HSV gradients
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
+  // Set up gradient effects and color synchronization
+  useGradientEffects(updateInputs);
 
   return (
     <div>
+      {/* Color model selection controls */}
       <ColorModelPicker
         visibleModels={visibleModels}
         updateInputs={updateInputs}
         setVisibleModels={setVisibleModels}
       />
+
       <div className="main">
-        <div className="color-swatch-wrapper">
-          <div className="color-swatch" ref={swatch} />
-          <CodeInput
-            name="hex"
-            onChange={([name, value]) => handleTextChange(name, value)}
-            pattern={colorPatterns.hex.source}
-          />
-        </div>
+        {/* Color display and hex input */}
+        <ColorSwatch onHexChange={handleTextChange} />
+
+        {/* Color model sliders and inputs */}
         <div className="color-pickers">
           {Object.entries(visibleModels).map(
             ([modelKey, isVisible]) =>
               isVisible && (
                 <div key={modelKey} className="color-picker">
+                  {/* Render sliders for this color model */}
                   {colorModelConfig[modelKey as keyof ColorModel].sliders.map(
                     ({ name, max, step }) => (
                       <ColorSlider
@@ -217,6 +62,8 @@ export const Picker: React.FC = () => {
                       />
                     ),
                   )}
+
+                  {/* Color format input for this model */}
                   <CodeInput
                     name={modelKey}
                     onChange={([name, value]) => handleTextChange(name, value)}

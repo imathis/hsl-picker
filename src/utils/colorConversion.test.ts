@@ -6,7 +6,7 @@ import {
   toRgb,
   createColorObject,
 } from "./colorConversion";
-import { RGBColor, HSLColor, HSVColor, HWBColor, HEXColor, ColorModel } from "../types";
+import { RGBColor, HSLColor, HSVColor, HWBColor, HEXColor, OKLCHColor } from "../types";
 
 describe("colorConversion", () => {
   describe("toString", () => {
@@ -69,6 +69,21 @@ describe("colorConversion", () => {
       const hex: HEXColor = { hex: "#ff0000" };
       expect(toString.hex(hex)).toBe("#ff0000");
     });
+
+    it("formats OKLCH color correctly without alpha", () => {
+      const oklch: OKLCHColor = { oklchLightness: 0.5, oklchChroma: 0.2, oklchHue: 180 };
+      expect(toString.oklch(oklch)).toBe("oklch(0.5 0.2 180)");
+    });
+
+    it("formats OKLCH color correctly with alpha", () => {
+      const oklch: OKLCHColor = {
+        oklchLightness: 0.755,
+        oklchChroma: 0.15,
+        oklchHue: 45,
+        alpha: 0.8,
+      };
+      expect(toString.oklch(oklch)).toBe("oklch(0.755 0.15 45 / 0.8)");
+    });
   });
 
   describe("rgbaToHex", () => {
@@ -84,7 +99,7 @@ describe("colorConversion", () => {
 
     it("handles invalid RGB values (NaN)", () => {
       const rgb: RGBColor = { red: NaN, green: 0, blue: 0 };
-      expect(rgbaToHex(rgb)).toBe("#0000");
+      expect(rgbaToHex(rgb)).toBe("#000000");
     });
   });
 
@@ -193,6 +208,36 @@ describe("colorConversion", () => {
       expect(colorObj.rgb).toBe(color); // Preserves input
     });
 
+    it("creates a ColorObject from OKLCH string (percentage input)", () => {
+      const color = "oklch(62.8% 0.258 29.2)";
+      const colorObj = createColorObject(color);
+      expect(colorObj).toMatchObject({
+        model: "oklch",
+        oklchLightness: 0.628,
+        oklchChroma: 0.258,
+        oklchHue: 29.2,
+        alpha: 1,
+      });
+      expect(colorObj.oklch).toBe("oklch(0.628 0.258 29)"); // Output uses decimal format
+      // Should also have other color representations
+      expect(typeof colorObj.hex).toBe("string");
+      expect(typeof colorObj.rgb).toBe("string");
+      expect(typeof colorObj.hsl).toBe("string");
+    });
+
+    it("creates a ColorObject from OKLCH string (decimal input)", () => {
+      const color = "oklch(0.628 0.258 29.2)";
+      const colorObj = createColorObject(color);
+      expect(colorObj).toMatchObject({
+        model: "oklch",
+        oklchLightness: 0.628, // Now uses 0-1 scale internally
+        oklchChroma: 0.258,
+        oklchHue: 29.2,
+        alpha: 1,
+      });
+      expect(colorObj.oklch).toBe("oklch(0.628 0.258 29)"); // Output uses decimal format
+    });
+
     it("creates a ColorObject from HEX string", () => {
       const color = "#ff0000";
       const colorObj = createColorObject(color);
@@ -232,6 +277,17 @@ describe("colorConversion", () => {
       expect(colorObj.toString("hex")).toBe("#ff0000");
       expect(colorObj.toString("rgb")).toBe("rgb(255 0 0)");
       expect(colorObj.toString("hsv")).toBe("hsv(0 100% 100%)");
+      expect(typeof colorObj.toString("oklch")).toBe("string");
+    });
+
+    it("sets OKLCH properties correctly", () => {
+      const color = "oklch(50% 0.2 180)";
+      const colorObj = createColorObject(color);
+      const updated = colorObj.set({ oklchLightness: 0.75, oklchChroma: 0.1, model: "oklch" });
+      expect(updated.oklchLightness).toBe(0.75);
+      expect(updated.oklchChroma).toBe(0.1);
+      expect(updated.oklchHue).toBe(180); // Should preserve hue
+      expect(updated.oklch).toMatch(/oklch\(0\.75 0\.1 180\)/); // Decimal format
     });
 
     it("creates a ColorObject from HSV string", () => {
@@ -303,5 +359,203 @@ describe("colorConversion", () => {
       expect(colorObj.hue).toBe(180);
       expect(colorObj.hsvSaturation).toBeCloseTo(75, 0);
       expect(colorObj.value).toBeCloseTo(60, 0);
+    });
+  });
+
+  describe("OKLCH adjustment precision", () => {
+    it("should preserve chroma and hue when adjusting only lightness", () => {
+      // Test the user's reported issue: oklch(0.52 0.1 81) -> adjust lightness to 0.251
+      const original = createColorObject("oklch(0.52 0.1 81)", "oklch");
+      const adjusted = original.set({ oklchLightness: 0.251, model: "oklch" });
+      
+      expect(adjusted.oklchLightness).toBeCloseTo(0.251, 3);
+      // Chroma and hue should remain very close to original values
+      expect(adjusted.oklchChroma).toBeCloseTo(0.1, 2); // Allow small precision differences
+      expect(adjusted.oklchHue).toBeCloseTo(81, 1); // Allow small precision differences
+    });
+
+    it("should handle string values like slider inputs", () => {
+      // Test what happens when values come in as strings (like from sliders)
+      const original = createColorObject("oklch(0.577 0.226 302)", "oklch");
+      
+      // Simulate what adjustColor does with string conversion
+      const stringValue = "0.303";
+      const numericValue = parseFloat(stringValue);
+      const adjusted = original.set({ oklchLightness: numericValue, model: "oklch" });
+      
+      expect(adjusted.oklchLightness).toBeCloseTo(0.303, 3);
+      // Chroma and hue should remain very close to original values
+      expect(adjusted.oklchChroma).toBeCloseTo(0.226, 2);
+      expect(adjusted.oklchHue).toBeCloseTo(302, 1);
+    });
+    
+    it("should preserve lightness and hue when adjusting only chroma", () => {
+      const original = createColorObject("oklch(0.499 0.17 142)", "oklch");
+      const adjusted = original.set({ oklchChroma: 0.25, model: "oklch" });
+      
+      expect(adjusted.oklchChroma).toBeCloseTo(0.25, 3);
+      // Lightness and hue should remain very close to original values
+      expect(adjusted.oklchLightness).toBeCloseTo(0.499, 2);
+      expect(adjusted.oklchHue).toBeCloseTo(142, 1);
+    });
+    
+    it("should preserve lightness and chroma when adjusting only hue", () => {
+      const original = createColorObject("oklch(0.499 0.17 142)", "oklch");
+      const adjusted = original.set({ oklchHue: 200, model: "oklch" });
+      
+      expect(adjusted.oklchHue).toBeCloseTo(200, 1);
+      // Lightness and chroma should remain very close to original values
+      expect(adjusted.oklchLightness).toBeCloseTo(0.499, 2);
+      expect(adjusted.oklchChroma).toBeCloseTo(0.17, 2);
+    });
+
+    it("should preserve exact OKLCH values from user reported issue", () => {
+      // Test the exact case: oklch(0.444 0.173 282) with lightness adjustment
+      const original = createColorObject("oklch(0.444 0.173 282)", "oklch");
+      
+      // Verify original values are exact
+      expect(original.oklchLightness).toBe(0.444);
+      expect(original.oklchChroma).toBe(0.173);
+      expect(original.oklchHue).toBe(282);
+      
+      // Adjust lightness to various values
+      const adjusted1 = original.set({ oklchLightness: 0.3, model: "oklch" });
+      expect(adjusted1.oklchLightness).toBe(0.3);
+      expect(adjusted1.oklchChroma).toBe(0.173); // Should be EXACT, not 0.172 or 0.174
+      expect(adjusted1.oklchHue).toBe(282);       // Should be EXACT
+      
+      const adjusted2 = original.set({ oklchLightness: 0.1, model: "oklch" });
+      expect(adjusted2.oklchLightness).toBe(0.1);
+      expect(adjusted2.oklchChroma).toBe(0.173); // Should NOT go to 0.075
+      expect(adjusted2.oklchHue).toBe(282);       // Should be EXACT
+    });
+
+    it("should allow cross-model updates to properly change OKLCH", () => {
+      // Ensure HSL adjustments still properly update OKLCH values
+      const original = createColorObject("oklch(0.444 0.173 282)", "oklch");
+      const hslAdjusted = original.set({ saturation: 50, model: "hsl" });
+      
+      // OKLCH values should change when adjusting from other models
+      expect(hslAdjusted.oklchLightness).not.toBe(0.444);
+      expect(hslAdjusted.oklchChroma).not.toBe(0.173);
+      // This proves cross-model conversion still works
+    });
+  });
+
+  describe("Hue preservation across color models", () => {
+    it("should preserve hue when converting OKLCH with low chroma to HWB", () => {
+      // Test case from user: oklch(0.026 0.012 208) should preserve hue 208
+      const original = createColorObject("oklch(0.026 0.012 208)", "oklch");
+      
+      expect(original.oklchHue).toBeCloseTo(208, 1);
+      expect(original.hue).toBeCloseTo(208, 1); // HWB hue should also be preserved
+      
+      // Verify the HWB string representation preserves the hue
+      expect(original.hwb).toMatch(/hwb\(208/);
+    });
+
+    it("should preserve hue when converting HWB with high blackness to HSL", () => {
+      // Test case from user: hwb(131 12.9% 100%) should preserve hue 131
+      const original = createColorObject("hwb(131 12.9% 100%)", "hwb");
+      
+      expect(original.hue).toBeCloseTo(131, 1);
+      
+      // Verify the HSL string representation preserves the hue
+      expect(original.hsl).toMatch(/hsl\(131/);
+    });
+
+    it("should preserve hue for achromatic colors during non-hue adjustments", () => {
+      // Test low saturation color preserving hue
+      const lowSatColor = createColorObject("hsl(45 2% 50%)", "hsl");
+      
+      // Original hue should be preserved
+      expect(lowSatColor.hue).toBeCloseTo(45, 1);
+      
+      // When adjusting lightness (non-hue adjustment), hue should be preserved
+      const adjusted = lowSatColor.set({ luminosity: 30, model: "hsl" });
+      expect(adjusted.hue).toBeCloseTo(45, 1);
+      expect(adjusted.oklchHue).toBeCloseTo(45, 5); // Allow some conversion tolerance
+    });
+
+    it("should preserve OKLCH hue for achromatic colors during lightness adjustments", () => {
+      // Test very low chroma OKLCH color
+      const lowChromaColor = createColorObject("oklch(0.5 0.005 150)", "oklch");
+      
+      expect(lowChromaColor.oklchHue).toBeCloseTo(150, 1);
+      
+      // Adjust lightness - hue should be preserved
+      const adjusted = lowChromaColor.set({ oklchLightness: 0.3, model: "oklch" });
+      expect(adjusted.oklchHue).toBeCloseTo(150, 1);
+      expect(adjusted.hue).toBeCloseTo(150, 5); // HSL hue should also be preserved
+    });
+
+    it("should preserve source hue when colors become achromatic through adjustments", () => {
+      // Start with a color that has clear hue
+      const colorfulColor = createColorObject("hsl(90 80% 50%)", "hsl");
+      expect(colorfulColor.hue).toBeCloseTo(90, 1);
+      
+      // Reduce saturation to make it achromatic - hue should be preserved
+      const achromatic = colorfulColor.set({ saturation: 0, model: "hsl" });
+      expect(achromatic.hue).toBeCloseTo(90, 1);
+      expect(achromatic.saturation).toBe(0);
+    });
+
+    it("should preserve hue during cross-model conversions for achromatic colors", () => {
+      // Start with OKLCH achromatic color with specific hue
+      const oklchAchromatic = createColorObject("oklch(0.4 0.001 275)", "oklch");
+      expect(oklchAchromatic.oklchHue).toBeCloseTo(275, 1);
+      
+      // Convert to HSL model - should preserve the hue concept
+      const hslVersion = oklchAchromatic.set({ model: "hsl" });
+      expect(hslVersion.hue).toBeCloseTo(275, 10); // Allow some tolerance for very low chroma colors
+      
+      // Convert back to OKLCH - should preserve original hue
+      const backToOklch = hslVersion.set({ model: "oklch" });
+      expect(backToOklch.oklchHue).toBeCloseTo(275, 10);
+    });
+
+    it("should NOT preserve hue when hue is explicitly being changed", () => {
+      // This test ensures hue preservation doesn't interfere with intentional hue changes
+      const original = createColorObject("hsl(100 50% 50%)", "hsl");
+      expect(original.hue).toBeCloseTo(100, 1);
+      
+      // Explicitly change hue - should NOT preserve original
+      const hueChanged = original.set({ hue: 200, model: "hsl" });
+      expect(hueChanged.hue).toBeCloseTo(200, 1);
+      expect(hueChanged.hue).not.toBeCloseTo(100, 1);
+    });
+
+    it("should preserve exact hue values from user-reported examples", () => {
+      // Test the exact examples from user feedback
+      
+      // Example 1: Very dark OKLCH color
+      const darkOklch = createColorObject("oklch(0.123 0.012 208)", "oklch");
+      expect(darkOklch.oklchHue).toBeCloseTo(208, 1);
+      expect(darkOklch.hue).toBeCloseTo(208, 5); // Allow tolerance for very dark colors
+      
+      // Make it even darker - hue should be preserved  
+      const darkerOklch = darkOklch.set({ oklchLightness: 0.05, model: "oklch" });
+      expect(darkerOklch.oklchHue).toBeCloseTo(208, 1);
+      
+      // Example 2: HWB with very high blackness (achromatic)
+      const highBlacknessHwb = createColorObject("hwb(131 12.9% 100%)", "hwb");
+      expect(highBlacknessHwb.hue).toBeCloseTo(131, 1);
+      
+      // Adjust whiteness - hue should be preserved
+      const adjustedHwb = highBlacknessHwb.set({ whiteness: 20, model: "hwb" });
+      expect(adjustedHwb.hue).toBeCloseTo(131, 1);
+    });
+
+    it("should preserve hue in HSL strings when adjusting HWB blackness", () => {
+      // User-reported issue: hwb(293 9.8% 78.9%) -> hwb(293 9.8% 81.5%) 
+      // should preserve hue 293 in HSL representation, not show 295
+      const original = createColorObject("hwb(293 9.8% 78.9%)", "hwb");
+      expect(original.hue).toBeCloseTo(293, 1);
+      
+      // Adjust blackness - both hue object and HSL string should preserve hue 293
+      const adjusted = original.set({ blackness: 81.5, model: "hwb" });
+      expect(adjusted.hue).toBeCloseTo(293, 1);
+      expect(adjusted.hsl).toMatch(/hsl\(293/); // HSL string should show hue 293, not 295
+      expect(adjusted.hwb).toMatch(/hwb\(293/); // HWB string should maintain hue 293
     });
   });

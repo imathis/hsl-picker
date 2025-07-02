@@ -16,15 +16,22 @@ export interface ColorState {
   red: number;
   green: number;
   blue: number;
+  oklchLightness: number;
+  oklchChroma: number;
+  oklchHue: number;
   alpha: number;
   hex: string;
   model: keyof ColorModel | "hex";
+  showP3: boolean; // Toggle for P3 vs sRGB gamut display
+  gamutGaps: boolean; // Toggle for gradient behavior: false = smooth (browser fallback), true = hard cutoffs
   colorObject: ColorObject; // Add ColorObject to the state
   setColor: (c: string | ColorObject) => ColorObject;
   adjustColor: (args: {
     [key: string]: string;
     model: keyof ColorModel | "hex";
   }) => ColorObject;
+  setShowP3: (showP3: boolean) => void;
+  setGamutGaps: (gamutGaps: boolean) => void;
   colorModels: ColorModel;
   getColorObject: () => ColorObject;
 }
@@ -44,9 +51,14 @@ export const useColorStore = create<ColorState>((set, get) => {
     red: 0,
     green: 0,
     blue: 0,
+    oklchLightness: 0,
+    oklchChroma: 0,
+    oklchHue: 0,
     alpha: 1,
     hex: "#c0ff33",
     model: "rgb",
+    showP3: true, // Default to showing P3 gamut
+    gamutGaps: true, // Default to smooth gradients (browser fallback)
     colorObject: initialColorObject, // Initialize colorObject
     colorModels,
     setColor: (c: string | ColorObject) => {
@@ -63,12 +75,15 @@ export const useColorStore = create<ColorState>((set, get) => {
         red: newColor.red,
         green: newColor.green,
         blue: newColor.blue,
+        oklchLightness: newColor.oklchLightness,
+        oklchChroma: newColor.oklchChroma,
+        oklchHue: newColor.oklchHue,
         alpha: newColor.alpha,
         hex: newColor.hex,
         model: newColor.model,
         colorObject: newColor, // Store the ColorObject
       });
-      updateUiColor(newColor);
+      updateUiColor(newColor, get().showP3, get().gamutGaps);
       return newColor;
     },
     adjustColor: (args: {
@@ -76,7 +91,24 @@ export const useColorStore = create<ColorState>((set, get) => {
       model: keyof ColorModel | "hex";
     }) => {
       const currentColor = get().colorObject; // Use the stored ColorObject
-      const newColor = currentColor.set(args);
+
+      // Convert string values to numbers for numeric properties
+      const numericArgs: { [key: string]: string | number } = {};
+      Object.entries(args).forEach(([key, value]) => {
+        if (key === "model") {
+          numericArgs[key] = value;
+        } else {
+          // Convert to number if it's a numeric property
+          const numValue = parseFloat(value);
+          numericArgs[key] = isNaN(numValue) ? value : numValue;
+        }
+      });
+
+      const newColor = currentColor.set(
+        numericArgs as Partial<ColorParts> & {
+          model?: keyof ColorModel | "hex";
+        },
+      );
       set({
         hue: newColor.hue,
         saturation: newColor.saturation,
@@ -88,13 +120,28 @@ export const useColorStore = create<ColorState>((set, get) => {
         red: newColor.red,
         green: newColor.green,
         blue: newColor.blue,
+        oklchLightness: newColor.oklchLightness,
+        oklchChroma: newColor.oklchChroma,
+        oklchHue: newColor.oklchHue,
         alpha: newColor.alpha,
         hex: newColor.hex,
         model: newColor.model,
         colorObject: newColor, // Update the ColorObject
       });
-      updateUiColor(newColor);
+      updateUiColor(newColor, get().showP3, get().gamutGaps);
       return newColor;
+    },
+    setShowP3: (showP3: boolean) => {
+      set({ showP3 });
+      // Trigger gradient regeneration by updating UI
+      const currentColor = get().colorObject;
+      updateUiColor(currentColor, showP3, get().gamutGaps);
+    },
+    setGamutGaps: (gamutGaps: boolean) => {
+      set({ gamutGaps });
+      // Trigger gradient regeneration by updating UI
+      const currentColor = get().colorObject;
+      updateUiColor(currentColor, get().showP3, gamutGaps);
     },
     getColorObject: () => {
       return get().colorObject; // Simply return the stored ColorObject
@@ -111,9 +158,9 @@ const initializeColor = () => {
 };
 
 // Initialize after DOM is ready
-if (typeof window !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeColor);
+if (typeof window !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeColor);
   } else {
     initializeColor();
   }

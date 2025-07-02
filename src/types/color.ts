@@ -3,13 +3,14 @@
  */
 
 /**
- * Interface defining the structure of color models (HSL, HSV, HWB, RGB).
+ * Interface defining the structure of color models (HSL, HSV, HWB, RGB, OKLCH).
  */
 export interface ColorModel {
   hsl: string[];
   hwb: string[];
   hsv: string[];
   rgb: string[];
+  oklch: string[];
 }
 
 /**
@@ -60,9 +61,19 @@ export interface HEXColor {
 }
 
 /**
- * Union type for color parts (HSL, HSV, HWB, RGB, or HEX).
+ * Interface for OKLCH color components.
  */
-export type ColorParts = HSLColor | HSVColor | HWBColor | RGBColor | HEXColor;
+export interface OKLCHColor {
+  oklchLightness: number;
+  oklchChroma: number;
+  oklchHue: number;
+  alpha?: number;
+}
+
+/**
+ * Union type for color parts (HSL, HSV, HWB, RGB, HEX, or OKLCH).
+ */
+export type ColorParts = HSLColor | HSVColor | HWBColor | RGBColor | HEXColor | OKLCHColor;
 
 /**
  * Interface for a comprehensive color object.
@@ -81,12 +92,15 @@ export interface ColorObject {
   green: number;
   blue: number;
   alpha: number;
+  oklchLightness: number;
+  oklchChroma: number;
   hex: string;
   hsl: string;
   hsv: string;
   hwb: string;
   rgb: string;
-  [key: string]: any; // Allow dynamic model key
+  oklch: string;
+  [key: string]: string | ((...args: unknown[]) => ColorObject | string); // Allow dynamic model key
   set: (
     args: Partial<ColorParts> & { model?: keyof ColorModel | "hex" },
   ) => ColorObject;

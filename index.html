@@ -15,7 +15,7 @@
     />
     <meta
       name="description"
-      content="An excellent HSL, HWB, and RGB color picker, written in React on Vite and fully open source."
+      content="An excellent HSL, HWB, HSV, OKLCH and RGB color picker, written in React on Vite and fully open source."
     />
     <meta property="og:site_name" content="HSL Color Picker" />
     <meta property="og:title" content="HSL Color Picker" />
@@ -39,7 +39,7 @@
     <div id="app">
       <header class="banner">
         <div class="preamble">A Most Excellent</div>
-        <h1>HSL Color Picker</h1>
+        <h1>Color Picker</h1>
         <div class="credit">
           Created for your enjoyment by
           <a rel="noreferrer" href="https://brandonmathis.com" target="_blank"
@@ -61,7 +61,7 @@
             >
           </span>
           <span class="divider">|</span>
-          <button onclick="toggleExplainer()">HSL vs HWB vs HSV?</button>
+          <button onclick="toggleExplainer()">Quesitons?</button>
         </div>
         <div id="explainer" data-visible="false">
           <h3>HSL, HWB &amp; HSV: Hue</h3>
@@ -77,8 +77,8 @@
           <p>
             With the HSL model, a pure red is at <code>hsl(0 100% 50%)</code>.
             In HWB however, a pure red is <code>hwb(0 0% 0%)</code>, and in HSV
-            it's <code>hsv(0 100% 100%)</code>. Read on to
-            learn the differences between these three models.
+            it's <code>hsv(0 100% 100%)</code>. Read on to learn the differences
+            between these three models.
           </p>
           <h3>HSL: Saturation &amp; Luminosity</h3>
           <p>
@@ -111,33 +111,72 @@
           </p>
           <h3>HSV: Saturation &amp; Value</h3>
           <p>
-            <abbr title="Hue, Saturation, Value">HSV</abbr> (also called HSB for 
-            Brightness) shares the same hue wheel as HSL and HWB. However, saturation 
-            and value work differently. In HSV, our pure red is 
-            <code>hsv(0 100% 100%)</code>. Saturation controls color intensity just 
-            like in HSL, but value controls brightness from black (0%) to the pure 
-            hue (100%). Unlike HSL's luminosity, HSV's value never adds white to 
-            your color—it only controls how bright or dark it appears.
+            <abbr title="Hue, Saturation, Value">HSV</abbr> (also called HSB for
+            Brightness) shares the same hue wheel as HSL and HWB. However,
+            saturation and value work differently. In HSV, our pure red is
+            <code>hsv(0 100% 100%)</code>. Saturation controls color intensity
+            just like in HSL, but value controls brightness from black (0%) to
+            the pure hue (100%). Unlike HSL's luminosity, HSV's value never adds
+            white to your color—it only controls how bright or dark it appears.
           </p>
           <p>
-            Where HWB lets you independently add whiteness and blackness to a pure hue, 
-            HSV takes a different approach. You can desaturate toward gray (like HSL) 
-            or darken toward black with value, but there's no direct way to lighten 
-            toward white. This makes HSV particularly intuitive for artists familiar 
-            with traditional color mixing, where you start with a pure pigment and 
-            either dilute it or darken it.
+            Where HWB lets you independently add whiteness and blackness to a
+            pure hue, HSV takes a different approach. You can desaturate toward
+            gray (like HSL) or darken toward black with value, but there's no
+            direct way to lighten toward white. This makes HSV particularly
+            intuitive for artists familiar with traditional color mixing, where
+            you start with a pure pigment and either dilute it or darken it.
+          </p>
+          <h3>OKLCH: The New Color Kid on the Block</h3>
+          <p>
+            <abbr title="Oklab Lightness, Chroma, Hue">OKLCH</abbr> is the
+            newest color model to arrive in browsers, and it's a game-changer.
+            Unlike HSL/HSV/HWB that share the same hue wheel, OKLCH uses a
+            completely different hue system based on human perception. Where
+            HSL's yellow sits at 60°, OKLCH puts it around 110°. This isn't a
+            bug—it's a feature! OKLCH hues actually match how our eyes perceive
+            color relationships.
+          </p>
+          <p>
+            The real magic of OKLCH is <strong>wide gamut support</strong>.
+            While HSL and friends are limited to sRGB colors (the web's
+            traditional color space), OKLCH can describe vibrant colors that
+            exist in P3 and beyond—think the electric blues and neon greens you
+            see on modern displays. When you pick an out-of-gamut color,
+            browsers automatically fall back to the closest sRGB or P3
+            equivalent, so your colors work everywhere.
+          </p>
+          <p>
+            You'll notice <strong>gaps in the OKLCH sliders</strong>—these
+            aren't broken! They represent the limits of what displays can
+            actually show. Those gaps are "gamut boundaries" where certain
+            combinations of lightness, chroma, and hue simply don't exist in the
+            real world. It's like trying to mix a color that's simultaneously
+            super bright and super saturated—physics just won't allow it.
+          </p>
+          <p>
+            <strong>Pro tip:</strong> OKLCH can be tricky to navigate directly.
+            Try picking a color in HSL or HWB first, then switch to OKLCH and
+            crank up the chroma to push it into those vibrant P3 territories.
+            It's like having a turbo button for your colors!
           </p>
           <h3>Which to use?</h3>
           <p>
-            HSL came first to the web, rescuing us from the misery of picking
-            colors in HEX (#c0ff33 anyone?) or RGB. HSL was instantly a better
-            choice and lead me to create this website to help people understand
-            how HSL worked. However, if you've spent much time using graphics
-            applications you may be familiar with HSV (also called HSB). While
-            HSV isn't supported in CSS, HWB's approach of independently controlling
-            whiteness and blackness makes it a natural choice for those comfortable
-            with HSV workflows. With excellent browser support you will be fine
-            with either HSL or HWB.
+            Here's the thing: OKLCH is secretly a superpower for design systems.
+            Because it uses perceptual lightness, you can shift hues while
+            keeping the same visual brightness—something that's impossible with
+            HSL. Imagine creating an entire palette by picking one color and
+            just rotating the hue. With OKLCH, all those colors will feel
+            equally vivid and balanced. With HSL? Some will look washed out
+            while others pop.
+          </p>
+          <p>
+            That said, HSL and HWB are still fantastic for quick color
+            picking—they're intuitive and you already know them. Think of it
+            this way: use HSL or HWB to find your color, then switch to OKLCH to
+            perfect it. Want that blue to really sing on a modern display?
+            OKLCH. Need a whole rainbow of colors that work together? OKLCH.
+            Just picking a quick accent color? HSL or HWB will do you just fine.
           </p>
           <h3>WAIT A MINUTE, Eight Character Hex Colors???</h3>
           <p>

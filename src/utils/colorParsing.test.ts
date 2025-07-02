@@ -24,6 +24,10 @@ describe("colorParsing", () => {
       expect(colorModel("#ff0000")).toBe("hex");
     });
 
+    it("detects OKLCH model", () => {
+      expect(colorModel("oklch(50% 0.2 180)")).toBe("oklch");
+    });
+
     it("detects RGB with space-separated values", () => {
       expect(colorModel("rgb(255 0 0)")).toBe("rgb");
     });
@@ -78,6 +82,26 @@ describe("colorParsing", () => {
       const result = colorArray("hsl(0, 100%, 50%)");
       expect(result).toEqual([0, 100, 50, 1]);
     });
+
+    it("parses OKLCH string with percentage", () => {
+      const result = colorArray("oklch(50% 0.2 180)");
+      expect(result).toEqual([0.5, 0.2, 180, 1]);
+    });
+
+    it("parses OKLCH string with decimal", () => {
+      const result = colorArray("oklch(0.5 0.2 180)");
+      expect(result).toEqual([0.5, 0.2, 180, 1]); // Now uses 0-1 scale internally
+    });
+
+    it("parses OKLCH string with alpha (percentage)", () => {
+      const result = colorArray("oklch(75% 0.15 45 / 0.8)");
+      expect(result).toEqual([0.75, 0.15, 45, 0.8]);
+    });
+
+    it("parses OKLCH string with alpha (decimal)", () => {
+      const result = colorArray("oklch(0.75 0.15 45 / 0.8)");
+      expect(result).toEqual([0.75, 0.15, 45, 0.8]); // Now uses 0-1 scale internally
+    });
   });
 
   describe("colorParts", () => {
@@ -116,6 +140,46 @@ describe("colorParsing", () => {
       expect(result).toEqual({ red: 255, green: 0, blue: 0, alpha: 1 });
     });
 
+    it("parses OKLCH string with percentage", () => {
+      const result = colorParts("oklch(50% 0.2 180)");
+      expect(result).toEqual({
+        oklchLightness: 0.5,
+        oklchChroma: 0.2,
+        oklchHue: 180,
+        alpha: 1,
+      });
+    });
+
+    it("parses OKLCH string with decimal", () => {
+      const result = colorParts("oklch(0.5 0.2 180)");
+      expect(result).toEqual({
+        oklchLightness: 0.5, // Now uses 0-1 scale internally
+        oklchChroma: 0.2,
+        oklchHue: 180,
+        alpha: 1,
+      });
+    });
+
+    it("parses OKLCH string with alpha (percentage)", () => {
+      const result = colorParts("oklch(75% 0.15 45 / 0.8)");
+      expect(result).toEqual({
+        oklchLightness: 0.75,
+        oklchChroma: 0.15,
+        oklchHue: 45,
+        alpha: 0.8,
+      });
+    });
+
+    it("parses OKLCH string with alpha (decimal)", () => {
+      const result = colorParts("oklch(0.75 0.15 45 / 0.8)");
+      expect(result).toEqual({
+        oklchLightness: 0.75, // Now uses 0-1 scale internally
+        oklchChroma: 0.15,
+        oklchHue: 45,
+        alpha: 0.8,
+      });
+    });
+
     it("throws error for invalid string", () => {
       expect(() => colorParts("invalid")).toThrow(
         /Unsupported Color Error: Color `invalid` is not a supported color format/,
@@ -150,6 +214,26 @@ describe("colorParsing", () => {
 
     it("returns false for out-of-range HSL values", () => {
       expect(validColor("hsl(400, 100%, 50%)")).toBe(true);
+    });
+
+    it("validates OKLCH string with percentage", () => {
+      expect(validColor("oklch(50% 0.2 180)")).toBe(true);
+    });
+
+    it("validates OKLCH string with decimal", () => {
+      expect(validColor("oklch(0.5 0.2 180)")).toBe(true);
+    });
+
+    it("validates OKLCH string with alpha (percentage)", () => {
+      expect(validColor("oklch(75% 0.15 45 / 0.8)")).toBe(true);
+    });
+
+    it("validates OKLCH string with alpha (decimal)", () => {
+      expect(validColor("oklch(0.75 0.15 45 / 0.8)")).toBe(true);
+    });
+
+    it("returns false for invalid OKLCH string", () => {
+      expect(validColor("oklch(invalid)")).toBe(false);
     });
   });
 });

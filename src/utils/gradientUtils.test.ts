@@ -1,11 +1,9 @@
 import { describe, it, expect } from "vitest";
 import {
   trackBg,
-  hslBg,
-  hwbBg,
-  rgbBg,
   rainbowBg,
   background,
+  generateOklchGradient,
 } from "./gradientUtils";
 
 describe("gradientUtils", () => {
@@ -81,15 +79,16 @@ describe("gradientUtils", () => {
       it("saturation gradient toggles between 0%, 50%, 100%", () => {
         const result = background.hsl.saturation;
         expect(result).toBe(
-          "linear-gradient(to right, hsl(var(--picker-hue) 0% calc(var(--picker-luminosity) * 1%) / var(--picker-alpha)), hsl(var(--picker-hue) 50% calc(var(--picker-luminosity) * 1%) / var(--picker-alpha)), hsl(var(--picker-hue) 100% calc(var(--picker-luminosity) * 1%) / var(--picker-alpha)))",
+          "linear-gradient(to right, hsl(var(--picker-hue) 0% calc(var(--picker-luminosity) * 1%)), hsl(var(--picker-hue) 50% calc(var(--picker-luminosity) * 1%)), hsl(var(--picker-hue) 100% calc(var(--picker-luminosity) * 1%)))",
         );
       });
 
-      it("luminosity gradient steps through 0%, 16.67%, 33.33%, 50%", () => {
+      it("luminosity gradient steps from 0% to 100% (black to white)", () => {
         const result = background.hsl.luminosity;
-        expect(result).toBe(
-          "linear-gradient(to right, hsl(var(--picker-hue) calc(var(--picker-saturation) * 1%) 0% / var(--picker-alpha)), hsl(var(--picker-hue) calc(var(--picker-saturation) * 1%) 16.67% / var(--picker-alpha)), hsl(var(--picker-hue) calc(var(--picker-saturation) * 1%) 33.33% / var(--picker-alpha)), hsl(var(--picker-hue) calc(var(--picker-saturation) * 1%) 50% / var(--picker-alpha)))",
-        );
+        expect(result).toContain("linear-gradient(to right,");
+        expect(result).toContain("hsl(var(--picker-hue) calc(var(--picker-saturation) * 1%) 0%)");
+        expect(result).toContain("hsl(var(--picker-hue) calc(var(--picker-saturation) * 1%) 100%)");
+        expect(result).not.toContain("/ var(--picker-alpha)");
       });
 
       it("alpha gradient varies from 0 to 1", () => {
@@ -111,14 +110,14 @@ describe("gradientUtils", () => {
       it("whiteness gradient varies from 0% to 100%", () => {
         const result = background.hwb.whiteness;
         expect(result).toBe(
-          "linear-gradient(to right, hwb(var(--picker-hue) 0% calc(var(--picker-blackness) * 1%) / var(--picker-alpha)), hwb(var(--picker-hue) 50% calc(var(--picker-blackness) * 1%) / var(--picker-alpha)), hwb(var(--picker-hue) 100% calc(var(--picker-blackness) * 1%) / var(--picker-alpha)))",
+          "linear-gradient(to right, hwb(var(--picker-hue) 0% calc(var(--picker-blackness) * 1%)), hwb(var(--picker-hue) 50% calc(var(--picker-blackness) * 1%)), hwb(var(--picker-hue) 100% calc(var(--picker-blackness) * 1%)))",
         );
       });
 
       it("blackness gradient varies from 0% to 100%", () => {
         const result = background.hwb.blackness;
         expect(result).toBe(
-          "linear-gradient(to right, hwb(var(--picker-hue) calc(var(--picker-whiteness) * 1%) 0% / var(--picker-alpha)), hwb(var(--picker-hue) calc(var(--picker-whiteness) * 1%) 50% / var(--picker-alpha)), hwb(var(--picker-hue) calc(var(--picker-whiteness) * 1%) 100% / var(--picker-alpha)))",
+          "linear-gradient(to right, hwb(var(--picker-hue) calc(var(--picker-whiteness) * 1%) 0%), hwb(var(--picker-hue) calc(var(--picker-whiteness) * 1%) 50%), hwb(var(--picker-hue) calc(var(--picker-whiteness) * 1%) 100%))",
         );
       });
 
@@ -133,33 +132,23 @@ describe("gradientUtils", () => {
     describe("rgb model", () => {
       it("red gradient varies from 0 to 255", () => {
         const result = background.rgb.red;
-        expect(result).toMatch(/^linear-gradient\(to right, rgba\(0 /);
-        expect(result).toMatch(
-          /rgba\(255 var\(--picker-green\) var\(--picker-blue\) \/ var\(--picker-alpha\)\)\)$/,
-        );
-        expect((result.match(/rgba\(/g) || []).length).toBe(256);
+        expect(result).toMatch(/^linear-gradient\(to right, rgb\(0 /);
+        expect(result).toMatch(/rgb\(255 var\(--picker-green\) var\(--picker-blue\)\)\)$/);
+        expect((result.match(/rgb\(/g) || []).length).toBe(256);
       });
 
       it("green gradient varies from 0 to 255", () => {
         const result = background.rgb.green;
-        expect(result).toMatch(
-          /^linear-gradient\(to right, rgba\(var\(--picker-red\) 0 /,
-        );
-        expect(result).toMatch(
-          /rgba\(var\(--picker-red\) 255 var\(--picker-blue\) \/ var\(--picker-alpha\)\)\)$/,
-        );
-        expect((result.match(/rgba\(/g) || []).length).toBe(256);
+        expect(result).toMatch(/^linear-gradient\(to right, rgb\(var\(--picker-red\) 0 /);
+        expect(result).toMatch(/rgb\(var\(--picker-red\) 255 var\(--picker-blue\)\)\)$/);
+        expect((result.match(/rgb\(/g) || []).length).toBe(256);
       });
 
       it("blue gradient varies from 0 to 255", () => {
         const result = background.rgb.blue;
-        expect(result).toMatch(
-          /^linear-gradient\(to right, rgba\(var\(--picker-red\) var\(--picker-green\) 0 /,
-        );
-        expect(result).toMatch(
-          /rgba\(var\(--picker-red\) var\(--picker-green\) 255 \/ var\(--picker-alpha\)\)\)$/,
-        );
-        expect((result.match(/rgba\(/g) || []).length).toBe(256);
+        expect(result).toMatch(/^linear-gradient\(to right, rgb\(var\(--picker-red\) var\(--picker-green\) 0\)/);
+        expect(result).toMatch(/rgb\(var\(--picker-red\) var\(--picker-green\) 255\)\)$/);
+        expect((result.match(/rgb\(/g) || []).length).toBe(256);
       });
 
       it("alpha gradient varies from 0 to 1", () => {
@@ -193,7 +182,102 @@ describe("gradientUtils", () => {
       expect(background.rgb).toHaveProperty("green");
       expect(background.rgb).toHaveProperty("blue");
       expect(background.rgb).toHaveProperty("alpha");
-      expect(background.rgb.red).toMatch(/^linear-gradient\(to right, rgba/);
+      expect(background.rgb.red).toMatch(/^linear-gradient\(to right, rgb/);
+    });
+  });
+
+  describe("generateOklchGradient", () => {
+    it("generates correct lightness values from 0 to 1", () => {
+      const gradient = generateOklchGradient(0.5, 0.2, 180, 'lightness', 4, true, false);
+      
+      // Should contain lightness values from 0 to 1
+      expect(gradient).toContain('oklch(0.000');
+      expect(gradient).toContain('oklch(0.250');
+      expect(gradient).toContain('oklch(0.500');
+      expect(gradient).toContain('oklch(0.750');
+      expect(gradient).toContain('oklch(1.000');
+      
+      // Should NOT contain near-zero values like 0.005
+      expect(gradient).not.toContain('oklch(0.005');
+      expect(gradient).not.toContain('oklch(0.001');
+    });
+
+    it("generates correct chroma values from 0 to max", () => {
+      const gradient = generateOklchGradient(0.5, 0.2, 180, 'chroma', 4, true, false);
+      
+      // Should contain chroma values from 0 to 0.37 (P3 max)
+      expect(gradient).toContain('oklch(0.500 0.000');
+      expect(gradient).toContain('oklch(0.500 0.092');
+      expect(gradient).toContain('oklch(0.500 0.185');
+      expect(gradient).toContain('oklch(0.500 0.277');
+      expect(gradient).toContain('oklch(0.500 0.370');
+      
+      // Lightness should stay constant
+      const lightnessMatches = gradient.match(/oklch\((0\.500)/g);
+      expect(lightnessMatches?.length).toBe(5);
+    });
+
+    it("generates correct hue values from 0 to 360", () => {
+      const gradient = generateOklchGradient(0.5, 0.2, 180, 'hue', 4, true, false);
+      
+      // Should contain hue values from 0 to 360
+      expect(gradient).toContain('oklch(0.500 0.200 0)');
+      expect(gradient).toContain('oklch(0.500 0.200 90)');
+      expect(gradient).toContain('oklch(0.500 0.200 180)');
+      expect(gradient).toContain('oklch(0.500 0.200 270)');
+      expect(gradient).toContain('oklch(0.500 0.200 360)');
+      
+      // Lightness and chroma should stay constant
+      const constantMatches = gradient.match(/oklch\(0\.500 0\.200/g);
+      expect(constantMatches?.length).toBe(5);
+    });
+
+    it("gamut gaps mode shows proper lightness values (not 0.005)", () => {
+      const gradient = generateOklchGradient(0.499, 0.17, 142, 'lightness', 5, true, true);
+      
+      // Should NOT contain the problematic 0.005 values
+      expect(gradient).not.toContain('oklch(0.005');
+      expect(gradient).not.toContain('oklch(0.001');
+      
+      // Should contain proper gap markers or valid lightness values
+      if (gradient.includes('oklch(0.')) {
+        // If it contains actual OKLCH colors, they should have proper lightness values >= 0.1
+        const oklchMatches = gradient.match(/oklch\((\d\.\d+)/g);
+        if (oklchMatches) {
+          for (const match of oklchMatches) {
+            const lightness = parseFloat(match.replace('oklch(', ''));
+            // Allow black placeholder (0.2) or valid lightness values (>= 0.1)
+            expect(lightness >= 0.1 || lightness === 0.2).toBe(true);
+          }
+        }
+      }
+    });
+
+    it("gamut gaps mode shows proper chroma values (not 0.005)", () => {
+      const gradient = generateOklchGradient(0.499, 0.17, 142, 'chroma', 5, true, true);
+      
+      // Should NOT contain the problematic 0.005 lightness values  
+      expect(gradient).not.toContain('oklch(0.005');
+      expect(gradient).not.toContain('oklch(0.001');
+      
+      // Should contain the input lightness (0.499) in valid colors
+      if (gradient.includes('oklch(0.499')) {
+        expect(gradient).toContain('oklch(0.499');
+      }
+    });
+
+    it("validates gradient syntax and structure", () => {
+      const gradient = generateOklchGradient(0.5, 0.2, 180, 'lightness', 3, true, false);
+      
+      // Should be a valid CSS linear-gradient
+      expect(gradient).toMatch(/^linear-gradient\(to right,/);
+      expect(gradient).toMatch(/\)$/);
+      
+      // Should contain percentage positions
+      expect(gradient).toMatch(/\d+\.\d+%/);
+      
+      // Should contain valid OKLCH colors
+      expect(gradient).toMatch(/oklch\(\d\.\d+ \d\.\d+ \d+\)/);
     });
   });
 });

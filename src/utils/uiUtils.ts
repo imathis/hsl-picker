@@ -1,5 +1,5 @@
 import { ColorObject } from "../types";
-import { generateHsvGradient } from "./gradientUtils";
+import { generateHsvGradient, generateOklchGradient } from "./gradientUtils";
 
 /**
  * Sets a CSS custom property on the root element.
@@ -38,7 +38,7 @@ const updateModelVars = (color: ColorObject): void => {
 };
 
 // Debounce utility function
-function debounce<T extends (...args: any[]) => void>(
+function debounce<T extends (...args: unknown[]) => void>(
   func: T,
   wait: number,
 ): (...args: Parameters<T>) => void {
@@ -71,16 +71,37 @@ export const updateHsvGradients = (color: ColorObject) => {
 };
 
 /**
- * Updates CSS variables, root color, URL, and HSV gradients with the current color.
+ * Updates OKLCH gradient CSS variables with the current color, taking gamut limitations into account.
  * @param color - The ColorObject to apply.
+ * @param showP3 - Whether to use P3 gamut (true) or sRGB gamut (false).
+ * @param gamutGaps - Whether to show hard cutoffs for out-of-gamut colors (true) or smooth gradients (false).
  */
-export const updateUiColor = (color: ColorObject) => {
+export const updateOklchGradients = (color: ColorObject, showP3: boolean, gamutGaps: boolean) => {
+  // Generate gamut-aware OKLCH gradients using current OKLCH values
+  const oklchLightness = generateOklchGradient(color.oklchLightness, color.oklchChroma, color.oklchHue, 'lightness', 20, showP3, gamutGaps);
+  const oklchChroma = generateOklchGradient(color.oklchLightness, color.oklchChroma, color.oklchHue, 'chroma', 20, showP3, gamutGaps);
+  const oklchHue = generateOklchGradient(color.oklchLightness, color.oklchChroma, color.oklchHue, 'hue', 72, showP3, gamutGaps);
+  
+  // Set OKLCH-specific gradient CSS variables
+  setRoot("oklch-lightness-gradient", oklchLightness);
+  setRoot("oklch-chroma-gradient", oklchChroma);
+  setRoot("oklch-hue-gradient", oklchHue);
+};
+
+/**
+ * Updates CSS variables, root color, URL, HSV gradients, and OKLCH gradients with the current color.
+ * @param color - The ColorObject to apply.
+ * @param showP3 - Whether to use P3 gamut (true) or sRGB gamut (false).
+ * @param gamutGaps - Whether to show hard cutoffs for out-of-gamut colors (true) or smooth gradients (false).
+ */
+export const updateUiColor = (color: ColorObject, showP3: boolean, gamutGaps: boolean) => {
   updateModelVars(color);
   setRoot("color", color.rgb);
   updateUrl(color.hex);
   
-  // Only generate HSV gradients if we're in a browser environment and DOM is ready
+  // Only generate gradients if we're in a browser environment and DOM is ready
   if (typeof window !== 'undefined' && document.readyState !== 'loading') {
     updateHsvGradients(color);
+    updateOklchGradients(color, showP3, gamutGaps);
   }
 };

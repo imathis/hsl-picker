@@ -7,7 +7,7 @@
  *  a new color is chosen, the browser handles recalculating the actual rendered gradients.
  *
  */
-import { rgb, hsv } from "culori";
+import { rgb, oklch, oklab, inGamut } from "culori";
 
 /**
  * Generates an HSV-specific gradient by computing RGB values for each stop.
@@ -217,6 +217,17 @@ interface RgbBgProps {
 }
 
 /**
+ * Props for generating an OKLCH gradient background.
+ */
+interface OklchBgProps {
+  lightness?: string | ((v: number) => string | number);
+  chroma?: string | ((v: number) => string | number);
+  hue?: string | ((v: number) => string | number);
+  steps?: number;
+  alpha?: string | ((v: number) => string | number) | false;
+}
+
+/**
  * Generates an RGB gradient background.
  * @param red - Red value or function (default: CSS variable).
  * @param green - Green value or function (default: CSS variable).
@@ -232,7 +243,278 @@ export const rgbBg = ({
   steps = 255,
   alpha,
 }: RgbBgProps): string =>
-  trackBg({ type: "rgba", props: [red, green, blue], steps, alpha });
+  trackBg({ type: alpha === false ? "rgb" : "rgba", props: [red, green, blue], steps, alpha });
+
+/**
+ * Generates an OKLCH gradient background.
+ * @param lightness - Lightness value or function (default: CSS variable).
+ * @param chroma - Chroma value or function (default: CSS variable).
+ * @param hue - Hue value or function (default: CSS variable).
+ * @param steps - Number of gradient steps (default: 10).
+ * @param alpha - Alpha value or function (or false to disable).
+ * @returns A CSS linear-gradient string for OKLCH.
+ */
+export const oklchBg = ({
+  lightness = "var(--picker-oklchLightness)",
+  chroma = "var(--picker-oklchChroma)",
+  hue = "var(--picker-oklchHue)",
+  steps = 10,
+  alpha,
+}: OklchBgProps): string =>
+  trackBg({ type: "oklch", props: [lightness, chroma, hue], steps, alpha });
+
+/**
+ * Generates OKLCH gradients with two modes:
+ * - gamutGaps: false (default) - Smooth gradients, browser handles gamut mapping
+ * - gamutGaps: true - Hard cutoffs with black regions for out-of-gamut colors (educational mode)
+ * @param currentL - Current lightness value (0-1)
+ * @param currentC - Current chroma value (0-0.37)
+ * @param currentH - Current hue value (0-360)
+ * @param component - Which OKLCH component to vary ('lightness', 'chroma', 'hue')
+ * @param steps - Number of gradient steps (more steps = smoother gradients)
+ * @param showP3 - Whether to use P3 gamut (true) or sRGB gamut (false) - affects max chroma
+ * @param gamutGaps - Whether to show hard cutoffs for out-of-gamut colors (true) or smooth gradients (false)
+ * @returns A CSS linear-gradient string
+ */
+export const generateOklchGradient = (
+  currentL: number,
+  currentC: number, 
+  currentH: number,
+  component: 'lightness' | 'chroma' | 'hue',
+  steps: number = 50, // Increased for smoother gradients
+  showP3: boolean = true,
+  gamutGaps: boolean = false
+): string => {
+  // Constants for OKLCH color space
+  const L_MAX = 1.0; // Lightness 0-1
+  const C_MAX = showP3 ? 0.37 : 0.32; // P3 has wider gamut than sRGB
+  const H_MAX = 360; // Hue 0-360
+  
+  if (!gamutGaps) {
+    // SMOOTH MODE: Generate continuous gradient stops across the full range
+    const gradientStops: string[] = [];
+    
+    if (component === 'lightness') {
+      // SPECIAL CASE: Use OKLAB for lightness gradients to maintain hue consistency
+      // Convert current OKLCH color to OKLAB for interpolation
+      const currentOklch = { mode: 'oklch' as const, l: currentL, c: currentC, h: currentH };
+      const currentOklab = oklab(currentOklch);
+      
+      if (!currentOklab) {
+        // Fallback to OKLCH if conversion fails
+        for (let i = 0; i <= steps; i++) {
+          const l = (i / steps) * L_MAX;
+          const colorStop = `oklch(${l.toFixed(3)} ${currentC.toFixed(3)} ${currentH.toFixed(0)})`;
+          const position = (i / steps) * 100;
+          gradientStops.push(`${colorStop} ${position.toFixed(1)}%`);
+        }
+      } else {
+        // Generate gradient in OKLAB space for better lightness transitions
+        for (let i = 0; i <= steps; i++) {
+          const lightnessFactor = i / steps; // 0 to 1
+          
+          // Interpolate in OKLAB space - vary only lightness (L), keep a,b constant
+          const oklabColor = {
+            mode: 'oklab' as const,
+            l: lightnessFactor, // Vary lightness from 0 to 1
+            a: currentOklab.a, // Keep a constant for hue consistency
+            b: currentOklab.b, // Keep b constant for hue consistency
+            alpha: currentOklab.alpha
+          };
+          
+          // Convert back to OKLCH for CSS output
+          const outputOklch = oklch(oklabColor);
+          if (outputOklch) {
+            const colorStop = `oklch(${outputOklch.l.toFixed(3)} ${(outputOklch.c || 0).toFixed(3)} ${(outputOklch.h || currentH).toFixed(0)})`;
+            const position = (i / steps) * 100;
+            gradientStops.push(`${colorStop} ${position.toFixed(1)}%`);
+          }
+        }
+      }
+    } else {
+      // STANDARD CASE: Use OKLCH for chroma and hue gradients (these work well)
+      for (let i = 0; i <= steps; i++) {
+        const l = currentL; // Already in 0-1 scale
+        let c = currentC;
+        let h = currentH;
+        
+        switch (component) {
+          case 'chroma':
+            // Vary chroma from 0 to max chroma
+            c = (i / steps) * C_MAX;
+            break;
+          case 'hue':
+            // Vary hue from 0 to 360 degrees
+            h = (i / steps) * H_MAX;
+            break;
+        }
+        
+        // Ensure hue is valid
+        const validHue = isNaN(h) || h === undefined ? 0 : h;
+        
+        // Create the OKLCH color string - let browser handle gamut mapping
+        const colorStop = `oklch(${l.toFixed(3)} ${c.toFixed(3)} ${validHue.toFixed(0)})`;
+        const position = (i / steps) * 100;
+        
+        gradientStops.push(`${colorStop} ${position.toFixed(1)}%`);
+      }
+    }
+    
+    return `linear-gradient(to right, ${gradientStops.join(', ')})`;
+  } else {
+    // HARD CUTOFFS MODE: Show gaps for out-of-gamut colors (educational mode)
+    // This mode helps users understand the limits of different color gamuts
+    const gradientStops: string[] = [];
+    const validColors: { color: string; position: number }[] = [];
+    
+    // First pass: identify valid colors within the target gamut
+    if (component === 'lightness') {
+      // SPECIAL CASE: Use OKLAB for lightness gradients to maintain hue consistency
+      // OKLCH lightness changes can shift perceived hue, so we interpolate in OKLAB space
+      // where lightness changes are more perceptually uniform
+      const currentOklch = { mode: 'oklch' as const, l: currentL, c: currentC, h: currentH };
+      const currentOklab = oklab(currentOklch);
+      
+      if (currentOklab) {
+        for (let i = 0; i <= steps; i++) {
+          const lightnessFactor = i / steps; // 0 to 1
+          
+          // Interpolate in OKLAB space for perceptually uniform lightness changes
+          const oklabColor = {
+            mode: 'oklab' as const,
+            l: lightnessFactor,
+            a: currentOklab.a, // Preserve green-red axis
+            b: currentOklab.b, // Preserve blue-yellow axis
+            alpha: currentOklab.alpha
+          };
+          
+          // Convert back to OKLCH for gamut checking
+          const outputOklch = oklch(oklabColor);
+          if (outputOklch) {
+            const oklchColorForGamut = {
+              mode: 'oklch' as const,
+              l: outputOklch.l,
+              c: outputOklch.c || 0,
+              h: outputOklch.h || currentH
+            };
+            
+            // Check if color is in gamut (sRGB OR P3 when showP3 is true)
+            const isInGamut = showP3 
+              ? (inGamut('rgb')(oklchColorForGamut) || inGamut('p3')(oklchColorForGamut))
+              : inGamut('rgb')(oklchColorForGamut);
+            const position = (i / steps) * 100;
+            
+            if (isInGamut) {
+              const colorStop = `oklch(${outputOklch.l.toFixed(3)} ${(outputOklch.c || 0).toFixed(3)} ${(outputOklch.h || currentH).toFixed(0)})`;
+              validColors.push({ color: colorStop, position });
+            }
+          }
+        }
+      } else {
+        // Fallback to standard OKLCH approach if OKLAB conversion fails
+        for (let i = 0; i <= steps; i++) {
+          const l = (i / steps) * 1.0;
+          const oklchColorForGamut = { 
+            mode: 'oklch' as const, 
+            l: l, 
+            c: Math.max(0, currentC), 
+            h: currentH 
+          };
+          
+          // Check if color is in gamut (sRGB OR P3 when showP3 is true)
+          const isInGamut = showP3 
+            ? (inGamut('rgb')(oklchColorForGamut) || inGamut('p3')(oklchColorForGamut))
+            : inGamut('rgb')(oklchColorForGamut);
+          const position = (i / steps) * 100;
+          
+          if (isInGamut) {
+            const colorStop = `oklch(${l.toFixed(3)} ${currentC.toFixed(3)} ${currentH.toFixed(0)})`;
+            validColors.push({ color: colorStop, position });
+          }
+        }
+      }
+    } else {
+      // STANDARD CASE: Use OKLCH for chroma and hue gradients  
+      for (let i = 0; i <= steps; i++) {
+        const l = currentL;
+        let c = currentC;
+        let h = currentH;
+        
+        switch (component) {
+          case 'chroma':
+            c = (i / steps) * C_MAX;
+            break;
+          case 'hue':
+            h = (i / steps) * H_MAX;
+            break;
+        }
+        
+        // Ensure hue is valid
+        const validHue = isNaN(h) || h === undefined ? 0 : h;
+        
+        // Create OKLCH color for gamut checking (culori uses 0-1 for lightness)
+        const oklchColorForGamut = { 
+          mode: 'oklch' as const, 
+          l: l, 
+          c: Math.max(0, c), 
+          h: validHue 
+        };
+        
+        // Check if color is in gamut (sRGB OR P3 when showP3 is true)
+        const isInGamut = showP3 
+          ? (inGamut('rgb')(oklchColorForGamut) || inGamut('p3')(oklchColorForGamut))
+          : inGamut('rgb')(oklchColorForGamut);
+        const position = (i / steps) * 100;
+        
+        if (isInGamut) {
+          const colorStop = `oklch(${l.toFixed(3)} ${c.toFixed(3)} ${validHue.toFixed(0)})`;
+          validColors.push({ color: colorStop, position });
+        }
+      }
+    }
+    
+    // Second pass: create gradient with hard cutoffs
+    if (validColors.length === 0) {
+      return 'linear-gradient(to right, oklch(0.2 0 0))';
+    }
+    
+    // Build gradient with explicit positions and hard cutoffs for gaps
+    for (let i = 0; i < validColors.length; i++) {
+      const { color, position } = validColors[i];
+      
+      // Add black at the start if first valid color isn't at 0%
+      if (i === 0 && position > 0) {
+        gradientStops.push('oklch(0.2 0 0) 0%');
+        gradientStops.push(`oklch(0.2 0 0) ${position.toFixed(1)}%`);
+      }
+      
+      gradientStops.push(`${color} ${position.toFixed(1)}%`);
+      
+      // Check for gaps to next valid color
+      if (i < validColors.length - 1) {
+        const nextPosition = validColors[i + 1].position;
+        const gap = nextPosition - position;
+        const stepSize = 100 / steps;
+        
+        // If there's a gap of more than 1.5 steps, add hard cutoff
+        if (gap > stepSize * 1.5) {
+          gradientStops.push(`${color} ${(position + 0.1).toFixed(1)}%`);
+          gradientStops.push(`oklch(0.2 0 0) ${(position + 0.1).toFixed(1)}%`);
+          gradientStops.push(`oklch(0.2 0 0) ${(nextPosition - 0.1).toFixed(1)}%`);
+        }
+      } else {
+        // Last valid color - add black to end if not at 100%
+        if (position < 100) {
+          gradientStops.push(`${color} ${(position + 0.1).toFixed(1)}%`);
+          gradientStops.push(`oklch(0.2 0 0) ${(position + 0.1).toFixed(1)}%`);
+          gradientStops.push('oklch(0.2 0 0) 100%');
+        }
+      }
+    }
+    
+    return `linear-gradient(to right, ${gradientStops.join(', ')})`;
+  }
+};
 
 /**
  * Generates a rainbow gradient background for the hue slider.
@@ -264,6 +546,7 @@ type BackgroundConfig = {
   hsv: Record<string, Partial<HsvBgProps>>;
   hwb: Record<string, Partial<HwbBgProps>>;
   rgb: Record<string, Partial<RgbBgProps>>;
+  oklch: Record<string, Partial<OklchBgProps>>;
 };
 
 /**
@@ -271,14 +554,16 @@ type BackgroundConfig = {
  */
 const backgroundConfig: BackgroundConfig = {
   hsl: {
-    hue: { hue: (v: number) => v, steps: 360 },
+    hue: { hue: (v: number) => v, steps: 360, alpha: false },
     saturation: {
       sat: (s: number) => formatPercentage((s / 2) * 100),
       steps: 2,
+      alpha: false,
     },
     luminosity: {
-      lig: (l: number) => formatPercentage((l / 3) * 50),
-      steps: 3,
+      lig: (l: number) => formatPercentage((l / 10) * 100),
+      steps: 10,
+      alpha: false,
     },
     alpha: { alpha: (v: number) => v, steps: 1 },
   },
@@ -289,21 +574,29 @@ const backgroundConfig: BackgroundConfig = {
     alpha: { alpha: (v: number) => v, steps: 1 },
   },
   hwb: {
-    hue: { hue: (v: number) => v, steps: 360 },
+    hue: { hue: (v: number) => v, steps: 360, alpha: false },
     whiteness: {
       whiteness: (v: number) => formatPercentage((v / 2) * 100),
       steps: 2,
+      alpha: false,
     },
     blackness: {
       blackness: (v: number) => formatPercentage((v / 2) * 100),
       steps: 2,
+      alpha: false,
     },
     alpha: { alpha: (v: number) => v, steps: 1 },
   },
   rgb: {
-    red: { red: (v: number) => v, steps: 255 },
-    green: { green: (v: number) => v, steps: 255 },
-    blue: { blue: (v: number) => v, steps: 255 },
+    red: { red: (v: number) => v, steps: 255, alpha: false },
+    green: { green: (v: number) => v, steps: 255, alpha: false },
+    blue: { blue: (v: number) => v, steps: 255, alpha: false },
+    alpha: { alpha: (v: number) => v, steps: 1 },
+  },
+  oklch: {
+    oklchLightness: "var(--picker-oklch-lightness-gradient)",
+    oklchChroma: "var(--picker-oklch-chroma-gradient)",
+    oklchHue: "var(--picker-oklch-hue-gradient)",
     alpha: { alpha: (v: number) => v, steps: 1 },
   },
 };
@@ -321,7 +614,9 @@ export const background: BackgroundModel = Object.fromEntries(
         typeof config === "string" ? config :
         (model === "hsl" ? hslBg : 
          model === "hsv" ? hsvBg : 
-         model === "hwb" ? hwbBg : rgbBg)(config),
+         model === "hwb" ? hwbBg : 
+         model === "oklch" ? oklchBg :
+         rgbBg)(config),
       ]),
     ),
   ]),

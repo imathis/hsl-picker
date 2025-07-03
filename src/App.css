@@ -44,7 +44,7 @@ input[type="text"] {
 input[type="number"] {
   text-align: right;
   padding: 3px 4px;
-  font-size: 0.9em;
+  font-size: 0.95em;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -182,7 +182,7 @@ input[type="number"] {
 
   .color-slider {
     display: grid;
-    grid-auto-columns: minmax(180px, 500px) 45px;
+    grid-auto-columns: minmax(180px, 500px) 65px;
     grid-auto-flow: column;
     align-items: center;
   }
@@ -299,6 +299,7 @@ input[type="number"] {
   border-radius: 8px;
   padding: 2px 8px;
   place-self: center;
+  color: #fff;
 }
 
 .color-pickers {
@@ -349,7 +350,7 @@ button.copy-code[data-copied] svg {
 }
 
 .slider-track {
-  height: 20px;
+  height: 28px;
   background-image:
     var(--picker-track-check-gradient), var(--picker-track-check-gradient);
   background-size: 20px 20px;
@@ -375,7 +376,7 @@ input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   box-shadow: var(--picker-slider-box-shadow);
-  height: 20px;
+  height: 28px;
   border-radius: 15px;
   width: 100%;
   margin: 0;
@@ -415,9 +416,9 @@ input[type="range"]::-ms-track {
 /* thumb */
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+  rotate: 45deg;
   cursor: ew-resize;
   transition: box-shadow 0.2s;
   box-shadow: var(--picker-thumb-box-shadow);

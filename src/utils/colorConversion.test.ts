@@ -218,7 +218,7 @@ describe("colorConversion", () => {
         oklchHue: 29.2,
         alpha: 1,
       });
-      expect(colorObj.oklch).toBe("oklch(0.628 0.258 29)"); // Output uses decimal format
+      expect(colorObj.oklch).toBe("oklch(0.628 0.258 29.2)"); // Output preserves decimal precision
       // Should also have other color representations
       expect(typeof colorObj.hex).toBe("string");
       expect(typeof colorObj.rgb).toBe("string");
@@ -235,7 +235,7 @@ describe("colorConversion", () => {
         oklchHue: 29.2,
         alpha: 1,
       });
-      expect(colorObj.oklch).toBe("oklch(0.628 0.258 29)"); // Output uses decimal format
+      expect(colorObj.oklch).toBe("oklch(0.628 0.258 29.2)"); // Output preserves decimal precision
     });
 
     it("creates a ColorObject from HEX string", () => {

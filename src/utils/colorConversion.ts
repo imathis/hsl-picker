@@ -59,7 +59,7 @@ export const toString = {
       : `rgb(${main})`;
   },
   oklch: ({ oklchLightness, oklchChroma, oklchHue, alpha }: OKLCHColor): string => {
-    const main = `${roundTo(oklchLightness, 3)} ${roundTo(oklchChroma, 3)} ${roundTo(oklchHue, 0)}`;
+    const main = `${roundTo(oklchLightness, 3)} ${roundTo(oklchChroma, 3)} ${roundTo(oklchHue, 3)}`;
     return alpha !== undefined && alpha < 1
       ? `oklch(${main} / ${roundTo(alpha, 2)})`
       : `oklch(${main})`;
@@ -458,6 +458,17 @@ export const createColorObject = (
   if (isAchromatic && preservedOklchHue !== hslvwb.oklchHue) {
     // Regenerate OKLCH string with preserved hue
     const oklchColor: OKLCHColor = { oklchLightness: hslvwb.oklchLightness, oklchChroma: hslvwb.oklchChroma, oklchHue: preservedOklchHue, alpha: hslvwb.alpha };
+    finalOklch = toString.oklch(oklchColor);
+  }
+  
+  // For OKLCH source, preserve original string for better precision if values match
+  if (model === "oklch" && current.oklchLightness !== undefined && current.oklchChroma !== undefined && current.oklchHue !== undefined) {
+    const oklchColor: OKLCHColor = { 
+      oklchLightness: current.oklchLightness, 
+      oklchChroma: current.oklchChroma, 
+      oklchHue: current.oklchHue, 
+      alpha: current.alpha 
+    };
     finalOklch = toString.oklch(oklchColor);
   }
   

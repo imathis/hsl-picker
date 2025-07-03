@@ -7,7 +7,7 @@ import { generateHsvGradient, generateOklchGradient } from "./gradientUtils";
  * @param value - The value to set.
  */
 export const setRoot = (prop: string, value: string): void => {
-  if (typeof document !== 'undefined' && document.documentElement) {
+  if (typeof document !== "undefined" && document.documentElement) {
     document.documentElement.style.setProperty(`--picker-${prop}`, value);
   }
 };
@@ -18,10 +18,10 @@ export const setRoot = (prop: string, value: string): void => {
  * @returns The property value.
  */
 export const getRoot = (prop: string): string => {
-  if (typeof document !== 'undefined' && document.documentElement) {
+  if (typeof document !== "undefined" && document.documentElement) {
     return document.documentElement.style.getPropertyValue(`--picker-${prop}`);
   }
-  return '';
+  return "";
 };
 
 /**
@@ -60,10 +60,28 @@ export const updateUrl = debounce((colorHex: string) => {
  */
 export const updateHsvGradients = (color: ColorObject) => {
   // Generate proper HSV gradients using the current HSV values
-  const hsvHue = generateHsvGradient(color.hue, color.hsvSaturation, color.value, 'hue', 36);
-  const hsvSaturation = generateHsvGradient(color.hue, color.hsvSaturation, color.value, 'saturation', 10);
-  const hsvValue = generateHsvGradient(color.hue, color.hsvSaturation, color.value, 'value', 10);
-  
+  const hsvHue = generateHsvGradient(
+    color.hue,
+    color.hsvSaturation,
+    color.value,
+    "hue",
+    36,
+  );
+  const hsvSaturation = generateHsvGradient(
+    color.hue,
+    color.hsvSaturation,
+    color.value,
+    "saturation",
+    10,
+  );
+  const hsvValue = generateHsvGradient(
+    color.hue,
+    color.hsvSaturation,
+    color.value,
+    "value",
+    10,
+  );
+
   // Set HSV-specific gradient CSS variables
   setRoot("hsv-hue-gradient", hsvHue);
   setRoot("hsv-saturation-gradient", hsvSaturation);
@@ -76,12 +94,40 @@ export const updateHsvGradients = (color: ColorObject) => {
  * @param showP3 - Whether to use P3 gamut (true) or sRGB gamut (false).
  * @param gamutGaps - Whether to show hard cutoffs for out-of-gamut colors (true) or smooth gradients (false).
  */
-export const updateOklchGradients = (color: ColorObject, showP3: boolean, gamutGaps: boolean) => {
-  // Generate gamut-aware OKLCH gradients using current OKLCH values
-  const oklchLightness = generateOklchGradient(color.oklchLightness, color.oklchChroma, color.oklchHue, 'lightness', 20, showP3, gamutGaps);
-  const oklchChroma = generateOklchGradient(color.oklchLightness, color.oklchChroma, color.oklchHue, 'chroma', 20, showP3, gamutGaps);
-  const oklchHue = generateOklchGradient(color.oklchLightness, color.oklchChroma, color.oklchHue, 'hue', 72, showP3, gamutGaps);
-  
+export const updateOklchGradients = (
+  color: ColorObject,
+  showP3: boolean,
+  gamutGaps: boolean,
+) => {
+  // Generate gamut-aware OKLCH gradients using current OKLCH values with higher resolution
+  const oklchLightness = generateOklchGradient(
+    color.oklchLightness,
+    color.oklchChroma,
+    color.oklchHue,
+    "lightness",
+    100, // Increased from 20 to 100 for better accuracy
+    showP3,
+    gamutGaps,
+  );
+  const oklchChroma = generateOklchGradient(
+    color.oklchLightness,
+    color.oklchChroma,
+    color.oklchHue,
+    "chroma",
+    100, // Increased from 20 to 100 for better accuracy
+    showP3,
+    gamutGaps,
+  );
+  const oklchHue = generateOklchGradient(
+    color.oklchLightness,
+    color.oklchChroma,
+    color.oklchHue,
+    "hue",
+    360, // Increased from 72 to 360 for 1-degree precision
+    showP3,
+    gamutGaps,
+  );
+
   // Set OKLCH-specific gradient CSS variables
   setRoot("oklch-lightness-gradient", oklchLightness);
   setRoot("oklch-chroma-gradient", oklchChroma);
@@ -94,13 +140,17 @@ export const updateOklchGradients = (color: ColorObject, showP3: boolean, gamutG
  * @param showP3 - Whether to use P3 gamut (true) or sRGB gamut (false).
  * @param gamutGaps - Whether to show hard cutoffs for out-of-gamut colors (true) or smooth gradients (false).
  */
-export const updateUiColor = (color: ColorObject, showP3: boolean, gamutGaps: boolean) => {
+export const updateUiColor = (
+  color: ColorObject,
+  showP3: boolean,
+  gamutGaps: boolean,
+) => {
   updateModelVars(color);
   setRoot("color", color.rgb);
   updateUrl(color.hex);
-  
+
   // Only generate gradients if we're in a browser environment and DOM is ready
-  if (typeof window !== 'undefined' && document.readyState !== 'loading') {
+  if (typeof window !== "undefined" && document.readyState !== "loading") {
     updateHsvGradients(color);
     updateOklchGradients(color, showP3, gamutGaps);
   }

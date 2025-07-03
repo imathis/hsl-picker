@@ -305,7 +305,8 @@ export const generateOklchGradient = (
         for (let i = 0; i <= steps; i++) {
           const l = (i / steps) * L_MAX;
           const colorStop = `oklch(${l.toFixed(3)} ${currentC.toFixed(3)} ${currentH.toFixed(0)})`;
-          const position = (i / steps) * 100;
+          // Position based on actual lightness value, not step index
+          const position = l * 100;
           gradientStops.push(`${colorStop} ${position.toFixed(1)}%`);
         }
       } else {
@@ -326,7 +327,8 @@ export const generateOklchGradient = (
           const outputOklch = oklch(oklabColor);
           if (outputOklch) {
             const colorStop = `oklch(${outputOklch.l.toFixed(3)} ${(outputOklch.c || 0).toFixed(3)} ${(outputOklch.h || currentH).toFixed(0)})`;
-            const position = (i / steps) * 100;
+            // Position based on actual lightness value, not step index
+            const position = lightnessFactor * 100;
             gradientStops.push(`${colorStop} ${position.toFixed(1)}%`);
           }
         }
@@ -337,16 +339,23 @@ export const generateOklchGradient = (
         const l = currentL; // Already in 0-1 scale
         let c = currentC;
         let h = currentH;
+        let position: number;
         
         switch (component) {
           case 'chroma':
             // Vary chroma from 0 to max chroma
             c = (i / steps) * C_MAX;
+            // Position based on actual chroma value
+            position = (c / C_MAX) * 100;
             break;
           case 'hue':
             // Vary hue from 0 to 360 degrees
             h = (i / steps) * H_MAX;
+            // Position based on actual hue value
+            position = (h / H_MAX) * 100;
             break;
+          default:
+            position = (i / steps) * 100;
         }
         
         // Ensure hue is valid
@@ -354,7 +363,6 @@ export const generateOklchGradient = (
         
         // Create the OKLCH color string - let browser handle gamut mapping
         const colorStop = `oklch(${l.toFixed(3)} ${c.toFixed(3)} ${validHue.toFixed(0)})`;
-        const position = (i / steps) * 100;
         
         gradientStops.push(`${colorStop} ${position.toFixed(1)}%`);
       }
@@ -402,7 +410,8 @@ export const generateOklchGradient = (
             const isInGamut = showP3 
               ? (inGamut('rgb')(oklchColorForGamut) || inGamut('p3')(oklchColorForGamut))
               : inGamut('rgb')(oklchColorForGamut);
-            const position = (i / steps) * 100;
+            // Position based on actual lightness value, not step index
+            const position = lightnessFactor * 100;
             
             if (isInGamut) {
               const colorStop = `oklch(${outputOklch.l.toFixed(3)} ${(outputOklch.c || 0).toFixed(3)} ${(outputOklch.h || currentH).toFixed(0)})`;
@@ -425,7 +434,8 @@ export const generateOklchGradient = (
           const isInGamut = showP3 
             ? (inGamut('rgb')(oklchColorForGamut) || inGamut('p3')(oklchColorForGamut))
             : inGamut('rgb')(oklchColorForGamut);
-          const position = (i / steps) * 100;
+          // Position based on actual lightness value, not step index
+          const position = l * 100;
           
           if (isInGamut) {
             const colorStop = `oklch(${l.toFixed(3)} ${currentC.toFixed(3)} ${currentH.toFixed(0)})`;
@@ -439,14 +449,21 @@ export const generateOklchGradient = (
         const l = currentL;
         let c = currentC;
         let h = currentH;
+        let position: number;
         
         switch (component) {
           case 'chroma':
             c = (i / steps) * C_MAX;
+            // Position based on actual chroma value
+            position = (c / C_MAX) * 100;
             break;
           case 'hue':
             h = (i / steps) * H_MAX;
+            // Position based on actual hue value
+            position = (h / H_MAX) * 100;
             break;
+          default:
+            position = (i / steps) * 100;
         }
         
         // Ensure hue is valid
@@ -464,7 +481,6 @@ export const generateOklchGradient = (
         const isInGamut = showP3 
           ? (inGamut('rgb')(oklchColorForGamut) || inGamut('p3')(oklchColorForGamut))
           : inGamut('rgb')(oklchColorForGamut);
-        const position = (i / steps) * 100;
         
         if (isInGamut) {
           const colorStop = `oklch(${l.toFixed(3)} ${c.toFixed(3)} ${validHue.toFixed(0)})`;

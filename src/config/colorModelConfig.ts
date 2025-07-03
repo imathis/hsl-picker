@@ -57,7 +57,7 @@ export const colorModelConfig: Record<
     sliders: [
       { name: "oklchLightness", max: 1, step: 0.001 }, // Decimal (0-1)
       { name: "oklchChroma", max: 0.37, step: 0.001 }, // Decimal (0-0.37 typical)
-      { name: "oklchHue", max: 360, step: 1 }, // Degrees (0-360)
+      { name: "oklchHue", max: 360, step: 0.001 }, // Degrees (0-360, 3 decimal places)
       { name: "alpha", max: 1, step: 0.01 }, // Decimal (0-1)
     ],
     pattern: colorPatterns.oklch,

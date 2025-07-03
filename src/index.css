@@ -59,21 +59,30 @@
 
   --picker-thumb-box-shadow:
     0 0 0 3px
-      rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.3)
+      oklch(
+        var(--picker-oklchLightness) var(--picker-oklchChroma)
+          var(--picker-oklchHue) / 0.3
+      )
       inset,
     0 0 0 3px rgba(255, 255, 255, 1) inset, 0 0 0 4px rgb(0 0 0 / 0.5) inset,
     0 0 0 1px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(0 0 0 / 0.3);
 
   --picker-thumb-box-shadow-hover:
     0 0 0 3px
-      rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.1)
+      oklch(
+        var(--picker-oklchLightness) var(--picker-oklchChroma)
+          var(--picker-oklchHue) / 0.1
+      )
       inset,
     0 0 0 3px rgba(255, 255, 255, 1) inset, 0 0 0 4px rgb(0 0 0 / 0.5) inset,
     0 0 0 1px rgb(0 0 0 / 0.5);
 
   --picker-thumb-box-shadow-focus:
     0 0 0 3px
-      rgba(var(--picker-red), var(--picker-green), var(--picker-blue), 0.1)
+      oklch(
+        var(--picker-oklchLightness) var(--picker-oklchChroma)
+          var(--picker-oklchHue) / 0.1
+      )
       inset,
     0 0 0 3px rgba(255, 255, 255, 1) inset, 0 0 0 4px rgb(0 0 0 / 0.5) inset,
     0 0 0 1px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(0 0 0 / 1),

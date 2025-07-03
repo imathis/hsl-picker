@@ -4,7 +4,7 @@
 
 An advanced, open-source color picker supporting multiple color models with wide gamut support and precision color handling.
 
-![Color Picker Screenshot](https://github.com/user-attachments/assets/8e7c38b6-59d3-4488-abb9-630dc91e00e6)
+https://github.com/user-attachments/assets/fe915bde-b022-4c5f-8187-433ccf480323
 
 ## ✨ Features
 

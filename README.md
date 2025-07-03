@@ -1,6 +1,6 @@
 # A Most Excellent Color Picker
 
-**🎨 [colorpicker.dev](https://colorpicker.dev) **
+**[colorpicker.dev](https://colorpicker.dev)**
 
 An advanced, open-source color picker supporting multiple color models with wide gamut support and precision color handling.
 

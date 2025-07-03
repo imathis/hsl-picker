@@ -2,11 +2,18 @@ import React from "react";
 import { ColorModel, ColorObject } from "../types";
 import { useColorStore } from "../utils/colorStore";
 
+// Define the display order for color model checkboxes
+const MODEL_DISPLAY_ORDER: (keyof ColorModel)[] = [
+  "oklch",
+  "hwb",
+  "hsl",
+  "hsv",
+  "rgb",
+];
+
 interface ColorModelPickerProps {
   visibleModels: Record<keyof ColorModel, boolean>;
-  setVisibleModels: React.Dispatch<
-    React.SetStateAction<Record<keyof ColorModel, boolean>>
-  >;
+  setVisibleModels: (models: Record<keyof ColorModel, boolean>) => void;
   updateInputs: (newColor: ColorObject, fromInput?: string) => void;
 }
 
@@ -17,13 +24,12 @@ export const ColorModelPicker: React.FC<ColorModelPickerProps> = ({
 }) => {
   const color = useColorStore((state) => state.colorObject);
   const toggleModel = (model: keyof ColorModel) => {
-    setVisibleModels((prev) => {
-      const newState = { ...prev, [model]: !prev[model] };
-      if (!Object.values(newState).some((v) => v)) {
-        return { ...newState, [model]: true }; // Ensure at least one model is visible
-      }
-      return newState;
-    });
+    const newState = { ...visibleModels, [model]: !visibleModels[model] };
+    // Ensure at least one model is visible
+    if (!Object.values(newState).some((v) => v)) {
+      newState[model] = true;
+    }
+    setVisibleModels(newState);
 
     // Update sliders and text inputs after toggling visibility
     if (color) {
@@ -35,13 +41,13 @@ export const ColorModelPicker: React.FC<ColorModelPickerProps> = ({
 
   return (
     <div className="slider-choices">
-      {Object.keys(visibleModels).map((model) => (
+      {MODEL_DISPLAY_ORDER.map((model) => (
         <label key={model}>
           <input
             type="checkbox"
             name={model}
-            checked={visibleModels[model as keyof ColorModel]}
-            onChange={() => toggleModel(model as keyof ColorModel)}
+            checked={visibleModels[model]}
+            onChange={() => toggleModel(model)}
           />
           <div>{model.toUpperCase()}</div>
         </label>

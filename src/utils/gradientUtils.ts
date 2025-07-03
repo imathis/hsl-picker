@@ -410,7 +410,8 @@ export const generateOklchGradient = (
             const isInGamut = showP3 
               ? (inGamut('rgb')(oklchColorForGamut) || inGamut('p3')(oklchColorForGamut))
               : inGamut('rgb')(oklchColorForGamut);
-            // Position based on actual lightness value, not step index
+            // CRITICAL: Position must align with slider handle calculation
+            // Slider calculates: ((value - 0) / (1 - 0)) * 100 = value * 100
             const position = lightnessFactor * 100;
             
             if (isInGamut) {
@@ -434,7 +435,8 @@ export const generateOklchGradient = (
           const isInGamut = showP3 
             ? (inGamut('rgb')(oklchColorForGamut) || inGamut('p3')(oklchColorForGamut))
             : inGamut('rgb')(oklchColorForGamut);
-          // Position based on actual lightness value, not step index
+          // CRITICAL: Position must align with slider handle calculation
+          // Both use (value / max) * 100 for consistent visual alignment
           const position = l * 100;
           
           if (isInGamut) {
@@ -454,12 +456,14 @@ export const generateOklchGradient = (
         switch (component) {
           case 'chroma':
             c = (i / steps) * C_MAX;
-            // Position based on actual chroma value
+            // CRITICAL: Position must match slider handle positioning
+            // Both use (value / max) * 100 to ensure gaps align with handles
             position = (c / C_MAX) * 100;
             break;
           case 'hue':
             h = (i / steps) * H_MAX;
-            // Position based on actual hue value
+            // CRITICAL: Position must match slider handle positioning
+            // Both use (value / max) * 100 to ensure gaps align with handles
             position = (h / H_MAX) * 100;
             break;
           default:

@@ -1,6 +1,6 @@
 import React from "react";
 import { useColorStore } from "../utils/colorStore";
-import { setRoot, updateHsvGradients, updateOklchGradients } from "../utils";
+import { setRoot, updateHsvGradients, updateOklchGradients, updateUiColor } from "../utils";
 import { rainbowBg } from "../utils/gradientUtils";
 
 /**
@@ -21,7 +21,11 @@ export const useGradientEffects = (
 ) => {
   React.useEffect(() => {
     // Initialize gradients and inputs on component mount
-    const initialColor = useColorStore.getState().colorObject;
+    const state = useColorStore.getState();
+    const initialColor = state.colorObject;
+    
+    // Ensure CSS variables are set for the initial color
+    updateUiColor(initialColor, state.showP3, state.gamutGaps);
     updateInputs(initialColor);
     
     // Set up rainbow gradient background for hue sliders
@@ -29,9 +33,7 @@ export const useGradientEffects = (
     
     // Initialize color model-specific gradients
     updateHsvGradients(initialColor); // HSV color space gradients
-    
-    const { showP3, gamutGaps } = useColorStore.getState();
-    updateOklchGradients(initialColor, showP3, gamutGaps); // OKLCH with P3 gamut support
+    updateOklchGradients(initialColor, state.showP3, state.gamutGaps); // OKLCH with P3 gamut support
 
     // Subscribe to state changes for continuous gradient updates
     const unsubscribe = useColorStore.subscribe((state) => {

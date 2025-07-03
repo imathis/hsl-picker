@@ -1,5 +1,6 @@
 import React from "react";
 import { createColorObject } from "../utils/colorConversion";
+import { colorModel } from "../utils/colorParsing";
 import { useCopyText } from "../hooks";
 
 /**
@@ -14,6 +15,12 @@ type InputProps = Omit<
 
 /**
  * A custom input component that handles color value input with validation.
+ * 
+ * Special behavior: Supports cross-format pasting! When users paste a color
+ * in a different format (e.g., OKLCH into an HWB input), it preserves the
+ * original value and passes it upstream for proper model detection and
+ * precision preservation.
+ * 
  * @param onChange - Callback to handle changes, receiving [name, value] tuple.
  * @param props - Standard HTML input attributes.
  * @param ref - Forwarded ref to the input element.
@@ -28,11 +35,24 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
       // If input is valid, pass the value directly
       onChange([name, value]);
     } else {
-      // If input is invalid, try to fix it
+      // CROSS-FORMAT PASTING: Handle colors pasted in wrong inputs
+      // Example: User pastes "oklch(0.7 0.2 180)" into HSL input
       try {
-        const validColor = createColorObject(value);
+        // Detect what format the pasted color actually is
+        const detectedModel = colorModel(value);
+        
+        // CRITICAL: If user pasted a different format, pass the ORIGINAL value
+        // This enables: 1) Auto-show correct picker, 2) Preserve OKLCH precision
+        // Without this, OKLCH→RGB→HSL conversion would lose wide-gamut data
+        if (detectedModel !== name && detectedModel !== 'hex') {
+          onChange([name, value]); // Pass original "oklch(...)" not "hsl(...)"
+          return;
+        }
+        
+        // Same format pasted (e.g., invalid HSL in HSL input) - try to fix it
+        const validColor = createColorObject(value, detectedModel);
         if (validColor?.[name]) {
-          // If the color object has a valid value for this field, use it
+          // Update input to show corrected format
           event.target.value = validColor[name];
           onChange([name, event.target.value]);
         }

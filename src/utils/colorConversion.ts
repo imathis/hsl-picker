@@ -403,10 +403,14 @@ export const createColorObject = (
     current.alpha = currentParts.alpha ?? 1;
   }
 
-  // Preserve source hue values when the color is achromatic to prevent unwanted hue shifts
-  // Expanded detection: low saturation/chroma OR fully black (lightness 0) OR fully white (lightness 100 + high whiteness)
+  // HUE PRESERVATION STRATEGY: Prevent unwanted hue shifts during color space conversions
+  // Problem: Achromatic colors (gray, black, white) lose hue information during RGB roundtrip
+  // Why critical: User expects hue slider to remember position even when saturation/chroma = 0
+  // Solution: Detect achromatic conditions and preserve original hue values
+  
+  // ACHROMATIC DETECTION: Multiple criteria to catch edge cases
   const isLowSaturation = hslvwb.saturation < 0.1 && hslvwb.hsvSaturation < 0.1;
-  const isLowChroma = hslvwb.oklchChroma < 0.02; // Increased threshold to catch colors like 0.012 chroma
+  const isLowChroma = hslvwb.oklchChroma < 0.02; // Wide threshold for colors like 0.012 chroma
   const isFullyBlack = hslvwb.luminosity < 0.1 || hslvwb.value < 0.1 || hslvwb.oklchLightness < 0.01;
   const isFullyWhite = (hslvwb.luminosity > 99.9 && hslvwb.saturation === 0) || 
                        (hslvwb.whiteness > 99.9) ||
@@ -414,8 +418,8 @@ export const createColorObject = (
   
   const isAchromatic = isLowSaturation || isLowChroma || isFullyBlack || isFullyWhite;
   
-  // Determine preserved hue values
-  // For achromatic colors, preserve hue from the source model when possible
+  // HUE VALUE PRESERVATION: Use original hue from source model when achromatic
+  // Prevents hue sliders from jumping to 0° when user adjusts saturation/lightness
   let preservedHue = hslvwb.hue;
   let preservedOklchHue = hslvwb.oklchHue;
   
@@ -507,7 +511,9 @@ export const createColorObject = (
       // SPECIAL CASE: Preserve exact values and hue for model-specific adjustments
       const adjustmentKeys = Object.keys(adj).filter(key => key !== 'model');
       
-      // OKLCH precision preservation
+      // CRITICAL: OKLCH precision preservation to prevent wide-gamut color degradation
+      // Problem: OKLCH -> RGB -> OKLCH conversions lose precision for wide-gamut colors
+      // Solution: For OKLCH-only adjustments (lightness, chroma, hue), bypass RGB roundtrip
       if (targetModel === "oklch" && colorObj.model === "oklch") {
         const oklchKeys = ['oklchLightness', 'oklchChroma', 'oklchHue', 'alpha'];
         const isOklchOnlyAdjustment = adjustmentKeys.every(key => oklchKeys.includes(key));
@@ -528,8 +534,8 @@ export const createColorObject = (
           // after the RGB roundtrip to preserve precision
           const newColorObj = createColorObject(oklchString, "oklch");
           
-          // Override the OKLCH values with our exact preserved values
-          // This prevents any precision loss from RGB conversion
+          // CRITICAL: Override with exact values to prevent RGB conversion precision loss
+          // This maintains values like oklchHue: 331.132 instead of 331.13199...
           newColorObj.oklchLightness = preservedOklch.oklchLightness;
           newColorObj.oklchChroma = preservedOklch.oklchChroma;
           newColorObj.oklchHue = preservedOklch.oklchHue;
@@ -540,12 +546,15 @@ export const createColorObject = (
         }
       }
       
-      // HUE PRESERVATION: For non-hue adjustments, preserve hue across related color models
+      // CROSS-MODEL HUE PRESERVATION: Maintain hue consistency during model transitions
+      // Problem: Adjusting saturation/lightness can shift hue due to RGB conversion artifacts
+      // Why needed: User expects hue to stay constant when only adjusting other properties
+      // Solution: Explicitly preserve hue values when not directly adjusting hue sliders
       const hueKeys = ['hue', 'oklchHue'];
       const isNonHueAdjustment = adjustmentKeys.length > 0 && 
         !adjustmentKeys.some(key => hueKeys.includes(key));
       
-      // Related models that share hue concepts
+      // MODEL RELATIONSHIPS: HSL/HSV/HWB share the same hue wheel (0-360°)
       const hslRelatedModels = ['hsl', 'hsv', 'hwb'];
       const isHslRelatedAdjustment = hslRelatedModels.includes(colorObj.model) && 
                                     hslRelatedModels.includes(targetModel);
@@ -578,13 +587,15 @@ export const createColorObject = (
         
         const newColorObj = createColorObject(str, targetModel);
         
-        // For HSL-related adjustments, ALWAYS preserve hue to prevent unwanted hue shifts
+        // AGGRESSIVE HUE PRESERVATION: Always preserve hue for HSL-family models
+        // Rationale: Small RGB conversion errors can cause noticeable hue shifts
+        // Impact: Ensures consistent hue display across all related color model sliders
         if (isHslRelatedAdjustment || targetModel === 'rgb' || targetModel === 'hex') {
-          // Preserve the original hue values
+          // Lock hue values to prevent drift during color space conversions
           newColorObj.hue = colorObj.hue;
           newColorObj.oklchHue = colorObj.oklchHue;
           
-          // Regenerate ALL color strings with preserved hue for HSL-related models
+          // REGENERATE COLOR STRINGS: Update all HSL-family representations with locked hue
           const hslColor: HSLColor = { hue: colorObj.hue, saturation: newColorObj.saturation, luminosity: newColorObj.luminosity, alpha: newColorObj.alpha };
           const hsvColor: HSVColor = { hue: colorObj.hue, hsvSaturation: newColorObj.hsvSaturation, value: newColorObj.value, alpha: newColorObj.alpha };
           const hwbColor: HWBColor = { hue: colorObj.hue, whiteness: newColorObj.whiteness, blackness: newColorObj.blackness, alpha: newColorObj.alpha };

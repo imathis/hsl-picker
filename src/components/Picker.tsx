@@ -3,6 +3,9 @@ import { ColorModel } from "../types";
 import { colorModelConfig } from "../config/colorModelConfig";
 import { useColorSync } from "../hooks/useColorSync";
 import { useGradientEffects } from "../hooks/useGradientEffects";
+import { useCssVariables } from "../hooks/useCssVariables";
+import { useUrlInitialization } from "../hooks/useUrlInitialization";
+import { useColorStore } from "../utils/colorStore";
 import { ColorModelPicker } from "./ColorModelPicker";
 import { ColorSlider } from "./ColorSlider";
 import { ColorSwatch } from "./ColorSwatch";
@@ -19,13 +22,18 @@ import { CodeInput } from "./Inputs";
  */
 
 export const Picker: React.FC = () => {
-  // State for controlling which color models are visible
-  const [visibleModels, setVisibleModels] = React.useState<
-    Record<keyof ColorModel, boolean>
-  >({ hsl: true, hwb: false, oklch: false, hsv: false, rgb: false });
+  // Get visible models and setter from zustand store (with persist)
+  const visibleModels = useColorStore((state) => state.visibleModels);
+  const setVisibleModels = useColorStore((state) => state.setVisibleModels);
 
   // Custom hooks to handle complex logic
   const { updateInputs, handleSliderChange, handleTextChange } = useColorSync();
+
+  // Initialize color from URL hash (runs after rehydration)
+  useUrlInitialization();
+
+  // Ensure CSS variables are always in sync with state
+  useCssVariables();
 
   // Set up gradient effects and color synchronization
   useGradientEffects(updateInputs);

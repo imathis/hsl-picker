@@ -64,13 +64,15 @@ const colorPattern = (type: keyof ColorModel | "hex"): RegExp => {
 /**
  * Regular expressions for validating color strings in different models.
  */
-export const colorPatterns: { [key in keyof ColorModel | "hex"]: RegExp } = {
+export const colorPatterns: { [key in keyof ColorModel | "hex" | "oklchUrl"]: RegExp } = {
   hsl: colorPattern("hsl"),
   hsv: colorPattern("hsv"),
   hwb: colorPattern("hwb"),
   rgb: colorPattern("rgb"),
   oklch: colorPattern("oklch"),
   hex: colorPattern("hex"),
+  // Special pattern for OKLCH URL format: #L,C,H,A
+  oklchUrl: /^#([0-9.]+),([0-9.]+),([0-9.]+),([0-9.]+)$/,
 };
 
 /**
@@ -163,6 +165,25 @@ export const parseOklchString = (color: string): number[] | null => {
     Number.parseFloat(chroma),
     Number.parseFloat(hue),
     alpha !== undefined ? Number.parseFloat(alpha) : 1,
+  ];
+};
+
+/**
+ * Parses an OKLCH URL hash format (#L,C,H,A) to preserve exact values.
+ * @param urlHash - The URL hash string to parse (e.g., "#0.7,0.1,154,1").
+ * @returns An array of numbers [lightness, chroma, hue, alpha], or null if invalid.
+ */
+export const parseOklchUrl = (urlHash: string): number[] | null => {
+  const match = urlHash.match(colorPatterns.oklchUrl);
+  if (!match) {
+    return null;
+  }
+  const [, lightness, chroma, hue, alpha] = match;
+  return [
+    Number.parseFloat(lightness),
+    Number.parseFloat(chroma),
+    Number.parseFloat(hue),
+    Number.parseFloat(alpha),
   ];
 };
 

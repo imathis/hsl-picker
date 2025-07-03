@@ -21,7 +21,7 @@ interface ColorSliderProps {
 /**
  * ColorSlider component renders a range slider with a numeric input
  * for adjusting individual color properties (hue, saturation, etc.).
- * 
+ *
  * Features:
  * - Visual gradient background showing the color range
  * - Synchronized range slider and number input
@@ -46,9 +46,18 @@ export const ColorSlider: React.FC<ColorSliderProps> = ({
   // Extract specific props to avoid conflicts
   const { max = 100, min = 0, step = 1, style, ...restProps } = props;
 
+  // CRITICAL: Handle positioning calculation for visual alignment with gradients
+  // This formula: ((value - min) / (max - min)) * 100 must match gradient position calculations
+  // Browser positions handles at percentage of track width, not element centers
+  const numericValue = Number(currentValue);
+  const numericMin = Number(min);
+  const numericMax = Number(max);
+  const percentage =
+    ((numericValue - numericMin) / (numericMax - numericMin)) * 100;
+
   return (
     <div className="color-slider">
-      <div className="slider-track">
+      <div className="slider-track" style={{ position: "relative" }}>
         <Input
           type="range"
           data-model={model}
@@ -60,6 +69,13 @@ export const ColorSlider: React.FC<ColorSliderProps> = ({
           onChange={handleChange}
           style={{ background: background[model][name], ...style }}
           {...restProps}
+        />
+        {/* Custom handle overlay */}
+        <div
+          className="custom-slider-handle"
+          style={{
+            left: `${percentage}%`,
+          }}
         />
       </div>
       <Input

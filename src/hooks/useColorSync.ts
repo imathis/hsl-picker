@@ -1,6 +1,6 @@
 import { ColorModel } from "../types";
 import { useColorStore } from "../utils/colorStore";
-import { allColorParts } from "../utils/colorParsing";
+import { allColorParts, colorModel } from "../utils/colorParsing";
 
 /**
  * Custom hook that handles synchronization between the color store
@@ -10,6 +10,8 @@ import { allColorParts } from "../utils/colorParsing";
 export const useColorSync = () => {
   const setColor = useColorStore((state) => state.setColor);
   const adjustColor = useColorStore((state) => state.adjustColor);
+  const visibleModels = useColorStore((state) => state.visibleModels);
+  const setVisibleModels = useColorStore((state) => state.setVisibleModels);
 
   /**
    * Updates DOM input elements to reflect the current color values.
@@ -63,11 +65,38 @@ export const useColorSync = () => {
 
   /**
    * Handles changes from text inputs (color format strings)
-   * by parsing and updating the color store.
+   * by parsing and updating the color store. Auto-enables the
+   * detected color model picker and preserves OKLCH precision.
+   * 
+   * Flow: Input component → handleTextChange → detect model → enable picker → setColor
+   * 
+   * Special case: When users paste cross-format (e.g., OKLCH in HSL input),
+   * the Input component passes the original value here, allowing us to:
+   * 1. Detect the actual format (OKLCH)
+   * 2. Auto-enable the OKLCH picker
+   * 3. Preserve wide-gamut precision by passing model to createColorObject
    */
   const handleTextChange = (name: string, value: string) => {
-    const newColor = setColor(value);
-    if (newColor) updateInputs(newColor, name);
+    try {
+      // Detect the color model of the pasted/input color
+      const detectedModel = colorModel(value);
+      
+      // Auto-enable the color model picker for the detected format
+      if (detectedModel && detectedModel !== 'hex') {
+        const modelKey = detectedModel as keyof ColorModel;
+        if (!visibleModels[modelKey]) {
+          setVisibleModels({ ...visibleModels, [modelKey]: true });
+        }
+      }
+      
+      // Set the color with the detected model to preserve precision
+      const newColor = setColor(value, detectedModel);
+      if (newColor) updateInputs(newColor, name);
+    } catch (_error) {
+      // Fallback to original behavior if model detection fails
+      const newColor = setColor(value);
+      if (newColor) updateInputs(newColor, name);
+    }
   };
 
   return {
